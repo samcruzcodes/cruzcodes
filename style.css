@@ -1,0 +1,115 @@
+html{
+  scroll-behavior: smooth;
+}
+
+@font-face {
+  src: url("SpaceMono-Bold.ttf");
+  font-family: SpaceMono;
+}
+
+a:hover {
+  color: #55995A;
+}
+
+.link{
+  text-decoration: none;
+  color:#568259;
+}
+
+.navbar{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 5px;
+  border-bottom: .35vh dotted #789188;
+  margin-left: 100px;
+  margin-right:100px;
+  padding:50px;
+  padding-top:40px;
+  padding-bottom:20px;
+}
+
+#head{
+  display:flex;
+}
+
+.rat{
+  object-fit: cover;
+  height: 9rem;
+  width: 9rem;
+}
+
+.menu{
+  display:flex;
+  margin-left:0.4630;
+  font-size:3.5vh;
+}
+
+#menu{
+  margin-top:50px;
+  font-size:2rem;
+  margin-left:30px;
+  margin-right:30px;
+}
+
+#menu:hover{
+  font-weight:10rem;
+}
+
+.contact {
+  font-size:3.5vh;
+  color: #568259;
+  text-align:flex-end;
+}
+
+body {
+  background: linear-gradient(#A9D1A9,#cff2ce);
+  object-fit: contain;
+  font-family: 'Space Mono', monospace;
+  color:#568259;
+  margin:10px;
+  font-size: 1.5rem;
+}
+
+.frontpage{
+  height:100vh;
+  text-align: center;
+}
+
+.start{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.story{
+  font-size:1.9vh;
+}
+
+.hi{
+  font-size:7.5vh;
+  width:46.5vh;
+  margin-right:9.25vh;
+}
+
+.stitch{
+  object-fit: cover;
+  width: 42vh;
+  height:42vh;
+  border-radius: 9.5vh;
+  border-width: 0.3vh;
+  border-style: solid;
+  border-color:#789188;
+}
+
+#about{
+  height:100vh;
+}
+
+#projects{
+  height:100vh;
+}
+
+#contact{
+  height:100vh;
+}
