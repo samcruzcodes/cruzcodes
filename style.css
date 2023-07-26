@@ -3,6 +3,10 @@ html {
   background-color: #91B3BC;
   color: #dbd7ca;
   font-family: 'Space Mono', monospace;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 
 html::-webkit-scrollbar {
@@ -37,6 +41,13 @@ body{
   margin-right: 10rem;
 }
 
+.wrapper{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 /* Global link styles */
 a:hover {
   color: #cfc8b0;
@@ -52,22 +63,20 @@ a:hover {
 /* Navbar container styles */
 .navbar {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   margin: 5px;
   padding: 1rem 2rem;
   top:0;
-  position:sticky;
-  margin-left: 5rem;
-  margin-right: 5rem;
+  position:fixed;
 }
 
 /* Styles for the header content */
 #head {
   display: flex;
   align-items: center;
-  font-size: 3vh;
-  gap:2rem;
+  font-size: 1rem;
+  gap:25rem;
   margin-top: -3rem;
   background-color: #91B3BC;
 }
@@ -86,8 +95,8 @@ a:hover {
 /* Logo styles */
 .rat {
   object-fit: cover;
-  height: 5rem;
-  width: 5rem;
+  height: 2rem;
+  width: 2rem;
   margin-top: 2rem;
 }
 
@@ -97,20 +106,17 @@ a:hover {
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  padding: 1rem;
-  text-align: center;
+  gap:2rem;
 }
 
 .hi {
   text-align: left;
-  font-size: 4rem;
-  max-width: 80%;
+  font-size: 3rem;
 }
 
 .story{
   text-align: left;
-  font-size: 2rem;
-  max-width: 30rem;
+  font-size: 1.5rem;
 }
 
 .me {
@@ -119,6 +125,12 @@ a:hover {
   border-radius: 10rem;
   border-style: solid;
   border-color:#b3d6cd;
-  margin-left: 3rem;
+  margin-left: 2rem;
+  margin-right: 1rem;
+  margin-top: 3rem;
 }
 
+
+div{
+  max-width: 50rem;
+}
