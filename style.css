@@ -1,3 +1,7 @@
+/* Add a viewport meta tag in the head of your HTML to ensure proper scaling on mobile devices */
+/* <meta name="viewport" content="width=device-width, initial-scale=1.0"> */
+
+/* Define common styles for all screen sizes */
 html {
   scroll-behavior: smooth;
   background-color: #91B3BC;
@@ -35,17 +39,17 @@ html::-webkit-scrollbar-track:hover {
   src: url("SpaceMono-Bold.ttf");
 }
 
-
-body{
-  margin-left: 10rem;
-  margin-right: 10rem;
+body {
+  margin: 0;
+  padding: 0;
 }
 
-.wrapper{
+.wrapper {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  justify-content: center; /* Center content vertically */
+  align-items: center; /* Center content horizontally */
+  padding: 0 1rem;
 }
 
 /* Global link styles */
@@ -59,16 +63,17 @@ a:hover {
   color: #F1EDE1;
 }
 
-
 /* Navbar container styles */
 .navbar {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 5px;
-  padding: 1rem 2rem;
-  top:0;
-  position:fixed;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: #91B3BC;
+  z-index: 100;
 }
 
 /* Styles for the header content */
@@ -76,20 +81,20 @@ a:hover {
   display: flex;
   align-items: center;
   font-size: 1rem;
-  gap:25rem;
-  margin-top: -3rem;
+  gap: 40rem;
   background-color: #91B3BC;
 }
 
-#head a:hover{
+#head a:hover {
   transform: translateY(-5px);
 }
 
 /* Styles for the menu items */
 .menu {
   display: flex;
+  justify-content: center;
   margin-top: 2rem;
-  gap: 2rem;
+  gap: 1rem;
 }
 
 /* Logo styles */
@@ -98,39 +103,154 @@ a:hover {
   height: 2rem;
   width: 2rem;
   margin-top: 2rem;
+  margin-left: -3.5rem;
 }
 
-/* Additional styles (you can add your existing styles here) */
-.start {
+.frontpage{
+  margin-top: 5rem;
   display: flex;
   flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  gap:2rem;
+}
+
+.start {
+  display: flex;
+  flex-direction: column;
+  max-width: 50%;
 }
 
 .hi {
+  margin-top: 4rem;
   text-align: left;
   font-size: 3rem;
 }
 
-.story{
+.story {
   text-align: left;
   font-size: 1.5rem;
 }
 
 .me {
-  object-fit:cover;
-  max-width: 20rem;
-  border-radius: 10rem;
-  border-style: solid;
-  border-color:#b3d6cd;
-  margin-left: 2rem;
-  margin-right: 1rem;
-  margin-top: 3rem;
+  margin-top: 4rem;
+  margin-left: 8rem;
+  border-radius: 50%;
+  border: 0.3rem solid #b3d6cd;
 }
 
-
-div{
-  max-width: 50rem;
+div {
+  max-width: 60%;
 }
+
+/* Media Query for Laptops and Desktops */
+@media (min-width: 1025px) and (max-width: 1280px){
+  div {
+    max-width: 60%;
+  }
+
+  #head {
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    gap: 23rem;
+    background-color: #91B3BC;
+  }
+
+  .rat {
+    object-fit: cover;
+    height: 2rem;
+    width: 2rem;
+    margin-top: 2rem;
+    margin-left: 0rem;
+  }
+
+
+  .frontpage{
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .start {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .me{
+    margin-left: 8rem;
+    margin-top: 5rem;
+    width:15rem;
+  }
+
+  .hi {
+    margin-top: 5rem;
+    text-align: left;
+    font-size: 3rem;
+  }
+  
+  .story {
+    text-align: left;
+    font-size: 1.5rem;
+  }
+}
+
+/* Media Query for Tablets Ipads portrait mode */
+@media (min-width: 768px) and (max-width: 1024px) {
+  div {
+    max-width: 80%;
+  }
+
+  
+  #head {
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    gap: 23rem;
+    background-color: #91B3BC;
+  }
+
+  .rat {
+    object-fit: cover;
+    height: 2rem;
+    width: 2rem;
+    margin-top: 2rem;
+    margin-left: -.5rem;
+  }
+
+
+  .frontpage{
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .start {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .me{
+    margin-left: 8rem;
+    margin-top: 4rem;
+    width:15rem;
+    height: auto;
+  }
+  .hi {
+    margin-top: 5rem;
+    text-align: left;
+    font-size: 3rem;
+  }
+  
+  .story {
+    text-align: left;
+    font-size: 1.5rem;
+  }
+}
+
+/* Media Query for low resolution  Tablets, Ipads */
+/* @media (min-width: 481px) and (max-width: 767px) {
+  
+}
+
+/* Media Query for Mobile Devices */
+/* @media (max-width: 480px) {
+
+} */ 
