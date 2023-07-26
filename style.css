@@ -257,7 +257,7 @@ div {
   }
 
   .frontpage{
-    margin-top: 2rem;
+    margin-top: 4rem;
     display: flex;
     flex-direction: column;
   }
@@ -272,7 +272,7 @@ div {
   .me{
     width:13rem;
     height: auto;
-    transform: translateX(-5.5rem) translateY(-20rem);
+    transform: translateX(-4rem) translateY(-20rem);
   }
   .hi {
     margin-top: 5rem;
