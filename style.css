@@ -251,6 +251,41 @@ div {
 }
 
 /* Media Query for Mobile Devices */
-/* @media (max-width: 480px) {
+ @media (max-width: 480px) {
+div {
+    max-width: 90%;
+  }
 
-} */ 
+  .frontpage{
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .start {
+    display: flex;
+    flex-direction: column;
+    max-width: 100%;
+    transform:translateY(16rem);
+  }
+
+  .me{
+    width:13rem;
+    height: auto;
+    transform: translateX(-5.5rem) translateY(-20rem);
+  }
+  .hi {
+    margin-top: 5rem;
+    text-align: center;
+    font-size: 2rem;
+  }
+
+  .story {
+    text-align: center;
+    font-size: 1rem;
+  }
+
+  #about{
+    margin-top: 2rem;
+  }
+} 
