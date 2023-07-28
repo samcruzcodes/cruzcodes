@@ -39,6 +39,34 @@ html::-webkit-scrollbar-track:hover {
   src: url("SpaceMono-Bold.ttf");
 }
 
+i{
+  color:#cfc5c5;
+  font-size: 1.5rem;
+}
+
+i:hover{
+  animation: bounce 1s;
+}
+
+@keyframes bounce {
+
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+
+  40% {
+    transform: translateY(-15px);
+  }
+
+  60% {
+    transform: translateY(-8px);
+  }
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -252,30 +280,49 @@ div {
 
 /* Media Query for Mobile Devices */
  @media (max-width: 480px) {
+
+  .wrapper{
+    display: flex;
+    flex-direction: column;
+  }
+
 div {
     max-width: 90%;
+  }
+
+  .navbar{
+    display:none;
   }
 
   .frontpage{
     margin-top: 4rem;
     display: flex;
     flex-direction: column;
+    align-items: center;
   }
 
   .start {
     display: flex;
     flex-direction: column;
     max-width: 100%;
-    transform:translateY(16rem);
+    transform:translateY(100%);
   }
 
   .me{
-    width:13rem;
-    height: auto;
-    transform: translateX(-4rem) translateY(-20rem);
+    max-width: 12rem;
+    margin: auto;
   }
+
+  .sam{
+    transform:translateY(-80%);
+
+  }
+
+  .start {
+    max-width: 90%;
+  }
+
   .hi {
-    margin-top: 5rem;
     text-align: center;
     font-size: 2rem;
   }
