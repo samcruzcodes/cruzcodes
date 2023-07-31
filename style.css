@@ -665,11 +665,7 @@ h1 {
     padding:1rem;
     font-size: 5rem;
     color: #FFFFFF;
-    max-width: 80%
-  }
-
-  .tool{
-    transform: translate(0rem, 1rem);
+    max-width: 80%;
   }
 
 }
