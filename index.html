@@ -245,7 +245,17 @@
 
     <section id="projects">
       <h1>My Projects</h1>
-      I love to make things both for the general web and for edutainment purposes. Here they are:
+      I love to make things both for the general web and for edutainment purposes. Here are the tools I use:
+      <div class="tools owl-carousel">
+        <i class="fa-brands fa-html5"></i>
+        <i class="fa-brands fa-css3-alt"></i>
+        <i class="fa-brands fa-java"></i>
+        <i class="fa-brands fa-square-js"></i>
+        <div class="tool"><img src = "p5js.png"></div>
+        <i class="fa-brands fa-python"></i>
+        <div class="tool"><img class src = "godot.png"></div>
+        <i class="fa-brands fa-square-git"></i>
+      </div>
       <h2>Web Projects</h2>
       <p>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam quo inventore repudiandae nam, asperiores animi
@@ -320,6 +330,31 @@
         },
         1600: {
           items: 3
+        }
+      }
+    });
+
+    $(".tools").owlCarousel({
+      items: 5,
+      loop: true,
+      autoplay:true,
+
+      responsive: {
+        320: {
+          items: 3
+        },
+        550: {
+          items: 3.9
+        },
+        850: {
+          items: 4
+        },
+
+        1200: {
+          items: 5
+        },
+        1600: {
+          items: 6
         }
       }
     });

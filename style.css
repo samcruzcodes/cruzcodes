@@ -331,6 +331,21 @@ h1 {
   font-size: 2rem;
 }
 
+.tools{
+  margin-left: 7.7rem;
+  padding:1rem;
+  gap:1rem;
+  font-size: 5rem;
+  color: #FFFFFF;
+  max-width: 70%
+}
+
+.tool{
+  transform: translate(0rem, 1.2rem);
+  height:auto;
+  max-width: 5rem;
+}
+
 /* Media Query for Laptops and Desktops */
 @media (min-width: 1025px) and (max-width: 1280px) {
   section {
@@ -424,6 +439,15 @@ h1 {
     gap: 3rem;
     transform: translate(25rem, -13rem);
   }
+
+  .tools{
+    margin-left: 1.2rem;
+    padding:1rem;
+    font-size: 5rem;
+    color: #FFFFFF;
+    max-width: 90%
+  }
+  
 }
 
 /* Media Query for low resolution  Tablets, Ipads */
@@ -521,6 +545,14 @@ h1 {
     min-width: 22rem;
     max-width: 23rem;
     transition: all 0.30s ease 0s;
+  }
+
+  .tools{
+    margin-left: 1.2rem;
+    padding:1rem;
+    font-size: 5rem;
+    color: #FFFFFF;
+    max-width: 90%
   }
 }
 
@@ -626,6 +658,14 @@ h1 {
 
   h2{
     font-size: 1.5rem;
+  }
+
+  .tools{
+    margin-left: .7rem;
+    padding:1rem;
+    font-size: 5rem;
+    color: #FFFFFF;
+    max-width: 80%
   }
 
 }
