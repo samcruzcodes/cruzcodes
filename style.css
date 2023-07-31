@@ -516,8 +516,13 @@ h1 {
     text-align: center;
     font-size: 1.5rem;
   }
-}
 
+  .single-blog {
+    min-width: 22rem;
+    max-width: 23rem;
+    transition: all 0.30s ease 0s;
+  }
+}
 
 /* Media Query for Mobile Devices */
 @media (max-width: 480px) {
@@ -609,6 +614,11 @@ h1 {
     font-size: 1rem;
   }
 
+  .single-blog {
+    min-width: 20rem;
+    max-width: 22rem;
+    transition: all 0.30s ease 0s;
+  }
 
   h1 {
     font-size: 1.75rem;
