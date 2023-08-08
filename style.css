@@ -411,6 +411,10 @@ h1 {
 /* Media Query for Tablets Ipads portrait mode */
 
 @media (min-width: 768px) and (max-width: 1024px) {
+  .cursor-outer{
+  display: none;
+  }
+  
   section {
     max-width: 70%;
   }
@@ -474,7 +478,9 @@ h1 {
 
 /* Media Query for low resolution  Tablets, Ipads */
 @media (min-width: 481px) and (max-width: 767px) {
-
+  .cursor-outer{
+    display: none;
+    }
   .navbar .links,
   .navbar .action_btn {
     display: none;
@@ -580,7 +586,9 @@ h1 {
 
 /* Media Query for Mobile Devices */
 @media (max-width: 480px) {
-
+  .cursor-outer{
+    display: none;
+    }
   .navbar .links,
   .navbar .action_btn {
     display: none;

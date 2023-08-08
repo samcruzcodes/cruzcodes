@@ -22,7 +22,7 @@ function fadeInTrailer() {
 
 function resetMouseMovingTimeout() {
   clearTimeout(mouseMovingTimeout);
-  mouseMovingTimeout = setTimeout(fadeOutTrailer, 3000);
+  mouseMovingTimeout = setTimeout(fadeOutTrailer, 1250);
   fadeInTrailer();
 }
 
