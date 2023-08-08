@@ -1,0 +1,16 @@
+Colors: 
+Background: #1f2a36 (A darker charcoal background for a polished look.)
+Background color
+Primary Color: #2c3e50 (Deep blue-gray as the primary color for a strong foundation.)
+Used for header
+Background + primary mix: #394f63 
+Used for header border + scroll
+Text and Content: #ecf0f1 (Light gray for easy readability against the dark background.)
+All text
+Subtle Accent: #95a5a6 (Subtle gray for secondary elements.)
+Used on outlines
+
+NOT USED
+Highlight: #f39c12 (Warm gold for important highlights or calls to action.)
+Secondary Color: #8e44ad (Rich purple for a touch of luxury and elegance.)
+Accent Color: #27ae60 (Subtle, deep green for a sophisticated accent.)
