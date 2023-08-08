@@ -35,11 +35,36 @@ html::-webkit-scrollbar-track:hover {
   src: url("SpaceMono-Bold.ttf");
 }
 
+
 body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  cursor:none;
 }
+
+
+body:hover > #trailer {
+  opacity: 0.75;
+}
+
+#trailer {
+  height: 30px;
+  width: 30px;
+  background-color: #7f8a93;
+  border-radius: 20px;
+  
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  z-index: 10000;
+  
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 500ms ease;
+}
+
+
 
 .wrapper {
   display: flex;
