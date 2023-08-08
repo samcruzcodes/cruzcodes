@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 
+<!--Cursor Part-->
+<div class="cursor-outer"></div>
+<div class="cursor-inner"></div>
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +13,7 @@
   <meta name="author" content="Samantha Cruz">
   <meta name="description" content="Online Portfolio">
   <link rel="stylesheet" href="style.css">
+  <script src="script.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -67,14 +72,15 @@
             id="mob2"></i></a>
         <div class="medias">
           <a href="https://www.linkedin.com/in/samanthajcruz/" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
-          <a href="https://github.com/samcruzcodes" target="_blank"><i class="fa-brands fa-square-github"></i></a>  
+          <a href="https://github.com/samcruzcodes" target="_blank"><i class="fa-brands fa-square-github"></i></a>
         </div>
       </div>
     </section>
 
     <section id="about">
       <h1>About Me</h1>
-      <p style = "text-align: center;">Scroll or click through to learn a bit about me and my journey with technology, both failures and successes, over the years!</p>
+      <p style="text-align: center;">Scroll or click through to learn a bit about me and my journey with technology,
+        both failures and successes, over the years!</p>
       <!-- START about -->
       <div id="about-area" class="section_padding">
         <div class="container">
@@ -191,8 +197,8 @@
                       </div>
                       <p class="blog-text">
                         After Turtleburg, I wanted to dive into other parts of CS. So, I signed up for Kode With Klossy
-                        for the summer. I didn't expect to like web development much but ended up coming out with three languages and <a
-                          href="edvisor.cruzcodes.com" target="_blank">"EdVisor"</a>.
+                        for the summer. I didn't expect to like web development much but ended up coming out with three
+                        languages and <a href="edvisor.cruzcodes.com" target="_blank">"EdVisor"</a>.
                       </p>
                     </div>
                   </div>
@@ -247,14 +253,14 @@
       <h1>Skills</h1>
       I love to make things both for the general web and for edutainment purposes. Here are the tools I use:
       <div class="tools owl-carousel">
-        <i class="fa-brands fa-html5" alt = "HTML5"></i>
-        <i class="fa-brands fa-css3-alt" alt = "CSS3"></i>
-        <i class="fa-brands fa-java" alt = "Java"></i>
-        <i class="fa-brands fa-square-js" alt = "JavaScript"></i>
-        <div class="tool"><img src = "p5js.png" alt = "p5.js"></div>
-        <i class="fa-brands fa-python" alt = "Python"></i>
-        <div class="tool"><img class src = "godot.png" alt = "Godot Engine"></div>
-        <i class="fa-brands fa-square-git" alt = "Git"></i>
+        <i class="fa-brands fa-html5" alt="HTML5"></i>
+        <i class="fa-brands fa-css3-alt" alt="CSS3"></i>
+        <i class="fa-brands fa-java" alt="Java"></i>
+        <i class="fa-brands fa-square-js" alt="JavaScript"></i>
+        <div class="tool"><img src="p5js.png" alt="p5.js"></div>
+        <i class="fa-brands fa-python" alt="Python"></i>
+        <div class="tool"><img class src="godot.png" alt="Godot Engine"></div>
+        <i class="fa-brands fa-square-git" alt="Git"></i>
       </div>
       <h2>Web Projects</h2>
       <p>
@@ -301,8 +307,8 @@
     $(".about_slider_area").owlCarousel({
       items: 3,
       loop: true,
-      dots:false,
-      nav:true,
+      dots: false,
+      nav: true,
       navText: ["<div class='nav-button owl-prev'>‹</div>", "<div class='nav-button owl-next'>›</div>"],
       margin: 90,
       responsive: {
@@ -327,8 +333,8 @@
     $(".tools").owlCarousel({
       items: 5,
       loop: true,
-      autoplay:true,
-      dots:false,
+      autoplay: true,
+      dots: false,
       nav: false,
       slideSpeed: 500,
 
@@ -351,7 +357,8 @@
         }
       }
     });
-    
+
+
   </script>
 
 </body>

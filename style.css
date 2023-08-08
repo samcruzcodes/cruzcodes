@@ -40,30 +40,28 @@ body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  cursor:none;
+}
+
+/*Cursor Start*/
+[class^="cursor"]{
+  position: fixed;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  z-index: 9999;
+  transform: translate(-50%,-50%);
+  pointer-events: none;
+  display: none;
 }
 
 
-body:hover > #trailer {
+.cursor-outer{
+  width: 3.5rem;
+  height: 3.5rem;
+  border: 3px solid #7f8a93;
+  transition: all .08s ease-out;
   opacity: 0.75;
 }
-
-#trailer {
-  height: 30px;
-  width: 30px;
-  background-color: #7f8a93;
-  border-radius: 20px;
-  
-  position: fixed;
-  left: 0px;
-  top: 0px;
-  z-index: 10000;
-  
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 500ms ease;
-}
-
 
 
 .wrapper {
