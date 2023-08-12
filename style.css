@@ -47,19 +47,15 @@ body {
   position: fixed;
   top: 0;
   left: 0;
-  border-radius: 50%;
   z-index: 9999;
-  transform: translate(-50%,-50%);
   pointer-events: none;
   display: none;
 }
 
 .cursor-outer{
-  width: 3.5rem;
-  height: 3.5rem;
-  border: 4px solid #7f8a93;
-  transition: all .08s ease-out;
-  opacity: 0.75;
+  font-size: 8rem;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 3px #7f8a93;
 }
 
 
@@ -401,8 +397,8 @@ h1 {
   margin-left: 2.8rem;
   position: relative;
   border-bottom: 2px solid #395068;
-  
 }
+
 .btn1:hover{
   color: #fff;
 }
@@ -443,6 +439,10 @@ h1 {
   display: block;
   max-width: 26rem;
   font-size: 0.8rem;
+}
+
+.cheeze{
+  max-width: 26rem;
 }
 
 /* Media Query for Laptops and Desktops */
