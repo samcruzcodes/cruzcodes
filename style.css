@@ -54,11 +54,10 @@ body {
   display: none;
 }
 
-
 .cursor-outer{
   width: 3.5rem;
   height: 3.5rem;
-  border: 3px solid #7f8a93;
+  border: 4px solid #7f8a93;
   transition: all .08s ease-out;
   opacity: 0.75;
 }
@@ -368,6 +367,84 @@ h1 {
   max-width: 5rem;
 }
 
+.proje{
+  display: flex;
+  justify-content: space-around;
+  margin-bottom:8rem;
+}
+
+.proje #project{
+  margin:1rem;
+  max-width: 26rem;
+  border: 0.5rem solid #395068;
+  transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+#project:hover{
+  transform: translateY(-1rem);
+}
+
+.projects p{
+  font-size: 0.8rem;
+  margin-left: 1rem;
+  margin-top: 2.5rem;
+  font-size: 1.2rem;
+}
+
+.textt{
+  display: block;
+  max-width: 26rem;
+}
+
+.btn1{
+  display: inline;
+  margin-left: 2.8rem;
+  position: relative;
+  border-bottom: 2px solid #395068;
+  
+}
+.btn1:hover{
+  color: #fff;
+}
+.btn1::before{
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: #395068;
+  z-index: -1;
+  transition: transform 0.5s;
+  transform-origin: 0 0;
+  transition-timing-function: cubic-bezier(0.5,1.6,0.4,0.7);
+}
+.btn1::before{
+  transform: scaleX(0);
+}
+.btn1:hover::before{
+  transform: scaleX(1);
+}
+
+#flipped #project{
+  margin:1rem;
+  max-width: 26rem;
+  border: 0.3rem solid #395068;
+  transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+
+}
+
+#flipped{
+  display: flex;
+  margin-top: -5rem;
+}
+
+#flipped .textt{
+  display: block;
+  max-width: 26rem;
+  font-size: 0.8rem;
+}
+
 /* Media Query for Laptops and Desktops */
 @media (min-width: 1025px) and (max-width: 1280px) {
   section {
@@ -409,7 +486,6 @@ h1 {
 }
 
 /* Media Query for Tablets Ipads portrait mode */
-
 @media (min-width: 768px) and (max-width: 1024px) {
   .cursor-outer{
   display: none;
@@ -473,7 +549,94 @@ h1 {
     color: #FFFFFF;
     max-width: 90%
   }
+
+  .proje{
+    display: flex;
+    margin-bottom: 8rem;
+  }
   
+  .proje #project{
+    margin:1rem;
+    max-width: 17rem;
+    border: 0.3rem solid #395068;
+    transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+  }
+  
+  #project:hover{
+    transform: translateY(-1rem);
+  }
+  
+  .projects p{
+    font-size: 0.8rem;
+    margin-left: 1rem;
+    margin-top: 1rem;
+    margin-bottom: -1.5rem;
+    max-width: 23.4rem;
+  }
+  
+  .textt{
+    display: flex;
+    flex-wrap: wrap;
+    margin-top:1rem;
+  }
+  
+  .btn1{
+    display: inline;
+    margin-left: 1rem;
+    position: relative;
+    border-bottom: 2px solid #395068;
+    
+  }
+  .btn1:hover{
+    color: #fff;
+  }
+  .btn1::before{
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: #395068;
+    z-index: -1;
+    transition: transform 0.5s;
+    transform-origin: 0 0;
+    transition-timing-function: cubic-bezier(0.5,1.6,0.4,0.7);
+  }
+  .btn1::before{
+    transform: scaleX(0);
+  }
+  .btn1:hover::before{
+    transform: scaleX(1);
+  }
+
+  #flipped #project{
+    margin:1rem;
+    max-width: 17rem;
+    border: 0.3rem solid #395068;
+    transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+  }
+  
+  #flipped{
+    display: flex;
+    margin-top: -7rem;
+    margin-bottom: -2rem;
+  }
+  
+  #flipped .textt{
+    display: flex;
+    flex-wrap: wrap;
+    margin-top:1rem;
+  }
+
+  #flipped p{
+    font-size: 0.8rem;
+    margin-top: 2rem;
+    margin-bottom: -1.5rem;
+    max-width: 23.4rem;
+    min-height: 7rem;
+  }
+
 }
 
 /* Media Query for low resolution  Tablets, Ipads */
@@ -582,9 +745,114 @@ h1 {
     color: #FFFFFF;
     max-width: 90%
   }
+
+  .proje{
+    display: block;
+    margin-bottom: 5rem;
+  }
+  
+  .proje #project{
+    max-width: 26rem;
+    border: 0.3rem solid #395068;
+    margin-bottom:2rem;
+    transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+  }
+  
+  #project:hover{
+    transform: translateY(-1rem);
+  }
+  
+  .projects p{
+    text-align: center;
+    font-size: 0.8rem;
+    margin-right: 1rem;
+    margin-top: 1rem;
+    max-width: 23.4rem;
+  }
+  
+  .textt{
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: -1rem;
+    margin-left: 1.5rem;
+  }
+
+  .btn-container{
+    display: inline;
+    margin-left: 3rem;
+  }
+  
+  .btn1{
+
+    position: relative;
+    border-bottom: 2px solid #395068;
+  }
+  .btn1:hover{
+    color: #fff;
+  }
+  .btn1::before{
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: #395068;
+    z-index: -1;
+    transition: transform 0.5s;
+    transform-origin: 0 0;
+    transition-timing-function: cubic-bezier(0.5,1.6,0.4,0.7);
+  }
+  .btn1::before{
+    transform: scaleX(0);
+  }
+  .btn1:hover::before{
+    transform: scaleX(1);
+  }
+
+  #flipped{
+    display: block;
+  }
+
+  #flipped p{
+    margin-top: -6rem;
+  }
+
+  #flipped #project{
+    margin-bottom: 10rem;
+  }
+
+  #flipped .btn-container{
+    display: inline;
+    margin-left: 3rem;
+  }
+
+  #flipped .textt{
+    transform: translateY(24rem);
+  }
+
+  #flipped .texttt{
+    transform: translateY(32rem);
+    max-width: 20rem;
+  }
+  .texttt p{
+    margin-bottom: 3rem;
+  }
+
+  .cheeze{
+    transform: translateY(32rem);
+    margin-left: 1.2rem;
+  }
+
+  .center{
+  display: flex;
+  flex-direction: column; /* Stack items vertically */
+  align-items: center; /* Center items horizontally */
+  justify-content: center; /* Center items vertically */
+  }
 }
 
-/* Media Query for Mobile Devices */
+/* Media Query for Mobile Devices  */
 @media (max-width: 480px) {
   .cursor-outer{
     display: none;
@@ -697,5 +965,106 @@ h1 {
     color: #FFFFFF;
     max-width: 80%;
   }
+  
+  .proje{
+    display: block;
+    margin-bottom: 5rem;
+  }
+  
+  .proje #project{
+    max-width: 18rem;
+    border: 0.3rem solid #395068;
+    margin-bottom:2rem;
+    transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+  }
+  
+  #project:hover{
+    transform: translateY(-1rem);
+  }
+  
+  .projects p{
+    text-align: center;
+    font-size: 0.8rem;
+    margin-left: 0.3rem;
+    max-width: 20rem;
+  }
+  
+  .textt{
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: -3.5rem;
+  }
 
+  .btn-container{
+    display: inline;
+    margin-left: 1rem;
+  }
+  
+  .btn1{
+
+    position: relative;
+    border-bottom: 2px solid #395068;
+  }
+  .btn1:hover{
+    color: #fff;
+  }
+  .btn1::before{
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: #395068;
+    z-index: -1;
+    transition: transform 0.5s;
+    transform-origin: 0 0;
+    transition-timing-function: cubic-bezier(0.5,1.6,0.4,0.7);
+  }
+  .btn1::before{
+    transform: scaleX(0);
+  }
+  .btn1:hover::before{
+    transform: scaleX(1);
+  }
+
+  #flipped{
+    display: block;
+  }
+
+  #flipped p{
+    margin-top: -6rem;
+  }
+
+  #flipped #project{
+    margin-bottom: 10rem;
+    max-width: 18rem;
+  }
+
+  #flipped .btn-container{
+    display: inline;
+  }
+
+  #flipped .textt{
+    transform: translateY(20rem);
+  }
+
+  #flipped .textt{
+    transform: translateY(19rem);
+  }
+
+  #flipped .texttt{
+    transform: translateY(26rem);
+  }
+
+  .cheeze{
+    transform: translateY(24.3rem);
+  }
+
+  .center{
+  display: flex;
+  flex-direction: column; /* Stack items vertically */
+  align-items: center; /* Center items horizontally */
+  justify-content: center; /* Center items vertically */
+  }
 }

@@ -16,7 +16,7 @@ function fadeOutTrailer() {
 }
 
 function fadeInTrailer() {
-  trailer1.style.opacity = 1;
+  trailer1.style.opacity = 0.75;
   isTrailerFaded = false;
 }
 
@@ -45,7 +45,7 @@ window.onmousemove = e => {
   };
 
   trailer1.animate(keyframes, {
-    duration: 800,
+    duration: 1000,
     fill: "forwards"
   });
 
