@@ -842,6 +842,7 @@ h1 {
   .cheeze{
     transform: translateY(32rem);
     margin-left: 1.2rem;
+    margin-top: -7rem;
   }
 
   .center{
@@ -1059,6 +1060,7 @@ h1 {
 
   .cheeze{
     transform: translateY(24.3rem);
+    margin-top: -7rem;
   }
 
   .center{
