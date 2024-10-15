@@ -344,6 +344,7 @@ h1 {
   transform: translate(0rem, 1.2rem);
   height:auto;
   max-width: 5rem;
+  margin-top:-1rem;
 }
 
 .proje{
