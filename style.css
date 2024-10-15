@@ -376,6 +376,10 @@ h1 {
   max-width: 26rem;
 }
 
+.btn-container{
+  margin-top: 2.5rem;
+}
+
 .btn1{
   display: inline;
   margin-left: 2.8rem;
@@ -603,6 +607,10 @@ h1 {
     display: flex;
     flex-wrap: wrap;
     margin-top:1rem;
+  }
+
+  .btn-container{
+    margin-top:0rem;
   }
   
   .btn1{
@@ -834,7 +842,6 @@ h1 {
   }
 
   .btn-container{
-    display: inline;
     margin-left: 3rem;
   }
   
@@ -879,7 +886,6 @@ h1 {
   }
 
   #flipped .btn-container{
-    display: inline;
     margin-left: 3rem;
   }
 
@@ -1086,7 +1092,6 @@ h1 {
   }
 
   .btn-container{
-    display: inline;
     margin-left: 1rem;
   }
   
@@ -1129,10 +1134,6 @@ h1 {
   #flipped #project{
     margin-bottom: 10rem;
     max-width: 18rem;
-  }
-
-  #flipped .btn-container{
-    display: inline;
   }
 
   #flipped .textt{
