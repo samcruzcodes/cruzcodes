@@ -183,6 +183,19 @@ a:hover {
   font-size: 1.5rem;
 }
 
+.resume{
+  background-color: #7a8f91;
+  border: 2px solid #95a5a6;
+  text-align: center;
+  color: #F1EDE1;
+  padding: 0.5rem 1rem;
+  outline: none;
+  border-radius: 20px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
 .me {
   margin-top: 3rem;
   margin-left: 8rem;
@@ -529,7 +542,7 @@ h1 {
   .frontpage {
     display: flex;
     flex-direction: row;
-    margin-bottom: -5rem;
+    margin-bottom: -3rem;
   }
 
 
@@ -749,11 +762,11 @@ h1 {
   }
 
   .frontpage {
-    margin-top: -10rem;
+    margin-top: -13rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 3rem;
+    margin-bottom: 9rem;
   }
 
   .start {
@@ -994,10 +1007,11 @@ h1 {
   }
 
   .frontpage {
-    margin-top: -4rem;
+    margin-top: -7rem;
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-bottom: 4rem;
   }
 
   .start {
