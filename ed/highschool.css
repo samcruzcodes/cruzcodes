@@ -1,0 +1,166 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+html::-webkit-scrollbar {
+  width: 0.5vw;
+}
+
+html::-webkit-scrollbar-thumb {
+  background-color: #FF85A1;
+}
+
+html::-webkit-scrollbar-thumb:hover {
+  background-color: #FF85A1;
+}
+
+html::-webkit-scrollbar-track {
+  background-color: #5555;
+}
+
+html::-webkit-scrollbar-track:hover {
+  background-color: #555;
+}
+
+body {
+  display: flex;
+  flex-wrap: wrap;
+  background: linear-gradient(#FF99AC, #F9BEC7);
+  max-width: 100%;
+  min-height: 100%;
+  justify-content: center;
+}
+
+/* logo location and animation */
+.nav {
+  top: 0;
+  left: 0;
+  max-width: 50px;
+  transform: translate(20px, 10px);
+  position: absolute;
+}
+
+.nav:hover {
+  transform: rotate(10deg)translate(15px, 10px);
+}
+
+.highschool {
+  font-family: 'Lilita One';
+  font-size: 70px;
+  color: #FAE0E4;
+  text-shadow: black 3px 3px 2px;
+}
+
+.desc {
+  font-family: 'Comfortaa', "Century Gothic";
+  font-size: 32px;
+  color: #fff;
+  padding: 10px;
+}
+
+/* nav bar links */
+.tabs {
+  text-decoration: none;
+  text-align: center;
+  color: #FF85A1;
+  font-family: 'Verdana';
+  font-size: 1.25rem;
+}
+
+/* local page nav bar */
+.direct {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  border: 3px solid #FF85A1;
+  border-top: 0px;
+  background-color: #FAE0E4;
+  top: 0;
+  position: sticky;
+}
+
+/* local page nav bar */
+.scholarship,
+.volunteer,
+.study,
+.summer {
+  background-color: #fdc5f5;
+  max-width: 150px;
+  border: 2px solid black;
+  border-radius: 1rem;
+  margin: 1rem;
+  padding: 0.5rem;
+}
+
+.scholarship:hover,
+.volunteer:hover,
+.study:hover,
+.summer:hover {
+  background-color: white;
+  transform: translateY(-4px);
+}
+
+/* sections sizing and customization */
+section {
+  background-color: #fdc5f5;
+  max-width: 90%;
+  min-height: 31.25rem;
+  padding: 25px;
+  margin: 30px;
+  border-radius: 1.875rem;
+  border: 3px solid #FF85A1;
+}
+
+/* section headings settings */
+h2 {
+  text-shadow: black 3px 3px 2px;
+  color: #FF85A1;
+  font-size: 3rem;
+  font-family: 'Lilita One';
+}
+
+/* paragraph text settings */
+h3 {
+  font-size: 1.5rem;
+  padding: 5px;
+  font-family: 'Comfortaa', "Century Gothic";
+}
+
+
+/* hyperlinked settings */
+.inText {
+  font-size: 1.5rem;
+  color: #ff1034;
+  text-decoration: underline;
+  font-family: 'Comfortaa', "Century Gothic";
+}
+
+.inText:hover {
+  color: #FF99AC;
+}
+
+/* lists settings */
+ol {
+  margin-top: 0;
+  margin: 1rem;
+  font-size: 1.5rem;
+  padding: 1rem;
+  font-family: 'Comfortaa', "Century Gothic";
+}
+
+ul {
+  margin-top: 0;
+  margin: 1rem;
+  font-size: 1.5rem;
+  padding: 1rem;
+  font-family: 'Comfortaa', "Century Gothic";
+
+}

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home | EdVisor</title>
+  <link rel="stylesheet" href="landing.page.css">
+  <link href="https://fonts.googleapis.com/css2?family=Mynerve&display=swap" rel="stylesheet">
+  <link rel="icon" href="green logo.png" type="image/icon type">
+</head>
+
+<body>
+
+  <div id="preloader"></div>
+
+  <div class="book">
+    <img id="book" src="book.png">
+    <h1 class="name">EdVisor</h1>
+    <div class="pen">
+      <img id = "pen" src = "pencil.png">
+    </div>
+    <div class="phones">
+      <a href="about.html" class="link"><img id="phone" src="phone.png">
+        <h2 id="about">About Us</h2>
+      </a>
+    </div>
+    <!-- tabs to send to page -->
+    <div id="tabs-container">
+      <div class="tabs">
+        <a href="highschool.html" class="link">
+          <h2 class="highschool"> High School Students </h2>
+        </a>
+        <a href="whats.next.html" class="link">
+          <h2 class="paths"> What's Next </h2>
+        </a>
+        <a href="college.html" class="link">
+          <h2 class="college"> College Students </h2>
+        </a>
+      </div>
+    </div>
+  </div>
+
+<script>
+  function closepreloader(){
+            document.getElementById("preloader").style.display = 'none';
+        }
+        window.addEventListener("load",function(){
+            setTimeout(closepreloader, 700);
+            
+        });
+</script>
+
+</body>
+
+</html>

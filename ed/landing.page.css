@@ -1,0 +1,161 @@
+#preloader{
+  background: #805431 url("loader.gif") no-repeat center center;
+  background-size: 20%;
+  height:100vh;
+  width:100%;
+  position:fixed;
+  z-index: 100;
+}
+
+html {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  /* removes scroll */
+  overflow: hidden;
+}
+
+body {
+  background-image: url("table.jpg");
+  font-family: 'Comfortaa', "Century Gothic", "Helvetica";
+}
+
+h1 {
+  position: absolute;
+  transform: rotate(-10deg) translate(-2rem, -7rem);
+  font-size: 48px;
+  font-weight:bolder;
+  z-index: 20;
+  font-family:'Mynerve', cursive;
+}
+
+
+/* book positioning */
+.book {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#book {
+  position: absolute;
+  max-width: 400px;
+  transform: rotate(-10deg) translate(-4rem, -3rem);
+  /* sets the book above the tabs */
+  z-index: 10;
+}
+
+#pen{
+  position: absolute;
+  max-width: 23rem;
+  transform:translate(-23rem, 8rem) rotate(105deg);
+}
+
+/* size + positioning of phone and about us */
+#phone {
+  max-width: 150px;
+  transform: rotate(10deg) translate(30rem, 8rem);
+}
+
+#about {
+  text-align: center;
+  position: absolute;
+  min-height: 200px;
+  max-width: 120px;
+  font-size: 30px;
+  transform: rotate(9.5deg) translate(28.5rem, -5rem);
+  background-color: #56AB91;
+}
+
+
+.phones {
+  transition-property: all;
+  transition-duration: 0.4s;
+  transition-timing-function: ease;
+  opacity: 90%;
+}
+
+.phones:hover {
+  transform: rotate(-9.5deg) translate(-2rem, 3rem);
+  opacity: 100%;
+}
+
+
+/* sets the tabs positioning */
+#tabs-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  transform: translate(2.9rem, -8rem);
+}
+
+.tabs {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  transform: rotate(80deg);
+}
+
+/* Code for tabs sizing*/
+h2 {
+  min-height: 90px;
+  max-width: 80px;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 19px;
+  margin: -3px;
+}
+
+.link {
+  text-decoration: none;
+}
+
+.highschool {
+  background-color: #FDC5F5;
+  transition-property: transform;
+  transition-duration: 0.3s;
+  transition-timing-function: ease;
+  border: 3px solid rgb(233, 172, 224);
+}
+
+.highschool:hover {
+  transform: translateY(-30px);
+}
+
+.paths {
+  background-color: #B388EB;
+  transition-property: transform;
+  transition-duration: 0.3s;
+  transition-timing-function: ease;
+  border: 3px solid rgb(156, 109, 214);
+}
+
+.paths:hover {
+  transform: translateY(-30px);
+}
+
+.college {
+  background-color: #8093F1;
+  transition-property: transform;
+  transition-duration: 0.3s;
+  transition-timing-function: ease;
+  border: 3px solid rgb(109, 131, 233);
+}
+
+.college:hover {
+  transform: translateY(-30px);
+}
+
+.about {
+  background-color: #56AB91;
+  transition-property: transform;
+  transition-duration: 0.3s;
+  transition-timing-function: ease;
+  border: 3px solid #56AB91;
+}
+
+.about:hover {
+  transform: translateY(-30px);
+}

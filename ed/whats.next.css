@@ -1,0 +1,169 @@
+html {
+  min-height: 100%;
+  max-width: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #C19EE0;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "comfortaa", "helvetica";
+  box-sizing: border-box;
+}
+
+html::-webkit-scrollbar {
+  width: 0.5vw;
+}
+
+html::-webkit-scrollbar-thumb {
+  background-color: #eed6ff;
+}
+
+html::-webkit-scrollbar-thumb:hover {
+  background-color: #eed6ff;
+}
+
+html::-webkit-scrollbar-track {
+  background-color: #5555;
+}
+
+html::-webkit-scrollbar-track:hover {
+  background-color: #555;
+}
+
+
+/* logo location and animation */
+.nav {
+  top: 0;
+  left: 0;
+  max-width: 50px;
+  transform: translate(20px, 10px);
+  position: absolute;
+}
+
+.nav:hover {
+  transform: rotate(10deg)translate(15px, 10px);
+}
+
+
+.paths {
+  font-family: 'Lilita One';
+  text-shadow: black 3px 3px 2px;
+  font-size: 70px;
+  color: #FAE0E4;
+}
+
+#introduction {
+  background-color: #C19EE0;
+  font-family: 'Comfortaa';
+  font-size: 32px;
+  color: black;
+  padding: 10px;
+}
+
+
+.bio {
+  gap: 50px;
+  color: #fff;
+  /* scroll-snap-align: start; */
+}
+
+
+
+
+.people {
+  width: 150px;
+  height: 150px;
+  border-radius: 60%;
+  object-fit: cover;
+  padding: 10px;
+}
+
+h3 {
+  font-size: 40px;
+  font-family: "century gothic";
+  color: white;
+  padding: 20px;
+}
+
+
+.bio p {
+  font-size: 25px;
+  font-family: "century gothic";
+  color: white;
+  padding: 20px;
+}
+
+
+.name {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 20px;
+}
+
+.pathName {
+  font-family: 'Lilita One', "Helvetica";
+  font-size: 50px;
+}
+
+.profileText {
+  display: block;
+  text-align: left;
+}
+
+.logo {
+  top: 0;
+  left: 0;
+  max-width: 50px;
+  transform: translate(20px, 10px);
+  position: absolute;
+}
+
+
+.tabs {
+  text-decoration: none;
+  text-align: center;
+  color: #a825ef;
+  font-family: 'Verdana';
+  font-size: 1.25rem;
+}
+
+.menu {
+  display: flex;
+  flex-wrap: wrap;
+  background-color: #eed6ff;
+  border: 3px solid #bd00bd;
+  border-radius: 1rem;
+  min-height: 20%;
+  justify-content: center;
+  align-items: center;
+  padding: 2px;
+  top: 0;
+  position: sticky;
+}
+
+.military,
+.workforce,
+.lawSchool,
+.phd,
+.college,
+.medicalSchool,
+.greenCollar,
+.art {
+  max-width: 150px;
+  min-height: 50px;
+  background-color: #daadff;
+  border: 3px solid black;
+  border-radius: 10px;
+  text-align: center;
+  margin: 1rem;
+}
+
+.bio {
+  /* background: linear-gradient(to right, #7028c8, #9d5cff); */
+  background-color: #C19EE0;
+}
