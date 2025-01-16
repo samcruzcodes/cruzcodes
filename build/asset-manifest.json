@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/static/css/main.9fa64bdd.css",
+    "main.js": "/static/js/main.6a52e15b.js",
+    "static/media/SpaceMono-Bold.ttf": "/static/media/SpaceMono-Bold.056ac3ebe5f65cb5c4ac.ttf",
+    "index.html": "/index.html",
+    "main.9fa64bdd.css.map": "/static/css/main.9fa64bdd.css.map",
+    "main.6a52e15b.js.map": "/static/js/main.6a52e15b.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.9fa64bdd.css",
+    "static/js/main.6a52e15b.js"
+  ]
+}

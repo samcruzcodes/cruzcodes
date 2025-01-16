@@ -1,0 +1,138 @@
+.proje {
+  display: flex;
+  gap: 3rem;
+}
+
+.proje #project {
+  margin: 1rem;
+  width: 20rem;
+  border: 0.3rem solid #395068;
+}
+
+.projects p {
+  font-size: 0.8rem;
+  margin-left: 1rem;
+  margin-top: 1rem;
+  margin-bottom: -1.5rem;
+}
+
+.textt {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+  width: 20rem;
+}
+
+.btn-container {
+  margin-top: 0rem;
+  transform: translateX(-1.9rem);
+}
+
+.btn1 {
+  display: inline;
+  margin-left: 2.8rem;
+  position: relative;
+  border-bottom: 2px solid #395068;
+}
+
+.btn1:hover {
+  color: #fff;
+}
+
+.btn1::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: #395068;
+  z-index: -1;
+  transition: transform 0.5s;
+  transform-origin: 0 0;
+  transition-timing-function: cubic-bezier(0.5, 1.6, 0.4, 0.7);
+}
+
+.btn1::before {
+  transform: scaleX(0);
+}
+
+.btn1:hover::before {
+  transform: scaleX(1);
+}
+
+#flipped {
+  flex-direction: row;
+}
+
+/* Media Query for Tablets (768px - 1024px) */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .textt{
+    margin-top: -1rem;
+    transform: translateX(1.5rem);
+  }
+
+  #flipped .textt {
+    transform: translate(1.5rem, 15rem);
+    margin-bottom: 1rem;
+    
+  }
+
+  #flipped #project {
+    transform: translateY(-5rem); 
+  }
+
+  .proje,
+  #flipped {
+    display: block;
+    margin-bottom: 1rem;
+  }
+}
+
+/* Media Query for Low-Resolution Tablets, iPads (481px - 767px) */
+@media (min-width: 481px) and (max-width: 767px) {
+  .textt{
+    margin-top: -1rem;
+    transform: translateX(1.5rem);
+  }
+
+  #flipped .textt {
+    transform: translate(1.5rem, 15rem);
+    margin-bottom: 1rem;
+    
+  }
+
+  #flipped #project {
+    transform: translateY(-5rem); 
+  }
+
+  .proje,
+  #flipped {
+    display: block;
+    margin-bottom: 1rem;
+  }
+}
+
+/* Media Query for Mobile Devices (max-width: 480px) */
+@media (max-width: 480px) {
+  .textt{
+    margin-top: -1rem;
+    transform: translateX(1.5rem);
+  }
+
+  #flipped .textt {
+    transform: translate(1.5rem, 15rem);
+    margin-bottom: 1rem;
+    
+  }
+
+  #flipped #project {
+    transform: translateY(-5rem); 
+  }
+
+  .proje,
+  #flipped {
+    display: block;
+    margin-bottom: 1rem;
+  }
+}
