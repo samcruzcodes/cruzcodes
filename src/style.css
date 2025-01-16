@@ -202,7 +202,8 @@ nav#dropdownMenu {
   transform: translate(25rem, -15rem);
 }
 
-#mob1, #mob2 {
+#mob1,
+#mob2 {
   display: none;
 }
 
@@ -216,7 +217,11 @@ nav#dropdownMenu {
 }
 
 @keyframes bounce {
-  0%, 20%, 50%, 80%, 100% {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
     transform: translateY(0);
   }
   40% {
@@ -393,7 +398,8 @@ nav#dropdownMenu {
     transform: translate(25rem, -13rem);
   }
 
-  .name, .start h2 {
+  .name,
+  .start h2 {
     text-align: center;
   }
 
@@ -425,10 +431,18 @@ nav#dropdownMenu {
   .toggle_btn {
     display: flex;
     justify-content: space-between;
-    margin: 0 2.3rem;
-    font-size: 2rem;
+    margin: 1rem 2.3rem;
+    font-size: 1.5rem;
   }
 
+  .toggle_btn .rat {
+    height: 2.5rem;
+    width: 2.5rem;
+  }
+
+  i.fa-solid.fa-bars, i.fa-solid.fa-xmark{
+    margin-top: .6rem;
+}
   .dropdown_menu.is-open {
     display: block;
   }
@@ -444,7 +458,7 @@ nav#dropdownMenu {
   .frontpage {
     flex-direction: column;
     align-items: center;
-    margin-bottom: -2rem;
+    margin-bottom: -5rem;
   }
 
   .start {
@@ -452,7 +466,8 @@ nav#dropdownMenu {
     transform: translateY(100%);
   }
 
-  .name, .start h2 {
+  .name,
+  .start h2 {
     text-align: center;
   }
 
@@ -470,7 +485,8 @@ nav#dropdownMenu {
     display: none;
   }
 
-  #mob1, #mob2 {
+  #mob1,
+  #mob2 {
     display: inline;
   }
 
