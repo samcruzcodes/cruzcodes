@@ -1,14 +1,17 @@
 {
   "files": {
-    "main.css": "/static/css/main.9fa64bdd.css",
-    "main.js": "/static/js/main.6a52e15b.js",
+    "main.css": "/static/css/main.3dbee543.css",
+    "main.js": "/static/js/main.620f8462.js",
     "static/media/SpaceMono-Bold.ttf": "/static/media/SpaceMono-Bold.056ac3ebe5f65cb5c4ac.ttf",
+    "static/media/revicons.eot": "/static/media/revicons.a77de540a38981833f9e.eot",
+    "static/media/revicons.ttf": "/static/media/revicons.57fd05d4ae650374c8de.ttf",
+    "static/media/revicons.woff": "/static/media/revicons.e8746a624ed098489406.woff",
     "index.html": "/index.html",
-    "main.9fa64bdd.css.map": "/static/css/main.9fa64bdd.css.map",
-    "main.6a52e15b.js.map": "/static/js/main.6a52e15b.js.map"
+    "main.3dbee543.css.map": "/static/css/main.3dbee543.css.map",
+    "main.620f8462.js.map": "/static/js/main.620f8462.js.map"
   },
   "entrypoints": [
-    "static/css/main.9fa64bdd.css",
-    "static/js/main.6a52e15b.js"
+    "static/css/main.3dbee543.css",
+    "static/js/main.620f8462.js"
   ]
 }
