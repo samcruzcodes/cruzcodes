@@ -46,6 +46,20 @@ function App() {
       viewLink: "https://budget.cruzcodes.com",
     },
     {
+      title: "APO Gamma Website",
+      description: "Built using React, Bootstrap, and hosted on fly.io.",
+      imageUrl: "assets/apowebsite.png",
+      githubLink: "https://github.com/samcruzcodes/Edvisor",
+      viewLink: "https://www.apogamma.org",
+    },
+    {
+      title: "Circle K Website",
+      description: "Built using React, Bootstrap, and hosted on fly.io.",
+      imageUrl: "assets/circlekwebsite.png",
+      githubLink: "https://github.com/samcruzcodes/Edvisor",
+      viewLink: "https://circlekatcornell.org",
+    },
+    {
       title: "Edvisor",
       description: "Built using HTML, CSS, and JavaScript.",
       imageUrl: "assets/webEd.png",
