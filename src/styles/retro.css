@@ -839,6 +839,55 @@ section {
   font-size: 13px;
 }
 
+.projectTabs{
+  display:flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items:center;
+
+  padding: 8px;
+  border-radius: 14px;
+  background: rgba(0,0,0,0.14);
+  border: 2px solid rgba(255,255,255,0.08);
+  box-shadow: inset 0 2px 0 rgba(255,255,255,0.05);
+}
+
+.projectTab{
+  font-family: "VT323", "Space Mono", monospace;
+  font-size: 22px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+
+  padding: 8px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+
+  color: rgba(236,240,241,0.9);
+  background: rgba(255,255,255,0.04);
+  border: 2px solid rgba(255,255,255,0.10);
+
+  box-shadow: 0 6px 0 rgba(0,0,0,0.28);
+  transition: transform 120ms ease, filter 120ms ease;
+}
+
+.projectTab:hover{
+  transform: translateY(-2px);
+  filter: brightness(1.05);
+}
+
+.projectTab:active{
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 rgba(0,0,0,0.28);
+}
+
+.projectTab--active{
+  color: var(--accent);
+  border-color: rgba(243,156,18,0.65);
+  background: rgba(243,156,18,0.10);
+  text-shadow: 0 2px 0 rgba(0,0,0,0.35);
+}
+
+
 @media (max-width: 980px) {
   .projectCard,
   .projectCard--flipped {
