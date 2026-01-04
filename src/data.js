@@ -69,7 +69,7 @@ export const gameProjects = [
     date: "2023-08-01",
     dateLabel: "Summer 2023",
     stack: ["JavaScript", "p5.js", "Aseprite", "repl.it"],
-    viewLink: "https://cheezyconundrum.github.io/",
+    viewLink: "https://cruzcodes.itch.io/cheezy-conundrum",
     githubLink: "https://github.com/samcruzcodes/Cheezy-Conundrum",
   },
   {
