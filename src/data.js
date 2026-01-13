@@ -75,7 +75,7 @@ export const gameProjects = [
   {
     title: "Turtleburg",
     description:
-      "Educational RPG exploring the global water crisis through narrative-driven gameplay.",
+      "Educational RPG exploring the global water crisis through narrative-driven gameplay, letting players learn by making meaningful choices.",
     imageUrl: "assets/tbGame.png",
     date: "2021-02-01",
     dateLabel: "2021–2023",
@@ -89,7 +89,7 @@ export const webProjects = [
   {
     title: "H4I — Alaska Children's Trust",
     description:
-      "Mobile app dashboard digitizing ACT's Safety Deck to improve accessibility and interactivity. Built modular components from Figma and shipped with an Agile team.",
+      "Helped transform ACT’s online safety decks into an engaging mobile app, making digital safety lessons easier and more fun for kids to use.",
     imageUrl: "assets/act.png",
     date: "2025-12-01",
     dateLabel: "Sep–Dec 2025",
@@ -100,7 +100,7 @@ export const webProjects = [
   {
     title: "ThinkDraft AI",
     description:
-      "B2C AI assistant serving ~3,000 students annually, featuring a 3-tier validation pipeline that reduced token usage by 40–60%.",
+      "Led the development of an AI sidekick helping ~3,000 research students a year turn raw research into polished abstracts, notecards, and poster-ready presentations.",
     imageUrl: "assets/thinkdraft.png",
     date: "2025-08-01",
     dateLabel: "Summer 2025",
@@ -111,7 +111,7 @@ export const webProjects = [
   {
     title: "H4I — Ithaca Community Recovery",
     description:
-      "Shipped features for a platform serving ~30,000 users annually, including backend recurrence improvements and QA/debugging for handoff.",
+      "Supported ~30,000 people each year by developing ICR’s admin platform, letting volunteers keep meetings, leases, and calendars in sync without the usual admin headache.",
     imageUrl: "assets/icr.png",
     date: "2025-05-01",
     dateLabel: "Jan–May 2025",
@@ -121,7 +121,7 @@ export const webProjects = [
   },
   {
     title: "Circle K Website",
-    description: "Official website for Circle K International at Cornell University.",
+    description: "Built the official Circle K International website at Cornell, improving online presence and engagement for student volunteers.",
     imageUrl: "assets/circlekwebsite.png",
     date: "2025-02-01",
     dateLabel: "2025",
@@ -132,7 +132,7 @@ export const webProjects = [
   {
     title: "Budget Planner",
     description:
-      "AI-powered budgeting app with real-time data visualization and personalized financial recommendations.",
+      "Developed an AI-powered budgeting app providing real-time insights and personalized recommendations to simplify budgeting.",
     imageUrl: "assets/budget.png",
     date: "2024-06-01",
     dateLabel: "2024",
@@ -142,7 +142,7 @@ export const webProjects = [
   },
   {
     title: "APO Gamma Website",
-    description: "Official website for Alpha Phi Omega Gamma Chapter at Cornell.",
+    description: "Created the official Alpha Phi Omega Gamma Chapter website at Cornell to streamline member engagement and online presence.",
     imageUrl: "assets/apowebsite.png",
     date: "2024-04-01",
     dateLabel: "2024",
