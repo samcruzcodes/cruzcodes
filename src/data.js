@@ -62,6 +62,17 @@ export const gameProjects = [
     githubLink: "",
   },
   {
+    title: "Sandy Shores",
+    description:
+      "A learn-then-play experience: an educational website on shoreline erosion paired with a game where players put that knowledge to work through interactive sandcastle mechanics.",
+    imageUrl: "assets/tycoon.PNG",
+    date: "2024-02-01",
+    dateLabel: "Feb 2024",
+    stack: ["JavaScript", "p5.js", "Aseprite", "repl.it"],
+    viewLink: "https://sandyshorescm.github.io/",
+    githubLink: "https://github.com/SandyShoresCM/sandyshores",
+  },
+  {
     title: "Cheezy Conundrum",
     description:
       "Help Timmy and Tommy chase cheese and dodge traps in this single-player puzzle game — control two rats with one keyboard to lead them to freedom!",
@@ -105,7 +116,7 @@ export const webProjects = [
     date: "2025-08-01",
     dateLabel: "Summer 2025",
     stack: ["React", "Tailwind", "Python", "OpenAI API", "Docker"],
-    viewLink: "",
+    viewLink: "https://gpt-abstract-assistant.vercel.app/",
     githubLink: "",
   },
   {
