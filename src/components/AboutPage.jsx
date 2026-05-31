@@ -53,7 +53,7 @@ export default function AboutPage() {
           </div>
 
           <p className="aboutLine">
-            I'm a sophomore at Cornell studying Information and Cognitive Science with a minor in Game Design. I
+            I'm a Junior at Cornell studying Information and Cognitive Science with a minor in Game Design. I
             love building interactive tools that make learning better. I'm
             drawn to projects with a strong focus on the user where I can blend creativity with technical problem-solving.
           </p>

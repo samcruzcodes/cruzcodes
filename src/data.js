@@ -53,12 +53,12 @@ export const gameProjects = [
   {
     title: "Duke vs. The Gang",
     description:
-      "Currently in development — a midwestern bullet hell action game created with DGA Studios at Cornell. Fight eccentric bosses, experiment with drink-based combat, and defend your saloon from a growing bar empire.",
+      "A free-to-play Wild West bullet hell created with DGA Studios at Cornell. Fight eccentric bosses, experiment with drink-based combat, and defend your saloon from a growing bar empire.",
     imageUrl: "assets/duke.png",
-    date: "2026-01-01",
-    dateLabel: "Aug 2025 – Present",
+    date: "2026-05-01",
+    dateLabel: "Aug 2025 – May 2026",
     stack: ["Unity", "C#", "Trello"],
-    viewLink: "https://dgacornell.itch.io/duke-vs-the-gang",
+    viewLink: "https://store.steampowered.com/app/4662580/Duke_vs_The_Gang/",
     githubLink: "",
   },
   {
@@ -98,6 +98,26 @@ export const gameProjects = [
 
 export const webProjects = [
   {
+  title: "H4I — PPAC Healthcare Platform",
+  imageUrl: "assets/ppac.png",
+  date: "2026-06-01",
+  dateLabel: "February 2026 - Present",
+  description:
+    "Building a full-stack healthcare platform for the Pelvic Pain Association of Cornell, featuring provider search, resource discovery, and an AI chatbot with retrieval-augmented generation.",
+  githubLink: "https://github.com/cornellh4i/PPAC",
+  viewLink: "",
+  },
+  {
+    title: "Cure Academy",
+    imageUrl: "assets/cureacademy.png",
+    date: "2026-05-01",
+    dateLabel: "May 2026",
+    description:
+      "Built the full-stack website for Cure Academy, a nonprofit empowering the next generation of cancer scientists and physicians through education, research, and mentorship.",
+    viewLink: "https://cureacademy.github.io",
+    githubLink: "https://github.com/cureacademy/CureAcademy.github.io/",
+  },
+  {
     title: "H4I — Alaska Children's Trust",
     description:
       "Helped transform ACT’s online safety decks into an engaging mobile app, making digital safety lessons easier and more fun for kids to use.",
@@ -105,7 +125,7 @@ export const webProjects = [
     date: "2025-12-01",
     dateLabel: "Sep–Dec 2025",
     stack: ["React Native", "NativeWind", "Expo", "Figma"],
-    viewLink: "",
+    viewLink: "https://play.google.com/store/apps/details?id=org.alaskachildrenstrust.act",
     githubLink: "https://github.com/cornellh4i/act",
   },
   {

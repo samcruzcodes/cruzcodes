@@ -19,7 +19,7 @@ export default function Home() {
       </div>
 
       <div className="homeSub">
-        CS @ Cornell • creative software + game dev at my core
+        Info + Cog Sci @ Cornell • creative software + game dev at my core
       </div>
     </section>
   );
