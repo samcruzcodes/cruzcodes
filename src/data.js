@@ -99,7 +99,7 @@ export const gameProjects = [
 export const webProjects = [
   {
   title: "H4I — PPAC Healthcare Platform",
-  imageUrl: "assets/ppac.png",
+  imageUrl: "assets/PPAC.png",
   date: "2026-06-01",
   dateLabel: "February 2026 - Present",
   description:
