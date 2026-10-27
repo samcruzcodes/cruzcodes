@@ -1,14 +1,14 @@
 {
-    "name": "",
-    "short_name": "",
+    "name": "Samantha Cruz | Software Engineer & Aspiring PM",
+    "short_name": "Sam Cruz",
     "icons": [
         {
-            "src": "/android-chrome-144x144.png",
+            "src": "/assets/android-chrome-144x144.png",
             "sizes": "144x144",
             "type": "image/png"
         }
     ],
-    "theme_color": "#ffffff",
-    "background_color": "#ffffff",
+    "theme_color": "#0f1a18",
+    "background_color": "#0f1a18",
     "display": "standalone"
 }
