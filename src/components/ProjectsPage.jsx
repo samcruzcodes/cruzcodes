@@ -1,66 +1,86 @@
-import React, { useMemo, useState } from "react";
+import { useState } from "react";
 import Skills from "./Skills";
-import { gameProjects, webProjects } from "../data";
+import ExternalLink from "./ExternalLink";
+import { projects, projectTags } from "../data";
 
-const toTime = (d) => (d ? Date.parse(String(d).replace(/\./g, "")) || 0 : 0);
-const byNewest = (a, b) => toTime(b.date) - toTime(a.date);
+// Ongoing stuff first, then newest → oldest (details above `projects` in data.js).
+const toTime = (d) => Date.parse(d) || 0;
+const sortedProjects = [...projects].sort(
+  (a, b) => Number(Boolean(b.ongoing)) - Number(Boolean(a.ongoing)) || toTime(b.date) - toTime(a.date)
+);
+
+const FILTERS = ["All", ...projectTags];
+
+const SUBTITLES = {
+  All: "Everything, sorted newest → oldest.",
+  Game: "Edutainment + game dev builds.",
+  Web: "Full-stack + product builds.",
+  Mobile: "Apps built for the phone in your pocket.",
+};
 
 function Stack({ items }) {
   if (!items?.length) return null;
 
   return (
-    <div className="projectStack" aria-label="Tech stack">
+    <ul className="projectStack" aria-label="Tech stack">
       {items.map((t) => (
-        <span key={t} className="projectChip">
+        <li key={t} className="projectChip">
           {t}
-        </span>
+        </li>
       ))}
-    </div>
-  );
-}
-
-function LinkBtn({ href, children }) {
-  if (!href) return null;
-
-  return (
-    <a className="projectBtn" href={href} target="_blank" rel="noreferrer">
-      {children}
-    </a>
+    </ul>
   );
 }
 
 function ProjectCard({ project, flipped }) {
-  const { title, description, imageUrl, dateLabel, stack, viewLink, githubLink } = project;
+  const { title, role, description, image, dateLabel, stack, viewLink, githubLink } = project;
   const hasLinks = Boolean(viewLink) || Boolean(githubLink);
+  const [imageFailed, setImageFailed] = useState(false);
 
   return (
     <article className={`projectCard panel ${flipped ? "projectCard--flipped" : ""}`}>
-      <div className="projectMedia" aria-hidden={!imageUrl}>
-        {imageUrl ? (
+      <div className="projectMedia">
+        {image && !imageFailed ? (
           <img
             className="projectImg"
-            src={imageUrl}
-            alt={`Screenshot of ${title}`}
+            src={image.src}
+            width={image.width}
+            height={image.height}
+            alt={image.alt}
             loading="lazy"
+            decoding="async"
+            onError={() => setImageFailed(true)}
           />
         ) : (
-          <div className="projectImg projectImg--fallback" />
+          <div className="projectImg projectImg--fallback" aria-hidden="true">
+            <span className="retro-title">{title}</span>
+          </div>
         )}
       </div>
 
       <div className="projectBody">
         <header className="projectHeader">
           <h3 className="retro-title projectTitle">{title}</h3>
-          {dateLabel && <div className="projectDate">{dateLabel}</div>}
+          {dateLabel && <p className="projectDate">{dateLabel}</p>}
         </header>
+
+        {role && <p className="projectRole">{role}</p>}
 
         <p className="projectDesc">{description}</p>
 
         <Stack items={stack} />
 
         <footer className="projectActions">
-          <LinkBtn href={viewLink}>View</LinkBtn>
-          <LinkBtn href={githubLink}>GitHub</LinkBtn>
+          {viewLink && (
+            <ExternalLink className="projectBtn" href={viewLink}>
+              View<span className="visuallyHidden"> {title}</span>
+            </ExternalLink>
+          )}
+          {githubLink && (
+            <ExternalLink className="projectBtn" href={githubLink}>
+              GitHub<span className="visuallyHidden"> repository for {title}</span>
+            </ExternalLink>
+          )}
           {!hasLinks && <span className="projectNoLink">No public link</span>}
         </footer>
       </div>
@@ -68,76 +88,30 @@ function ProjectCard({ project, flipped }) {
   );
 }
 
-function ProjectSection({ title, subtitle, projects }) {
-  if (!projects?.length) return null;
-
-  return (
-    <div className="projectSection">
-      <div className="projectSectionHead">
-        <h2 className="retro-title projectSectionTitle">{title}</h2>
-        {subtitle && <div className="projectSectionSub">{subtitle}</div>}
-      </div>
-
-      <div className="projectList">
-        {projects.map((p, i) => (
-          <ProjectCard key={`${p.title}-${p.date ?? i}`} project={p} flipped={i % 2 === 1} />
-        ))}
-      </div>
-    </div>
-  );
-}
-
 export default function ProjectsPage() {
   const [filter, setFilter] = useState("All");
 
-  const sortedGameProjects = useMemo(
-    () => [...gameProjects].sort(byNewest),
-    []
-  );
-
-  const sortedWebProjects = useMemo(
-    () => [...webProjects].sort(byNewest),
-    []
-  );
-
-  const allProjects = useMemo(() => {
-    const taggedGames = sortedGameProjects.map((p) => ({ ...p, kind: "Game" }));
-    const taggedWeb = sortedWebProjects.map((p) => ({ ...p, kind: "Web" }));
-    return [...taggedGames, ...taggedWeb].sort(byNewest);
-  }, [sortedGameProjects, sortedWebProjects]);
-
-  const visible = useMemo(() => {
-    if (filter === "All") return allProjects;
-    return allProjects.filter((p) => p.kind === filter);
-  }, [allProjects, filter]);
-
-  const sectionTitle =
-    filter === "All" ? "All Projects" : filter === "Game" ? "Game Projects" : "Web Projects";
-
-  const sectionSubtitle =
-    filter === "All"
-      ? "Everything, sorted newest → oldest."
-      : filter === "Game"
-      ? "Edutainment + game dev builds."
-      : "Full-stack + product builds.";
+  const visible =
+    filter === "All" ? sortedProjects : sortedProjects.filter((p) => p.tag === filter);
 
   return (
-    <section className="panel panel-bevel projectsPage" style={{ padding: 18 }}>
+    <section className="page panel panel-bevel projectsPage" aria-labelledby="projects-title">
       <div className="projectsTop">
         <div className="projectsTitleBlock">
-          <h1 className="retro-title projectsTitle">Projects</h1>
-          <div className="projectsHint">A mix of web + games — creative developer at my core.</div>
+          <h1 id="projects-title" className="retro-title projectsTitle" tabIndex={-1}>
+            Projects
+          </h1>
+          <p className="projectsHint">A mix of web + games — creative developer at my core.</p>
         </div>
 
-        <div className="projectTabs" role="tablist" aria-label="Project filters">
-          {["All", "Game", "Web"].map((t) => (
+        <div className="projectTabs" role="group" aria-label="Filter projects">
+          {FILTERS.map((t) => (
             <button
               key={t}
               type="button"
               className={`projectTab ${filter === t ? "projectTab--active" : ""}`}
               onClick={() => setFilter(t)}
-              role="tab"
-              aria-selected={filter === t}
+              aria-pressed={filter === t}
             >
               {t}
             </button>
@@ -149,7 +123,20 @@ export default function ProjectsPage() {
         <Skills />
       </div>
 
-      <ProjectSection title={sectionTitle} subtitle={sectionSubtitle} projects={visible} />
+      <section className="projectSection" aria-labelledby="project-list-title">
+        <div className="projectSectionHead">
+          <h2 id="project-list-title" className="retro-title projectSectionTitle">
+            {filter === "All" ? "All Projects" : `${filter} Projects`}
+          </h2>
+          <p className="projectSectionSub">{SUBTITLES[filter]}</p>
+        </div>
+
+        <div className="projectList">
+          {visible.map((p, i) => (
+            <ProjectCard key={p.title} project={p} flipped={i % 2 === 1} />
+          ))}
+        </div>
+      </section>
     </section>
   );
 }

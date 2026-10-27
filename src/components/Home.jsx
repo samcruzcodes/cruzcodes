@@ -2,25 +2,20 @@ import FollowEyeOnPNG from "./FollowEyeOnPNG";
 
 export default function Home() {
   return (
-    <section className="panel panel-bevel homeOnly" style={{ padding: 22 }}>
-      <div className="nameRow">
-        <div className="nameLine">
-          <span className="retro-title bigName">Sam</span>
-          <span className="retro-title bigName">Cruz</span>
-        </div>
-
-        <span className="retro-title bigName nameLeft">Sam</span>
-
-        <div className="faceSlot">
+    <section className="page panel panel-bevel homeOnly" aria-labelledby="home-title">
+      {/* Just one h1! Flex order puts my face between the names on wide screens
+          and under them on mid-size ones. */}
+      <h1 id="home-title" className="nameRow retro-title" tabIndex={-1}>
+        <span className="bigName nameFirst">Sam</span>{" "}
+        <span className="bigName nameLast">Cruz</span>
+        <span className="faceSlot">
           <FollowEyeOnPNG />
-        </div>
+        </span>
+      </h1>
 
-        <span className="retro-title bigName nameRight">Cruz</span>
-      </div>
-
-      <div className="homeSub">
+      <p className="homeSub">
         Info + Cog Sci @ Cornell • creative software + game dev at my core
-      </div>
+      </p>
     </section>
   );
 }

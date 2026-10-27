@@ -1,148 +1,144 @@
-import { useRef, useState } from "react";
-import { aboutItems } from "../data";
+import { useState } from "react";
+import Carousel from "./Carousel";
+import ExternalLink from "./ExternalLink";
+import Icon from "./Icon";
+import Lightbox from "./Lightbox";
+import RichText from "./RichText";
+import { about, contact, printGallery, story } from "../data";
+
+const galleryPhotos = [printGallery.hero, ...printGallery.thumbs];
 
 export default function AboutPage() {
-  const railRef = useRef(null);
-  const [dragging, setDragging] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [scrollLeft, setScrollLeft] = useState(0);
-
-  const down = (pageX) => {
-    if (!railRef.current) return;
-    setDragging(true);
-    setStartX(pageX - railRef.current.getBoundingClientRect().left);
-    setScrollLeft(railRef.current.scrollLeft);
-  };
-
-  const move = (pageX) => {
-    if (!dragging || !railRef.current) return;
-    const x = pageX - railRef.current.getBoundingClientRect().left;
-    const walk = (x - startX) * 1.55;
-    railRef.current.scrollLeft = scrollLeft - walk;
-  };
-
-  const prints = [
-    ["gallery/Shelf.jpg", "Shelf Display"],
-    ["gallery/darth vader.jpg", "Darth Vader"],
-    ["gallery/dog portrait.jpg", "Dog Portrait"],
-    ["gallery/banana.JPG", "Banana"],
-    ["gallery/gfs shelf.jpg", "Misc Shelf"],
-    ["gallery/dragon ball.jpg", "Dragon Ball"],
-    ["gallery/kuchi kopi.jpg", "Kuchi Kopi"],
-    ["gallery/autumn dragon.jpg", "Autumn Dragon"],
-    ["gallery/hollow dragon.jpg", "Hollow Dragon"],
-    ["gallery/imperial dragon.jpg", "Imperial Dragon"],
-    ["gallery/family portrait.jpg", "Family Portrait"],
-    ["gallery/dinos flexy.jpg", "Flexible Dragons"],
-    ["gallery/among us.jpg", "Among Us Display"],
-    ["gallery/evil minion.jpg", "Evil Minion"],
-    ["gallery/crystal dragon.jpg", "Crystal Dragon"],
-    ["gallery/minion.jpg", "Bob the Minion"],
-    ["gallery/frenchy face.jpg", "Frenchy Face"],
-    ["gallery/coco lithopane.JPG", "Coco Lithopane"],
-    ["gallery/frenchy buddha.JPG", "Frenchy Buddha"],
-  ];
+  // Which photo is open in the big view (index into galleryPhotos), or null if none.
+  const [enlarged, setEnlarged] = useState(null);
 
   return (
-    <section className="panel panel-bevel aboutPanel">
+    <section className="page panel panel-bevel aboutPanel" aria-labelledby="about-title">
       <div className="aboutHero">
-        {/* LEFT */}
         <div className="aboutIntro">
-          <div className="retro-title aboutHey">
+          <h1 id="about-title" className="retro-title aboutHey" tabIndex={-1}>
             Hey, I&apos;m <span className="aboutName">Sam!</span>
-          </div>
+          </h1>
 
           <p className="aboutLine">
-            I'm a Junior at Cornell studying Information and Cognitive Science with a minor in Game Design. I
-            love building interactive tools that make learning better. I'm
-            drawn to projects with a strong focus on the user where I can blend creativity with technical problem-solving.
+            <RichText parts={about.intro} />
           </p>
 
-          <p className="aboutMini">
-            Latinas Promoviendo Comunidad / Lambda Pi Chi Sorority Inc.
-            <br />
-            Hack4Impact
-            <br />
-            DGA Studios
-          </p>
+          <ul className="aboutMini" aria-label="Organizations">
+            {about.orgs.map((org) => (
+              <li key={org.name}>
+                <ExternalLink className="inlineLink" href={org.href}>
+                  {org.name}
+                </ExternalLink>
+              </li>
+            ))}
+          </ul>
 
-          <div className="aboutSocials">
-            <a
-              href="https://www.linkedin.com/in/samanthajcruz/"
-              target="_blank"
-              rel="noreferrer"
-              className="aboutSocialLink"
-              aria-label="LinkedIn"
-            >
-              <i className="fa-brands fa-linkedin"></i>
-            </a>
-            <a
-              href="https://github.com/samcruzcodes"
-              target="_blank"
-              rel="noreferrer"
-              className="aboutSocialLink"
-              aria-label="GitHub"
-            >
-              <i className="fa-brands fa-square-github"></i>
-            </a>
-          </div>
+          {/* Icon-only links, so the hidden text says where each one goes. */}
+          <ul className="aboutSocials" aria-label="Contact">
+            <li>
+              <a href={contact.mailto} className="aboutSocialLink">
+                <Icon name="envelope" />
+                <span className="visuallyHidden">Email Samantha at {contact.email}</span>
+              </a>
+            </li>
+            <li>
+              <ExternalLink href={contact.linkedin} className="aboutSocialLink">
+                <Icon name="linkedin" />
+                <span className="visuallyHidden">Samantha's LinkedIn profile</span>
+              </ExternalLink>
+            </li>
+            <li>
+              <ExternalLink href={contact.github} className="aboutSocialLink">
+                <Icon name="github" />
+                <span className="visuallyHidden">Samantha's GitHub profile</span>
+              </ExternalLink>
+            </li>
+          </ul>
         </div>
 
-        {/* RIGHT */}
-        <div className="aboutStory">
-          <div className="retro-title aboutStoryTitle">My Story</div>
-
-          <div
-            ref={railRef}
-            className="aboutRail"
-            onMouseDown={(e) => down(e.pageX)}
-            onMouseUp={() => setDragging(false)}
-            onMouseLeave={() => setDragging(false)}
-            onMouseMove={(e) => {
-              e.preventDefault();
-              move(e.pageX);
-            }}
-            onTouchStart={(e) => down(e.touches[0].pageX)}
-            onTouchEnd={() => setDragging(false)}
-            onTouchMove={(e) => move(e.touches[0].pageX)}
-          >
-            <div className="aboutTrack">
-              {aboutItems.map((item) => (
-                <article key={item.title + item.imageSrc} className="aboutCard">
-                  <div className="aboutCardTitle retro-title">{item.title}</div>
-
-                  <div className="aboutCardImg">
-                    <img src={item.imageSrc} alt={item.title} />
-                  </div>
-
-                  <p className="aboutCardBody">{item.description}</p>
-                </article>
-              ))}
-            </div>
-          </div>
-        </div>
+        <img
+          className="aboutPhoto"
+          src={about.photo.src}
+          width={about.photo.width}
+          height={about.photo.height}
+          alt={about.photo.alt}
+        />
       </div>
+
+      <Carousel
+        id="story"
+        title="My Story"
+        titleClassName="aboutStoryTitle"
+        itemName="story cards"
+        className="carousel--story"
+        items={story}
+        itemKey={(item) => item.year + item.image.src}
+        renderItem={(item) => (
+          <article className="aboutCard">
+            <h3 className="retro-title aboutCardTitle">{item.year}</h3>
+            <div className="aboutCardImg">
+              <img
+                src={item.image.src}
+                width={item.image.width}
+                height={item.image.height}
+                alt={item.image.alt}
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+            <p className="aboutCardBody">
+              <RichText parts={item.text} />
+            </p>
+          </article>
+        )}
+      />
 
       {/* 3D PRINTING GALLERY */}
-      <div className="aboutGallery">
-        <div className="retro-title aboutGalleryTitle">3D Printing Gallery</div>
+      <section className="aboutGallery" aria-labelledby="gallery-title">
+        <h2 id="gallery-title" className="retro-title aboutGalleryTitle">
+          3D Printing Gallery
+        </h2>
 
+        {/* Every photo is a button that opens it big. The alt says what clicking does,
+            and the big view has the full description. */}
         <div className="printFrame">
-          <div className="printMain">
-            <img src="gallery/Shelf.jpg" alt="Shelf Display" />
-          </div>
+          <button type="button" className="printMain" onClick={() => setEnlarged(0)}>
+            <img
+              src={printGallery.hero.src}
+              width={printGallery.hero.width}
+              height={printGallery.hero.height}
+              alt={`View larger: ${printGallery.hero.label}`}
+              loading="lazy"
+              decoding="async"
+            />
+          </button>
 
-          <div className="printThumbRow" aria-label="More 3D prints">
-            {prints
-              .filter(([src]) => src !== "gallery/Shelf.jpg")
-              .map(([src, label]) => (
-                <div key={src} className="printThumb is-static" title={label}>
-                  <img src={src} alt={label} />
-                </div>
-              ))}
-          </div>
+          <ul className="printThumbRow" aria-label="More 3D prints">
+            {printGallery.thumbs.map((p, i) => (
+              <li key={p.src}>
+                <button type="button" className="printThumb" onClick={() => setEnlarged(i + 1)}>
+                  <img
+                    src={p.src}
+                    width={p.width}
+                    height={p.height}
+                    alt={`View larger: ${p.label}`}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </button>
+              </li>
+            ))}
+          </ul>
         </div>
-      </div>
+
+        <Lightbox
+          photos={galleryPhotos}
+          index={enlarged}
+          onChange={setEnlarged}
+          onClose={() => setEnlarged(null)}
+        />
+      </section>
     </section>
   );
 }

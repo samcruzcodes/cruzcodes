@@ -1,3 +1,14 @@
+/* =========================================================
+   My retro theme ✨ (mobile-first!)
+   Base styles are for phones; min-width media queries add the
+   tablet/desktop stuff on top.
+   Hover/focus states only change color, border, and shadow here.
+   All the movement lives in the reduced-motion block at the very
+   bottom, so it's off for anyone who's asked for less motion.
+   Fonts load in public/index.html.
+   ========================================================= */
+
+/* ---------- Tokens ---------- */
 :root {
   --bg: #0f1a18;
   --panel: #1a2e2a;
@@ -11,14 +22,12 @@
   --glow-secondary: rgba(92, 255, 177, 0.08);
   --accent-rgb: 92, 255, 177;
   --panel-rgb: 26, 46, 42;
-  --header-h: 78px;
-  --page-w: 1100px;
+  --header-h: 4.875rem;
+  --page-w: 68.75rem;
 }
 
-@import url("https://fonts.googleapis.com/css2?family=VT323&display=swap");
-
+/* ---------- Base ---------- */
 html {
-  scroll-behavior: smooth;
   background: var(--bg);
   color: var(--text);
   font-family: "Space Mono", monospace;
@@ -26,6 +35,7 @@ html {
 
 body {
   margin: 0;
+  overflow-wrap: break-word;
 }
 
 *,
@@ -34,18 +44,36 @@ body {
   box-sizing: border-box;
 }
 
+img {
+  max-width: 100%;
+  height: auto;
+}
+
 #root {
   min-height: 100vh;
 }
 
-.retro-bg {
-  min-height: 100vh;
-  overflow-x: hidden;
-  background:
-    radial-gradient(circle at 20% 20%, rgba(var(--accent-rgb), 0.08), transparent 40%),
-    radial-gradient(circle at 80% 30%, var(--glow-secondary), transparent 35%),
-    linear-gradient(0deg, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25));
-  background-color: var(--bg);
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* No focus ring on headings I focus with JS after switching pages. */
+[tabindex="-1"]:focus {
+  outline: none;
+}
+
+/* ---------- Utilities ---------- */
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .retro-title {
@@ -54,23 +82,57 @@ body {
   text-shadow: 0 3px 0 rgba(0, 0, 0, 0.35);
 }
 
+/* Links inside sentences get an underline so they don't rely on color alone. */
+.inlineLink {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+.inlineLink:hover,
+.inlineLink:focus-visible {
+  color: var(--text);
+  text-decoration-thickness: 2px;
+}
+
+/* Inline SVG icons (Icon.jsx) scale with the text around them. */
+.icon {
+  display: inline-block;
+  flex-shrink: 0;
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.125em;
+}
+
+/* ---------- Layout ---------- */
+.retro-bg {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(var(--accent-rgb), 0.08), transparent 40%),
+    radial-gradient(circle at 80% 30%, var(--glow-secondary), transparent 35%),
+    linear-gradient(0deg, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25));
+  background-color: var(--bg);
+}
+
 .wrapper {
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 18px;
+  padding: 0.75rem;
 }
 
 .wrapper--home {
-  min-height: calc(100vh - var(--header-h));
-  display: flex;
-  align-items: center;
   justify-content: center;
-  padding: 24px 18px;
 }
 
-section {
-  width: min(var(--page-w), 95vw);
+.page {
+  width: 100%;
+  max-width: var(--page-w);
+  margin: 0 auto;
 }
 
 .panel {
@@ -95,23 +157,28 @@ section {
   pointer-events: none;
 }
 
+@media (min-width: 768px) {
+  .wrapper {
+    padding: 1.125rem;
+  }
+
+  .wrapper--home {
+    padding: 1.5rem 1.125rem;
+  }
+}
+
+/* ---------- Header ---------- */
 .siteHeader {
   position: sticky;
   top: 0;
   z-index: 100;
-  padding: 0 2rem;
+  padding: 0 1.5rem;
   background-color: rgba(var(--panel-rgb), 0.95);
   border-bottom: 2px solid var(--panel2);
 }
 
 .navbar {
-  min-height: var(--header-h);
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  gap: 16px;
+  display: none;
 }
 
 .navbar .links {
@@ -123,13 +190,20 @@ section {
   padding: 0;
 }
 
-.navbar .rat {
+.rat {
+  display: block;
   object-fit: cover;
+  height: 2.5rem;
+  width: 2.5rem;
+}
+
+.navbar .rat {
   height: 4rem;
   width: 4rem;
 }
 
 .logoBtn {
+  display: block;
   background: transparent;
   border: none;
   cursor: pointer;
@@ -143,11 +217,11 @@ section {
   color: var(--text);
   font-family: "VT323", "Space Mono", monospace;
   font-size: 1.7rem;
-  padding: 6px 10px;
-  transition: color 0.15s ease;
+  padding: 0.375rem 0.625rem;
 }
 
-.navLink:hover {
+.navLink:hover,
+.navLink:focus-visible {
   color: var(--text-muted);
 }
 
@@ -166,31 +240,39 @@ section {
   font-size: 1.6rem;
   cursor: pointer;
   text-decoration: none;
-  transition: background-color 0.15s ease;
 }
 
-.action_btn:hover {
+.action_btn:hover,
+.action_btn:focus-visible {
   color: var(--text);
   background-color: var(--btn-hover);
+  border-color: rgba(var(--accent-rgb), 0.6);
 }
 
 .toggle_btn {
-  display: none;
-  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1rem 2.8rem;
 }
 
 .menuIcon {
+  display: grid;
+  place-items: center;
   background: transparent;
   border: none;
   color: var(--text);
   font-size: 1.7rem;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
   cursor: pointer;
 }
 
 .dropdown_menu {
   display: none;
-  width: min(var(--page-w), calc(100vw - 3rem));
-  margin: 16px auto;
+  width: 100%;
+  max-width: var(--page-w);
+  margin: 1rem auto;
   background: var(--panel2);
   border-radius: 16px;
   overflow: hidden;
@@ -205,11 +287,11 @@ section {
 .dropdown_list {
   list-style: none;
   margin: 0;
-  padding: 26px 20px;
+  padding: 1.625rem 1.25rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 22px;
+  gap: 1.375rem;
 }
 
 .dropdown_list li {
@@ -220,135 +302,337 @@ section {
 
 .dropdown_list .navLink {
   font-size: 2.4rem;
-  padding: 12px 18px;
+  padding: 0.75rem 1.125rem;
 }
 
 .dropdown_list .action_btn {
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  padding: 12px 18px;
+  padding: 0.75rem 1.125rem;
   font-size: 2.2rem;
 }
 
-@media (max-width: 767px) {
-  .navbar .links,
-  .navbar .action_btn,
-  .navbar .logo {
-    display: none;
+@media (min-width: 768px) {
+  .siteHeader {
+    padding: 0 2rem;
   }
 
   .navbar {
-    min-height: 0;
-  }
-
-  .toggle_btn {
+    min-height: var(--header-h);
+    max-width: 75rem;
+    margin: 0 auto;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin: 1rem 2.3rem;
-    width: calc(100% - 4.6rem);
+    justify-content: space-around;
+    gap: 1rem;
   }
 
-  .toggle_btn .rat {
-    height: 2.5rem;
-    width: 2.5rem;
+  .toggle_btn,
+  .dropdown_menu.is-open {
+    display: none;
   }
 }
 
+/* ---------- Footer (small + quiet on purpose) ---------- */
+.siteFooter {
+  padding: 0.375rem 1rem 0.625rem;
+  text-align: center;
+  background-color: rgba(var(--panel-rgb), 0.95);
+  border-top: 2px solid var(--panel2);
+}
+
+.footerLinks {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0 1.25rem;
+}
+
+.footerLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  min-height: 2rem;
+  color: var(--text-muted);
+  font-size: 0.8125rem;
+  text-decoration: none;
+}
+
+.footerLink .icon {
+  font-size: 0.875rem;
+}
+
+.footerLink:hover,
+.footerLink:focus-visible {
+  color: var(--accent);
+}
+
+.footerNote {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+/* Space Mono's © looks tiny and floaty, so this one uses a system font instead. */
+.copyMark {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+/* ---------- Home ---------- */
 .homeOnly {
-  width: min(var(--page-w), 95vw);
-  min-height: clamp(460px, 68vh, 750px);
-  margin: 0 auto;
+  min-height: clamp(28.75rem, 68vh, 46.875rem);
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 28px;
+  padding: 1rem;
 }
 
+/* Phones + desktop: Sam / face / Cruz in a row (it wraps on phones).
+   500–1000px: "Sam Cruz" on one line with my face underneath. */
 .nameRow {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 20px;
-  width: 100%;
   flex-wrap: wrap;
+  gap: 1.25rem;
+  width: 100%;
+  margin: 0;
+  font-weight: 400;
+  line-height: 0.9;
 }
 
 .bigName {
-  font-size: 120px;
-  line-height: 0.9;
+  font-size: clamp(4.5rem, 30vw, 7.5rem);
   white-space: nowrap;
 }
 
-.nameLine {
-  display: none;
-}
-
-.nameLeft,
-.nameRight {
-  display: inline;
+.nameFirst {
+  order: 1;
 }
 
 .faceSlot {
-  display: grid;
-  place-items: center;
-  padding: 10px;
+  order: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 0;
+  max-width: 100%;
+  padding: 0.625rem;
 }
 
-.faceSlot img {
-  width: 330px;
+.nameLast {
+  order: 3;
+}
+
+/* Lets the face shrink below 300px on tiny screens. */
+.eyeWrap {
+  position: relative;
+  display: block;
+  flex: 0 1 18.75rem;
+  min-width: 0;
+  user-select: none;
+}
+
+.eyeFace {
+  display: block;
+  width: 100%;
   height: auto;
+}
+
+/* Keep this lined up with EYE_CENTER_PCT in FollowEyeOnPNG.jsx! */
+.eyePupil {
+  position: absolute;
+  left: 46%;
+  top: 31.5%;
+  width: 5%;
+  height: 4%;
+  margin-left: -2.5%;
+  margin-top: -2%;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.85);
+  box-shadow: inset 2px 2px 0 rgba(255, 255, 255, 0.15);
+  pointer-events: none;
 }
 
 .homeSub {
   text-align: center;
-  margin-top: 12px;
+  margin: 0.75rem 0 0;
   opacity: 0.9;
-  font-size: 20px;
+  font-size: 1.25rem;
 }
 
-@media (min-width: 500px) and (max-width: 1000px) {
+@media (min-width: 500px) {
   .nameRow {
-    flex-direction: column;
-    gap: 14px;
-  }
-
-  .nameLine {
-    display: flex;
-    gap: 22px;
-    justify-content: center;
     align-items: baseline;
+    gap: 0.875rem 1.375rem;
   }
 
-  .nameLeft,
-  .nameRight {
-    display: none;
+  .nameLast {
+    order: 2;
+  }
+
+  .faceSlot {
+    order: 3;
+    flex-basis: 100%;
   }
 }
 
+@media (min-width: 768px) {
+  .homeOnly {
+    padding: 1.375rem;
+  }
+}
+
+@media (min-width: 1001px) {
+  .nameRow {
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  .faceSlot {
+    order: 2;
+    flex-basis: auto;
+  }
+
+  .nameLast {
+    order: 3;
+  }
+}
+
+/* ---------- Carousel (used by My Story + Skills) ---------- */
+/* Each slide is sized so --per-view slides fit, plus a --peek of the next one,
+   so it's obvious there's more to scroll to. */
+.carousel {
+  --gap: 1rem;
+  --per-view: 1;
+  --peek: 0.25;
+  --slide-max: 20rem;
+  min-width: 0;
+}
+
+.carouselHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.75rem;
+}
+
+.carouselControls {
+  display: flex;
+  gap: 0.625rem;
+}
+
+/* Little square icon buttons (carousel arrows + lightbox controls). */
+.iconBtn {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  font-size: 1rem;
+  color: var(--text);
+  background: linear-gradient(180deg, rgba(var(--accent-rgb), 0.18), rgba(0, 0, 0, 0.2));
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+
+.iconBtn:not([aria-disabled="true"]):hover,
+.iconBtn:not([aria-disabled="true"]):focus-visible {
+  background: linear-gradient(180deg, rgba(var(--accent-rgb), 0.26), rgba(0, 0, 0, 0.15));
+  border-color: rgba(var(--accent-rgb), 0.7);
+  box-shadow: 0 8px 0 rgba(0, 0, 0, 0.35);
+}
+
+.iconBtn:not([aria-disabled="true"]):active {
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.3);
+}
+
+.iconBtn[aria-disabled="true"] {
+  opacity: 0.45;
+  box-shadow: none;
+  cursor: default;
+}
+
+.carouselDesc {
+  margin: 0.25rem 0 0;
+  opacity: 0.9;
+}
+
+/* Only the track scrolls sideways, never the whole page. */
+.carouselTrack {
+  position: relative;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: min(
+    var(--slide-max),
+    calc((100% - var(--per-view) * var(--gap)) / (var(--per-view) + var(--peek)))
+  );
+  gap: var(--gap);
+  margin-top: 0.75rem;
+  padding: 0.5rem 0.25rem 1rem;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 0.25rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--btn-border) transparent;
+  border-radius: 12px;
+}
+
+.carouselTrack::-webkit-scrollbar {
+  height: 8px;
+}
+
+.carouselTrack::-webkit-scrollbar-thumb {
+  background: var(--btn-border);
+  border-radius: 8px;
+}
+
+.carouselSlide {
+  min-width: 0;
+  scroll-snap-align: start;
+}
+
+/* Lets the last slide snap to the right edge so you can always reach the end. */
+.carouselSlide:last-child {
+  scroll-snap-align: end;
+}
+
+/* ---------- About ---------- */
 .aboutPanel {
-  width: min(var(--page-w), 95vw);
-  margin: 0 auto;
-  padding: 22px;
+  padding: 1rem;
 }
 
+/* Intro + my headshot: photo on top on phones, next to the text from 768px up. */
 .aboutHero {
   display: grid;
-  grid-template-columns: 560px minmax(0, 1fr);
-  gap: 28px;
-  align-items: start;
+  gap: 1rem;
 }
 
-.aboutIntro {
-  padding-right: 14px;
+.aboutPhoto {
+  order: -1;
+  justify-self: center;
+  width: min(15rem, 75%);
+  height: auto;
+  border: 3px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  box-shadow: 0 10px 0 rgba(0, 0, 0, 0.2);
 }
 
 .aboutHey {
-  font-size: 78px;
+  font-size: clamp(3.5rem, 15vw, 4.875rem);
+  font-weight: 400;
   line-height: 1;
-  margin: 0 0 14px 0;
-  white-space: nowrap;
+  margin: 0 0 0.875rem 0;
+  text-align: center;
 }
 
 .aboutName {
@@ -357,101 +641,81 @@ section {
 }
 
 .aboutLine {
-  margin: 10px 0;
-  font-size: 15px;
+  max-width: 65ch;
+  margin: 0.625rem 0;
+  font-size: 0.9375rem;
   line-height: 1.65;
   opacity: 0.92;
 }
 
 .aboutMini {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0 0 0 0.75rem;
   opacity: 0.85;
-  font-size: 13px;
-  margin-top: 16px;
+  font-size: 0.8125rem;
   border-left: 4px solid rgba(var(--accent-rgb), 0.55);
-  padding-left: 12px;
 }
 
 .aboutSocials {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
   display: flex;
-  gap: 12px;
-  margin-top: 16px;
+  gap: 0.75rem;
 }
 
 .aboutSocialLink {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
+  width: 2.75rem;
+  height: 2.75rem;
   border-radius: 10px;
   background: rgba(0, 0, 0, 0.15);
   border: 2px solid rgba(255, 255, 255, 0.1);
   color: var(--text);
-  font-size: 24px;
+  font-size: 1.5rem;
   text-decoration: none;
-  transition: transform 0.15s ease, background 0.15s ease, color 0.15s ease;
 }
 
-.aboutSocialLink:hover {
-  transform: translateY(-2px);
+.aboutSocialLink:hover,
+.aboutSocialLink:focus-visible {
   background: rgba(var(--accent-rgb), 0.2);
+  border-color: rgba(var(--accent-rgb), 0.5);
   color: var(--accent);
 }
 
-.aboutStory {
-  min-width: 0;
-  padding-top: 32px;
+.carousel--story {
+  margin-top: 1.75rem;
 }
 
 .aboutStoryTitle {
-  font-size: 48px;
-  margin: 0 0 12px 0;
-  text-align: center;
-}
-
-.aboutRail {
-  width: 100%;
-  max-width: 420px;
-  margin: 0 auto;
-  overflow-x: auto;
-  overflow-y: hidden;
-  cursor: grab;
-  user-select: none;
-  -webkit-overflow-scrolling: touch;
-  padding: 6px 2px 12px;
-}
-
-.aboutRail:active {
-  cursor: grabbing;
-}
-
-.aboutRail:focus {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-}
-
-.aboutTrack {
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: 270px;
-  gap: 16px;
-  align-items: start;
+  font-size: 3rem;
+  font-weight: 400;
+  line-height: 1;
+  margin: 0;
 }
 
 .aboutCard {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem;
   background: rgba(0, 0, 0, 0.12);
   border: 2px solid rgba(255, 255, 255, 0.08);
   border-radius: 14px;
   box-shadow: 0 10px 0 rgba(0, 0, 0, 0.2);
-  padding: 12px;
-  height: 220px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+}
+
+.carouselTrack:focus-visible .aboutCard {
+  border-color: rgba(var(--accent-rgb), 0.35);
 }
 
 .aboutCardTitle {
-  font-size: 26px;
+  font-size: 1.625rem;
+  font-weight: 400;
   margin: 0;
 }
 
@@ -460,243 +724,361 @@ section {
   overflow: hidden;
   border: 2px solid rgba(255, 255, 255, 0.08);
   background: rgba(0, 0, 0, 0.12);
-  flex: 0 0 92px;
 }
 
 .aboutCardImg img {
-  width: 100%;
-  height: 92px;
-  object-fit: cover;
   display: block;
+  width: 100%;
+  height: 7.5rem;
+  object-fit: cover;
 }
 
 .aboutCardBody {
   margin: 0;
-  font-size: 13px;
-  line-height: 1.45;
+  font-size: 0.8125rem;
+  line-height: 1.5;
   opacity: 0.92;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
-}
-
-@media (max-width: 1000px) {
-  .aboutHey {
-    text-align: center;
-    white-space: normal;
-  }
-
-  .aboutIntro {
-    padding-right: 0;
-  }
-}
-
-@media (max-width: 900px) {
-  .aboutHero {
-    grid-template-columns: 1fr;
-    gap: 22px;
-  }
-
-  .aboutStory {
-    padding-top: 12px;
-  }
-
-  .aboutRail {
-    max-width: 100%;
-  }
-
-  .aboutTrack {
-    grid-auto-columns: clamp(240px, 56vw, 320px);
-  }
 }
 
 .aboutGallery {
-  margin-top: 18px;
+  margin-top: 1.125rem;
 }
 
 .aboutGalleryTitle {
-  font-size: 44px;
-  margin: 12px 0 10px;
+  font-size: 2.75rem;
+  font-weight: 400;
+  margin: 0.75rem 0 0.625rem;
 }
 
 .printFrame {
   background: rgba(0, 0, 0, 0.14);
   border: 2px solid rgba(255, 255, 255, 0.08);
   border-radius: 14px;
-  padding: 14px;
+  padding: 0.875rem;
   box-shadow: 0 10px 0 rgba(0, 0, 0, 0.2);
 }
 
-.printMain {
+/* Gallery photos are buttons that open the big view (Lightbox.jsx). */
+.printMain,
+.printThumb {
+  display: block;
   width: 100%;
-  border-radius: 12px;
+  padding: 0;
   overflow: hidden;
-  border: 2px solid rgba(255, 255, 255, 0.08);
+  font: inherit;
   background: rgba(0, 0, 0, 0.12);
+  border: 2px solid rgba(255, 255, 255, 0.08);
+  cursor: zoom-in;
+}
+
+.printMain {
+  border-radius: 12px;
+}
+
+.printMain:hover,
+.printMain:focus-visible,
+.printThumb:hover,
+.printThumb:focus-visible {
+  border-color: rgba(var(--accent-rgb), 0.6);
 }
 
 .printMain img {
   display: block;
   width: 100%;
-  height: clamp(240px, 42vh, 520px);
+  height: clamp(15rem, 42vh, 32.5rem);
   object-fit: cover;
 }
 
 .printThumbRow {
-  margin-top: 12px;
+  list-style: none;
+  margin: 0.75rem 0 0;
+  padding: 0;
   display: grid;
-  grid-template-columns: repeat(8, minmax(0, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.625rem;
 }
 
 .printThumb {
-  border: 2px solid rgba(255, 255, 255, 0.08);
   border-radius: 10px;
-  overflow: hidden;
-  padding: 0;
-  background: rgba(0, 0, 0, 0.12);
 }
 
 .printThumb img {
   display: block;
   width: 100%;
-  height: 58px;
+  height: 3.625rem;
   object-fit: cover;
   opacity: 0.9;
 }
 
-.printThumb.is-static {
-  cursor: default;
+.printThumb:hover img,
+.printThumb:focus-visible img {
+  opacity: 1;
 }
 
-@media (max-width: 900px) {
+/* ---------- Lightbox (enlarged gallery photo) ---------- */
+body:has(.lightbox[open]) {
+  overflow: hidden;
+}
+
+/* The box hugs the photo: the image's max-height decides how wide it gets. */
+.lightbox {
+  width: fit-content;
+  max-width: min(64rem, calc(100vw - 1.5rem));
+  max-height: calc(100vh - 1.5rem);
+  padding: 0;
+  overflow: hidden;
+  color: var(--text);
+  background: var(--panel);
+  border: 3px solid var(--panel2);
+  border-radius: 14px;
+  box-shadow: 0 10px 0 rgba(0, 0, 0, 0.35);
+}
+
+.lightbox::backdrop {
+  background: rgba(5, 10, 9, 0.85);
+}
+
+.lightboxTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.625rem 0.75rem 0.5rem 1rem;
+}
+
+.lightboxTitle {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.lightboxImg {
+  display: block;
+  width: auto;
+  max-width: calc(100% - 1.5rem);
+  max-height: calc(100vh - 10.5rem);
+  margin: 0 auto;
+  border-radius: 10px;
+}
+
+.lightboxBar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 0.625rem 0.75rem 0.875rem;
+}
+
+.lightboxCount {
+  margin: 0;
+  min-width: 6ch;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
+@media (min-width: 480px) {
   .printThumbRow {
     grid-template-columns: repeat(5, minmax(0, 1fr));
   }
 }
 
-.skillsBlock {
-  width: 100%;
+@media (min-width: 700px) {
+  .carousel--story {
+    --per-view: 2;
+  }
 }
 
-.skillsCarousel {
-  padding: 6px 2px 8px;
+@media (min-width: 768px) {
+  .aboutPanel {
+    padding: 1.375rem;
+  }
+
+  /* Text column stops at a comfy line length; my photo centers in the space left. */
+  .aboutHero {
+    grid-template-columns: minmax(0, 36rem) minmax(14rem, 1fr);
+    align-items: center;
+    gap: 1.75rem;
+  }
+
+  .aboutPhoto {
+    order: 0;
+    width: min(100%, 21rem);
+  }
+
+  .aboutHey {
+    text-align: left;
+  }
 }
 
-.carousel-item-spacing {
-  padding: 0 8px;
+@media (min-width: 901px) {
+  .printThumbRow {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1001px) {
+  .aboutHey {
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  .carousel--story {
+    --per-view: 3;
+  }
+}
+
+/* ---------- Skills ---------- */
+.carousel--skills {
+  --gap: 0.75rem;
+  --per-view: 2;
+  --peek: 0.35;
+  --slide-max: 8rem;
+}
+
+.skillsTitle {
+  font-size: 2.75rem;
+  line-height: 1;
+  margin: 0;
 }
 
 .skillItem {
   text-align: center;
-  user-select: none;
 }
 
-.skillIconWrap,
 .skillIconFrame {
-  height: 84px;
+  height: 5.25rem;
   display: grid;
   place-items: center;
   background: rgba(0, 0, 0, 0.1);
   border: 2px solid rgba(255, 255, 255, 0.1);
   border-radius: 14px;
   box-shadow: 0 8px 0 rgba(0, 0, 0, 0.2);
-  padding: 10px;
+  padding: 0.625rem;
 }
 
-.skillIconWrap img,
+.skillItem:hover .skillIconFrame {
+  border-color: rgba(var(--accent-rgb), 0.55);
+  box-shadow: 0 10px 0 rgba(0, 0, 0, 0.28);
+}
+
+.carouselTrack:focus-visible .skillIconFrame {
+  border-color: rgba(var(--accent-rgb), 0.35);
+}
+
 .skillIconFrame img {
-  width: 64px;
-  height: 64px;
-  object-fit: contain;
-  image-rendering: -webkit-optimize-contrast;
+  width: 3.5rem;
+  height: 3.5rem;
 }
 
 .skillLabel {
-  margin-top: 8px;
-  font-size: 14px;
-  opacity: 0.95;
+  display: block;
+  margin-top: 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.3;
 }
 
+@media (min-width: 420px) {
+  .carousel--skills {
+    --per-view: 3;
+  }
+}
+
+@media (min-width: 560px) {
+  .carousel--skills {
+    --per-view: 4;
+  }
+}
+
+@media (min-width: 768px) {
+  .carousel--skills {
+    --per-view: 6;
+  }
+
+  .skillIconFrame img {
+    width: 4rem;
+    height: 4rem;
+  }
+}
+
+@media (min-width: 1001px) {
+  .carousel--skills {
+    --per-view: 8;
+  }
+}
+
+/* ---------- Projects ---------- */
 .projectsPage {
-  margin: 0 auto;
+  padding: 1rem;
 }
 
 .projectsTop {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  gap: 14px;
+  gap: 0.875rem;
   flex-wrap: wrap;
-  margin-bottom: 12px;
+  margin-bottom: 0.75rem;
 }
 
 .projectsTitle {
-  font-size: 60px;
+  font-size: 3.75rem;
   line-height: 1;
   margin: 0;
 }
 
 .projectsHint {
   opacity: 0.9;
-  margin-top: 6px;
-  font-size: 15px;
+  margin: 0.375rem 0 0;
+  font-size: 0.9375rem;
 }
 
 .portalFrame {
-  margin-top: 14px;
-  padding: 14px;
+  margin-top: 0.875rem;
+  padding: 0.875rem;
 }
 
 .projectSection {
-  margin-top: 18px;
+  margin-top: 1.125rem;
   width: 100%;
-  max-width: 100%;
 }
 
 .projectSectionHead {
-  margin: 14px 0 10px;
+  margin: 0.875rem 0 0.625rem;
 }
 
 .projectSectionTitle {
-  font-size: 44px;
+  font-size: 2.75rem;
   line-height: 1;
   margin: 0;
 }
 
 .projectSectionSub {
   opacity: 0.9;
-  font-size: 14px;
-  margin-top: 4px;
+  font-size: 0.875rem;
+  margin: 0.25rem 0 0;
 }
 
 .projectList {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 1rem;
 }
 
 .projectCard {
   display: grid;
-  grid-template-columns: 360px minmax(0, 1fr);
-  gap: 18px;
-  padding: 14px;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.125rem;
+  padding: 0.875rem;
   align-items: stretch;
   width: 100%;
-  max-width: 100%;
 }
 
-.projectCard--flipped {
-  grid-template-columns: minmax(0, 1fr) 360px;
-}
-
-.projectCard--flipped .projectMedia {
-  order: 2;
-}
-
-.projectCard--flipped .projectBody {
-  order: 1;
+.projectCard:hover,
+.projectCard:has(:focus-visible) {
+  border-color: rgba(var(--accent-rgb), 0.45);
+  box-shadow: 0 14px 0 rgba(0, 0, 0, 0.3);
 }
 
 .projectMedia {
@@ -705,9 +1087,10 @@ section {
   border: 3px solid rgba(255, 255, 255, 0.08);
   background: rgba(0, 0, 0, 0.14);
   box-shadow: 0 10px 0 rgba(0, 0, 0, 0.2);
-  height: 220px;
+  height: 15rem;
+  /* Explicit grid track so height: 100% works and the whole screenshot fits (contain). */
   display: grid;
-  place-items: center;
+  grid-template: minmax(0, 1fr) / minmax(0, 1fr);
 }
 
 .projectImg {
@@ -718,16 +1101,24 @@ section {
   background: rgba(0, 0, 0, 0.18);
 }
 
+/* Placeholder for when a project has no screenshot (or it doesn't load). */
 .projectImg--fallback {
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.06);
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 2rem;
+  background:
+    repeating-linear-gradient(0deg, rgba(var(--accent-rgb), 0.06) 0 2px, transparent 2px 16px),
+    repeating-linear-gradient(90deg, rgba(var(--accent-rgb), 0.06) 0 2px, transparent 2px 16px),
+    rgba(0, 0, 0, 0.18);
 }
 
 .projectBody {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 0.625rem;
   padding: 4px 2px;
   min-width: 0;
 }
@@ -736,42 +1127,53 @@ section {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  gap: 12px;
+  gap: 0.75rem;
   flex-wrap: wrap;
 }
 
 .projectTitle {
   margin: 0;
-  font-size: 46px;
+  font-size: 2.875rem;
   line-height: 0.9;
 }
 
 .projectDate {
+  margin: 0;
   opacity: 0.85;
-  font-size: 14px;
+  font-size: 0.875rem;
   border: 2px solid rgba(255, 255, 255, 0.1);
   background: rgba(0, 0, 0, 0.12);
-  padding: 6px 10px;
+  padding: 0.375rem 0.625rem;
   border-radius: 999px;
+}
+
+.projectRole {
+  margin: 0;
+  color: var(--accent);
+  font-size: 0.875rem;
+  font-weight: 700;
 }
 
 .projectDesc {
   margin: 0;
   opacity: 0.92;
-  font-size: 14px;
+  font-size: 0.875rem;
   line-height: 1.5;
 }
 
 .projectStack {
+  list-style: none;
+  margin: 0;
+  padding: 0;
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 0.5rem;
 }
 
 .projectChip {
-  font-size: 12px;
+  font-size: 0.75rem;
   opacity: 0.95;
-  padding: 6px 10px;
+  padding: 0.375rem 0.625rem;
   border-radius: 999px;
   background: rgba(var(--panel-rgb), 0.55);
   border: 2px solid rgba(255, 255, 255, 0.1);
@@ -779,18 +1181,19 @@ section {
 
 .projectActions {
   display: flex;
-  gap: 10px;
+  gap: 0.625rem;
   align-items: center;
   flex-wrap: wrap;
+  min-height: 3rem;
 }
 
 .projectBtn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 10px 14px;
+  padding: 0.625rem 0.875rem;
   font-family: "VT323", "Space Mono", monospace;
-  font-size: 22px;
+  font-size: 1.375rem;
   color: var(--text);
   background: linear-gradient(180deg, rgba(var(--accent-rgb), 0.18), rgba(0, 0, 0, 0.2));
   border: 2px solid rgba(255, 255, 255, 0.12);
@@ -799,29 +1202,30 @@ section {
   cursor: pointer;
   text-transform: uppercase;
   text-decoration: none;
-  transition: transform 0.1s ease, box-shadow 0.1s ease;
 }
 
-.projectBtn:hover {
-  transform: translateY(-2px);
+.projectBtn:hover,
+.projectBtn:focus-visible {
+  background: linear-gradient(180deg, rgba(var(--accent-rgb), 0.26), rgba(0, 0, 0, 0.15));
+  border-color: rgba(var(--accent-rgb), 0.7);
+  box-shadow: 0 8px 0 rgba(0, 0, 0, 0.35);
 }
 
 .projectBtn:active {
-  transform: translateY(4px);
   box-shadow: 0 2px 0 rgba(0, 0, 0, 0.3);
 }
 
 .projectNoLink {
   opacity: 0.75;
-  font-size: 13px;
+  font-size: 0.8125rem;
 }
 
 .projectTabs {
   display: flex;
-  gap: 10px;
+  gap: 0.625rem;
   flex-wrap: wrap;
   align-items: center;
-  padding: 8px;
+  padding: 0.5rem;
   border-radius: 14px;
   background: rgba(0, 0, 0, 0.14);
   border: 2px solid rgba(255, 255, 255, 0.08);
@@ -830,26 +1234,26 @@ section {
 
 .projectTab {
   font-family: "VT323", "Space Mono", monospace;
-  font-size: 22px;
+  font-size: 1.375rem;
   letter-spacing: 1px;
   text-transform: uppercase;
-  padding: 8px 14px;
+  padding: 0.5rem 0.875rem;
   border-radius: 12px;
   cursor: pointer;
   color: rgba(224, 212, 255, 0.9);
   background: rgba(255, 255, 255, 0.04);
   border: 2px solid rgba(255, 255, 255, 0.10);
   box-shadow: 0 6px 0 rgba(0, 0, 0, 0.28);
-  transition: transform 120ms ease, filter 120ms ease;
 }
 
-.projectTab:hover {
-  transform: translateY(-2px);
-  filter: brightness(1.05);
+.projectTab:hover,
+.projectTab:focus-visible {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(var(--accent-rgb), 0.45);
+  box-shadow: 0 8px 0 rgba(0, 0, 0, 0.32);
 }
 
 .projectTab:active {
-  transform: translateY(4px);
   box-shadow: 0 2px 0 rgba(0, 0, 0, 0.28);
 }
 
@@ -860,18 +1264,153 @@ section {
   text-shadow: 0 2px 0 rgba(0, 0, 0, 0.35);
 }
 
-@media (max-width: 980px) {
-  .projectCard,
-  .projectCard--flipped {
-    grid-template-columns: 1fr;
+@media (min-width: 768px) {
+  .projectsPage {
+    padding: 1.125rem;
+  }
+}
+
+@media (min-width: 981px) {
+  .projectCard {
+    grid-template-columns: 22.5rem minmax(0, 1fr);
   }
 
-  .projectCard--flipped .projectMedia,
+  .projectCard--flipped {
+    grid-template-columns: minmax(0, 1fr) 22.5rem;
+  }
+
+  .projectCard--flipped .projectMedia {
+    order: 2;
+  }
+
   .projectCard--flipped .projectBody {
-    order: unset;
+    order: 1;
   }
 
   .projectMedia {
-    height: 240px;
+    height: 13.75rem;
+  }
+}
+
+/* =========================================================
+   Motion! Only runs for people who haven't asked for reduced motion.
+   With reduced motion on, hover/focus still change color, border,
+   and shadow (just instantly, with nothing moving).
+   Transforms don't affect layout, so nothing shifts or overflows.
+   ========================================================= */
+@media (prefers-reduced-motion: no-preference) {
+  html,
+  .carouselTrack {
+    scroll-behavior: smooth;
+  }
+
+  .navLink,
+  .footerLink,
+  .inlineLink {
+    transition: color 0.15s ease;
+  }
+
+  .printMain,
+  .printThumb {
+    transition: border-color 0.15s ease;
+  }
+
+  .printMain img,
+  .printThumb img {
+    transition: transform 0.3s ease, opacity 0.2s ease;
+  }
+
+  .printMain:hover img,
+  .printMain:focus-visible img {
+    transform: scale(1.03);
+  }
+
+  .printThumb:hover img,
+  .printThumb:focus-visible img {
+    transform: scale(1.1);
+  }
+
+  .lightbox[open] {
+    animation: lightbox-in 0.2s ease-out;
+  }
+
+  .lightbox[open]::backdrop {
+    animation: lightbox-fade 0.2s ease-out;
+  }
+
+  @keyframes lightbox-in {
+    from {
+      opacity: 0;
+      transform: scale(0.96);
+    }
+  }
+
+  @keyframes lightbox-fade {
+    from {
+      opacity: 0;
+    }
+  }
+
+  .eyePupil {
+    transition: transform 60ms linear;
+  }
+
+  .action_btn,
+  .aboutSocialLink,
+  .projectBtn,
+  .projectTab,
+  .iconBtn,
+  .skillIconFrame {
+    transition:
+      transform 0.15s ease,
+      box-shadow 0.15s ease,
+      background-color 0.15s ease,
+      border-color 0.15s ease,
+      color 0.15s ease;
+  }
+
+  .action_btn:hover,
+  .action_btn:focus-visible {
+    transform: translateY(-2px);
+  }
+
+  .aboutSocialLink:hover,
+  .aboutSocialLink:focus-visible,
+  .projectBtn:hover,
+  .projectBtn:focus-visible,
+  .projectTab:hover,
+  .projectTab:focus-visible,
+  .iconBtn:not([aria-disabled="true"]):hover,
+  .iconBtn:not([aria-disabled="true"]):focus-visible {
+    transform: translateY(-3px);
+  }
+
+  .projectBtn:active,
+  .projectTab:active,
+  .iconBtn:not([aria-disabled="true"]):active {
+    transform: translateY(3px);
+  }
+
+  .skillItem:hover .skillIconFrame {
+    transform: translateY(-4px);
+  }
+
+  .projectCard {
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+
+  .projectCard:hover,
+  .projectCard:has(:focus-visible) {
+    transform: translateY(-4px);
+  }
+
+  /* Zooms inside the frame (.projectMedia clips it with overflow: hidden). */
+  .projectImg {
+    transition: transform 0.35s ease;
+  }
+
+  .projectCard:hover .projectImg,
+  .projectCard:has(:focus-visible) .projectImg {
+    transform: scale(1.04);
   }
 }
