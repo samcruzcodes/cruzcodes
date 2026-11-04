@@ -1,15 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Skills from "./Skills";
 import ExternalLink from "./ExternalLink";
 import Icon from "./Icon";
 import ImagePlaceholder from "./ImagePlaceholder";
-import { projects, projectTags } from "../data";
+import Lightbox from "./Lightbox";
+import { findProjectById, projectId, projects, projectTags } from "../data";
 
-// Ongoing stuff first, then newest → oldest (details above `projects` in data.js).
-const toTime = (d) => Date.parse(d) || 0;
-const sortedProjects = [...projects].sort(
-  (a, b) => Number(Boolean(b.ongoing)) - Number(Boolean(a.ongoing)) || toTime(b.date) - toTime(a.date)
-);
+// The order is hand-picked in data.js (`section` + `rank`), not by date. Filters keep it.
+const inSection = (section) =>
+  projects.filter((p) => p.section === section).sort((a, b) => a.rank - b.rank);
+const selectedProjects = inSection("selected");
+const moreProjects = inSection("more");
 
 const FILTERS = ["All", ...projectTags];
 
@@ -17,8 +18,8 @@ const FILTERS = ["All", ...projectTags];
 const matchesFilter = (p, filter) =>
   filter === "All" || p.tag === filter || Boolean(p.alsoTags?.includes(filter));
 
+// Shown under "Selected Projects" when a filter is on.
 const SUBTITLES = {
-  All: "Everything, sorted newest → oldest.",
   Game: "Edutainment + game dev builds.",
   Web: "Full-stack + product builds.",
   Mobile: "Apps built for the phone in your pocket.",
@@ -39,14 +40,15 @@ function Stack({ items }) {
   );
 }
 
-function ProjectCard({ project, flipped }) {
+// `compact` is the smaller card used in "More Projects".
+function ProjectCard({ project, flipped, compact }) {
   const {
     title,
     role,
     description,
     image,
     imagePlaceholder,
-    galleryPlaceholders,
+    gallery,
     status,
     dateLabel,
     stack,
@@ -55,9 +57,16 @@ function ProjectCard({ project, flipped }) {
   } = project;
   const hasLinks = Boolean(viewLink) || Boolean(githubLink);
   const [imageFailed, setImageFailed] = useState(false);
+  // Which screenshot is open in the big viewer (index into `gallery`), or null.
+  const [enlarged, setEnlarged] = useState(null);
 
   return (
-    <article className={`projectCard panel ${flipped ? "projectCard--flipped" : ""}`}>
+    <article
+      id={projectId(title)}
+      className={`projectCard panel ${flipped ? "projectCard--flipped" : ""} ${
+        compact ? "projectCard--compact" : ""
+      }`}
+    >
       <div className="projectMedia">
         {image && !imageFailed ? (
           <img
@@ -71,7 +80,7 @@ function ProjectCard({ project, flipped }) {
             onError={() => setImageFailed(true)}
           />
         ) : imagePlaceholder ? (
-          // The exact filename to add is in the TODO next to this project in data.js.
+          // Fallback for a project with no screenshot yet (see data.js).
           <ImagePlaceholder description={imagePlaceholder} height="100%" />
         ) : (
           <div className="projectImg projectImg--fallback" aria-hidden="true">
@@ -82,7 +91,9 @@ function ProjectCard({ project, flipped }) {
 
       <div className="projectBody">
         <header className="projectHeader">
-          <h3 className="retro-title projectTitle">{title}</h3>
+          <h3 className="retro-title projectTitle" tabIndex={-1}>
+            {title}
+          </h3>
           {dateLabel && <p className="projectDate">{dateLabel}</p>}
         </header>
 
@@ -108,27 +119,58 @@ function ProjectCard({ project, flipped }) {
         </footer>
       </div>
 
-      {galleryPlaceholders?.length > 0 && (
-        // Filenames for these are in the TODO next to this project in data.js.
-        <ul className="projectGallery" aria-label={`${title} screenshots`}>
-          {galleryPlaceholders.map((description) => (
-            <li key={description}>
-              <ImagePlaceholder description={description} aspectRatio={null} />
-            </li>
-          ))}
-        </ul>
+      {gallery?.length > 0 && (
+        <>
+          {/* Every screenshot is a button that opens it big. The alt says what clicking does,
+              and the big view has the full description. */}
+          <ul className="projectGallery" aria-label={`${title} screenshots`}>
+            {gallery.map((photo, i) => (
+              <li key={photo.src}>
+                <button type="button" className="projectShot" onClick={() => setEnlarged(i)}>
+                  <img
+                    src={photo.src}
+                    width={photo.width}
+                    height={photo.height}
+                    alt={`View larger: ${photo.label}`}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </button>
+              </li>
+            ))}
+          </ul>
+          <Lightbox
+            photos={gallery}
+            index={enlarged}
+            onChange={setEnlarged}
+            onClose={() => setEnlarged(null)}
+          />
+        </>
       )}
     </article>
   );
 }
 
-export default function ProjectsPage() {
+// `targetId` (from a Featured tile on Home, or a #project-… link) is a card to jump to.
+export default function ProjectsPage({ targetId = null }) {
   const [filter, setFilter] = useState("All");
+  const target = findProjectById(targetId);
   // Stays as you left it when you change filters; the section hides itself if nothing matches.
-  const [moreOpen, setMoreOpen] = useState(false);
+  // Starts open if the project I'm jumping to lives inside it.
+  const [moreOpen, setMoreOpen] = useState(target?.section === "more");
 
-  const visible = sortedProjects.filter((p) => !p.moreProjects && matchesFilter(p, filter));
-  const visibleMore = sortedProjects.filter((p) => p.moreProjects && matchesFilter(p, filter));
+  // Filter starts on "All" every time this page opens, so the target card is always on the page.
+  useEffect(() => {
+    const card = target && document.getElementById(projectId(target.title));
+    if (!card) return;
+    // "instant" so it doesn't glide past everything (and it's fine for reduced motion).
+    // The card's scroll-margin-top keeps it clear of the sticky header.
+    card.scrollIntoView({ block: "start", behavior: "instant" });
+    card.querySelector("h3")?.focus({ preventScroll: true });
+  }, [target]);
+
+  const visible = selectedProjects.filter((p) => matchesFilter(p, filter));
+  const visibleMore = moreProjects.filter((p) => matchesFilter(p, filter));
 
   return (
     <section className="page panel panel-bevel projectsPage" aria-labelledby="projects-title">
@@ -162,9 +204,9 @@ export default function ProjectsPage() {
       <section className="projectSection" aria-labelledby="project-list-title">
         <div className="projectSectionHead">
           <h2 id="project-list-title" className="retro-title projectSectionTitle">
-            {filter === "All" ? "All Projects" : `${filter} Projects`}
+            Selected Projects
           </h2>
-          <p className="projectSectionSub">{SUBTITLES[filter]}</p>
+          {SUBTITLES[filter] && <p className="projectSectionSub">{SUBTITLES[filter]}</p>}
         </div>
 
         <div className="projectList">
@@ -191,9 +233,9 @@ export default function ProjectsPage() {
 
           {/* `hidden` takes the cards out of the tab order and the screen-reader tree. */}
           <div id="more-projects-list" hidden={!moreOpen}>
-            <div className="projectList">
-              {visibleMore.map((p, i) => (
-                <ProjectCard key={p.title} project={p} flipped={(visible.length + i) % 2 === 1} />
+            <div className="projectList projectList--compact">
+              {visibleMore.map((p) => (
+                <ProjectCard key={p.title} project={p} flipped={false} compact />
               ))}
             </div>
           </div>

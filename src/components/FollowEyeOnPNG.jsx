@@ -54,6 +54,7 @@ export default function FollowEyeOnPNG() {
         width="600"
         height="794"
         alt=""
+        fetchpriority="high"
         draggable={false}
       />
       <span ref={pupilRef} className="eyePupil" />

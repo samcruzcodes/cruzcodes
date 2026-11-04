@@ -23,7 +23,7 @@ export const about = {
     { text: "AI tools for researchers", href: "https://gpt-abstract-assistant.vercel.app/" },
     ", and I lead ",
     { text: "a 24-person game team at DGA Studios", href: "https://github.com/cornelldga/Veil-Sur" },
-    ". I'm always up for collaborating at the intersection of EdTech, games, and product, so let's connect!",
+    ". I've also taught game dev at Girls Who Code, TA'd Cornell's intro CS course, and taught English in Tokyo. I'm always up for collaborating at the intersection of EdTech, games, and product, so let's connect!",
   ],
   orgs: [
     { name: "Latinas Promoviendo Comunidad / Lambda Pi Chi Sorority, Inc.", href: "https://www.lambdapichi.org" },
@@ -86,8 +86,8 @@ export const story = [
     ],
     image: {
       src: "assets/projects/cheezy-conundrum.webp",
-      width: 853,
-      height: 480,
+      width: 610,
+      height: 343,
       alt: "Cheezy Conundrum title screen: a white rat peeking out of a trash can",
     },
   },
@@ -130,18 +130,38 @@ export const story = [
 // A project has one main `tag`, and can show up under more tabs with `alsoTags` (e.g. ["AI"]).
 export const projectTags = ["Game", "Web", "Mobile", "AI"];
 
-// How sorting works: anything I'm still working on (`ongoing: true`) goes first,
-// newest start date first. Everything else is sorted by end date.
-// So `date` = start date if ongoing, end date if not. `dateLabel` is what shows on the card.
+// How the Projects page is ordered (on purpose: recruiter-focused, not by date):
+//   section: "selected" -> the main "Selected Projects" list, or "more" -> the "More Projects" list
+//   rank:    1, 2, 3... the order inside its section (filters keep this order)
+//   featured: 1, 2, 3 (optional) -> the three Featured tiles on Home, in that order
+// `date` and `ongoing` are no longer used for sorting; they're just notes about when I worked on it.
+// `dateLabel` is what shows on the card.
 // `image` width/height = the file's real pixel size (keeps the page from jumping while it loads).
-// No screenshot yet? Use `imagePlaceholder: "what it will show"` instead of `image` (it renders an
-// ImagePlaceholder), add a TODO with the exact filename, and add a row to IMAGE_REQUESTS.md.
-// `galleryPlaceholders` does the same for a row of extra screenshots under the card.
+// `gallery` = extra screenshots under the card (same shape as printGallery photos; they open in
+// the big viewer). `imagePlaceholder: "what it will show"` is the fallback when there's no image
+// yet: add a TODO with the exact filename and a row in IMAGE_REQUESTS.md.
+// `legacyIds` = old card ids (from before a rename) that should still open the right card.
 // `status` shows a small note (like "Coming Soon") where the buttons would be.
-// `moreProjects` (see bottom of the list) tucks older projects into the collapsible section.
+
+// Stable id for a project's card (also its link target): "Veil Sur" -> "project-veil-sur".
+export const projectId = (title) =>
+  "project-" +
+  title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+
+// Finds a project from a card id like "project-veil-sur" (or one of its old `legacyIds`).
+export const findProjectById = (id) =>
+  projects.find((p) => projectId(p.title) === id || p.legacyIds?.includes(id));
+
 export const projects = [
   {
-    title: "The Veil Sur",
+    title: "Veil Sur",
+    section: "selected",
+    rank: 2,
+    featured: 2,
+    legacyIds: ["project-the-veil-sur"],
     tag: "Game",
     role: "Project Lead",
     ongoing: true,
@@ -154,38 +174,69 @@ export const projects = [
       src: "assets/projects/the-veil-sur.webp",
       width: 865,
       height: 480,
-      alt: "The Veil Sur key art: a camera-headed character beside shadowy creatures, under the game's logo",
+      alt: "Veil Sur key art: a camera-headed character beside shadowy creatures, under the game's logo",
     },
     stack: ["Unity", "C#", "GitHub", "Milanote"],
     viewLink: "",
     githubLink: "https://github.com/cornelldga/Veil-Sur", // checked Nov 2026: public repo
-    // TODO(image): public/assets/projects/veilsur-1.png, veilsur-2.png, veilsur-3.png
-    galleryPlaceholders: [
-      "The Veil Sur gameplay screenshot 1",
-      "The Veil Sur gameplay screenshot 2",
-      "The Veil Sur gameplay screenshot 3",
+    // Screenshots from the game (originals are in design/source-images/). thumb = gallery tile,
+    // large = the big viewer.
+    gallery: [
+      {
+        src: "assets/projects/veilsur-in-game1.webp",
+        width: 640,
+        height: 358,
+        label: "Veil Sur: HQ reception",
+        alt: "Veil Sur in-game reception room with an eye-logo desk and a dialogue box from HQ saying you're in the reception of OYO HQ",
+        large: { src: "assets/projects/veilsur-in-game1-large.webp", width: 1480, height: 828 },
+      },
+      {
+        src: "assets/projects/veilsur-in-game2.webp",
+        width: 640,
+        height: 361,
+        label: "Veil Sur: document mode",
+        alt: "Veil Sur in document mode: a camera-viewfinder overlay with the prompt “Open your notebook again.” and a white document panel noting “TODO: Government inspector on 04/04”",
+        large: { src: "assets/projects/veilsur-in-game2-large.webp", width: 1374, height: 776 },
+      },
+      {
+        src: "assets/projects/veilsur-in-game3.webp",
+        width: 640,
+        height: 351,
+        label: "Veil Sur: photo-linking puzzle",
+        alt: "Veil Sur puzzle screen with the questions “What day is it today?” and “What is the elevator code?” linked to empty photo slots",
+        large: { src: "assets/projects/veilsur-in-game3-large.webp", width: 1600, height: 879 },
+      },
     ],
   },
   {
     title: "Budget.io Watchdog",
+    section: "selected",
+    rank: 3,
+    featured: 3,
     tag: "Web",
     alsoTags: ["AI"],
     role: "Solo Project",
     ongoing: true,
-    // Real start is Oct 2026, but sorting by that would put it above The Veil Sur. Ties keep
-    // list order, so sharing the Veil Sur date keeps Watchdog second. Only dateLabel shows.
-    date: "2026-08-01",
+    date: "2026-10-01",
     dateLabel: "Oct 2026 – Present",
     description:
       "A real-time fraud detection system that streams transactions through Kafka into a Java/Spring Boot service with PostgreSQL. Six rules catch duplicate charges, subscription price hikes, and suspicious spending. I tested it through Kubernetes recovery, scaling, and rolling updates with zero missing transactions across 1,503 transactions, and built a dashboard tracking per-rule precision/recall and ~26 ms p99 latency.",
-    // TODO(image): public/assets/projects/watchdog-dashboard.png
-    imagePlaceholder: "Budget.io Watchdog monitoring dashboard",
+    image: {
+      // Source: screenshot of my Budget.io Watchdog dashboard (original: design/source-images/watchdog-latency.png).
+      src: "assets/projects/watchdog.webp",
+      width: 795,
+      height: 480,
+      alt: "Budget.io Watchdog dashboard showing 14,868 transactions processed, 733 alerts raised, 56.3 per second throughput, and 7.9 ms median latency (p99 20 ms), above a table of precision and recall for each fraud rule",
+    },
     stack: ["Java", "Spring Boot", "Kafka", "PostgreSQL", "Docker", "Kubernetes", "React"],
     viewLink: "",
     githubLink: "https://github.com/samcruzcodes/budget-io-watchdog",
   },
   {
     title: "CourseLynx",
+    section: "selected",
+    rank: 1,
+    featured: 1,
     tag: "Mobile",
     role: "Mobile Engineer Intern → Engineer",
     ongoing: true,
@@ -206,6 +257,8 @@ export const projects = [
   },
   {
     title: "Lerly Liz Studios",
+    section: "selected",
+    rank: 8,
     tag: "Web",
     role: "Freelance Web Developer",
     date: "2026-07-01",
@@ -225,6 +278,8 @@ export const projects = [
   },
   {
     title: "H4I — PPAC Healthcare Platform",
+    section: "selected",
+    rank: 4,
     tag: "Web",
     alsoTags: ["AI"],
     date: "2026-05-01",
@@ -244,6 +299,8 @@ export const projects = [
   },
   {
     title: "Duke vs. The Gang",
+    section: "selected",
+    rank: 5,
     tag: "Game",
     date: "2026-05-01",
     dateLabel: "Sep 2025 – May 2026",
@@ -256,12 +313,41 @@ export const projects = [
       height: 480,
       alt: "Duke vs. The Gang key art: the Wild West cast in a comic-style brawl",
     },
+    // In-game screenshots (originals are in design/source-images/). Same setup as Veil Sur's.
+    gallery: [
+      {
+        src: "assets/projects/duke-ingame-1.webp",
+        width: 640,
+        height: 358,
+        label: "Duke vs. The Gang: Julius boss fight",
+        alt: "Duke vs. The Gang boss fight against Julius, Manic Miner: a cowboy dodges red-circled dynamite on mine-cart tracks as an explosion goes off",
+        large: { src: "assets/projects/duke-ingame-1-large.webp", width: 1600, height: 895 },
+      },
+      {
+        src: "assets/projects/duke-ingame-2.webp",
+        width: 640,
+        height: 360,
+        label: "Duke vs. The Gang: dialogue with Ash",
+        alt: "Duke vs. The Gang dialogue scene: Ash, a red-haired character in a leafy hat, says “Duke, right? I know I'm in no position to ask for anything, but please. Granny's all I have.”",
+        large: { src: "assets/projects/duke-ingame-2-large.webp", width: 1600, height: 899 },
+      },
+      {
+        src: "assets/projects/duke-ingame-3.webp",
+        width: 640,
+        height: 359,
+        label: "Duke vs. The Gang: Mirage & Ace boss fight",
+        alt: "Duke vs. The Gang boss fight against Mirage & Ace, Dynamic Duo: a cowboy stands near a man in sunglasses on a theater stage with red curtains while knives with bows fly across the floor",
+        large: { src: "assets/projects/duke-ingame-3-large.webp", width: 1600, height: 896 },
+      },
+    ],
     stack: ["Unity", "C#", "Trello"],
     viewLink: "https://store.steampowered.com/app/4662580/Duke_vs_The_Gang/",
     githubLink: "",
   },
   {
     title: "Cure Academy",
+    section: "more",
+    rank: 1,
     tag: "Web",
     role: "Freelance Web Developer",
     date: "2026-05-01",
@@ -270,8 +356,8 @@ export const projects = [
       "Built the full-stack website for Cure Academy, a nonprofit empowering the next generation of cancer scientists and physicians through education, research, and mentorship.",
     image: {
       src: "assets/projects/cure-academy.webp",
-      width: 918,
-      height: 480,
+      width: 660,
+      height: 345,
       alt: "Cure Academy homepage headline: “Empowering the next generation of cancer scientists and physicians”",
     },
     viewLink: "https://cureacademy.github.io",
@@ -279,20 +365,28 @@ export const projects = [
   },
   {
     title: "Cornell Med in Black Website",
+    section: "selected",
+    rank: 10,
     tag: "Web",
     role: "Freelance Web Developer",
-    date: "2026-08-01",
-    dateLabel: "Sep - Nov 2026",
-    status: "Coming Soon",
+    date: "2026-09-01",
+    dateLabel: "Sep 2026 – Nov 2026",
     description: "An accessible, W3C-valid multi-page site for Cornell's Med in Black student org.",
-    // TODO(image): public/assets/projects/mib.png
-    imagePlaceholder: "Cornell Med in Black website",
+    image: {
+      // Source: screenshot of medinblackcornell.github.io; photos © Med in Black at Cornell.
+      src: "assets/projects/medinblack.webp",
+      width: 832,
+      height: 480,
+      alt: "Cornell Med in Black homepage: the headline “To Be Young, Gifted and Black” beside three group photos of members on an ice rink",
+    },
     stack: ["HTML", "CSS"],
-    viewLink: "",
-    githubLink: "",
+    viewLink: "https://medinblackcornell.github.io/index.html",
+    githubLink: "https://github.com/medinblackcornell/medinblackcornell.github.io",
   },
   {
     title: "H4I — Alaska Children's Trust",
+    section: "selected",
+    rank: 7,
     tag: "Mobile",
     date: "2025-12-01",
     dateLabel: "Sep–Dec 2025",
@@ -311,6 +405,8 @@ export const projects = [
   },
   {
     title: "ThinkDraft AI",
+    section: "selected",
+    rank: 6,
     tag: "Web",
     alsoTags: ["AI"],
     date: "2025-08-01",
@@ -329,6 +425,8 @@ export const projects = [
   },
   {
     title: "H4I — Ithaca Community Recovery",
+    section: "selected",
+    rank: 9,
     tag: "Web",
     date: "2025-05-01",
     dateLabel: "Jan–May 2025",
@@ -347,7 +445,8 @@ export const projects = [
   },
   {
     title: "Circle K Website",
-    moreProjects: true,
+    section: "more",
+    rank: 6,
     tag: "Web",
     date: "2025-02-01",
     dateLabel: "2025",
@@ -356,8 +455,8 @@ export const projects = [
     image: {
       // Source: screenshot of circlekatcornell.org; group photo © Circle K at Cornell.
       src: "assets/projects/circle-k.webp",
-      width: 883,
-      height: 480,
+      width: 630,
+      height: 342,
       alt: "Circle K at Cornell homepage with a member group photo and the motto “Service. Leadership. Fellowship.”",
     },
     stack: ["React", "Bootstrap", "Fly.io"],
@@ -366,6 +465,8 @@ export const projects = [
   },
   {
     title: "Budget Planner",
+    section: "more",
+    rank: 3,
     tag: "Web",
     date: "2024-06-01",
     dateLabel: "2024",
@@ -373,8 +474,8 @@ export const projects = [
       "Developed an AI-powered budgeting app providing real-time insights and personalized recommendations to simplify budgeting.",
     image: {
       src: "assets/projects/budget-planner.webp",
-      width: 892,
-      height: 480,
+      width: 640,
+      height: 344,
       alt: "Budget Planner with monthly income and expense inputs beside budget-tracking progress bars",
     },
     stack: ["JavaScript", "Node.js", "React", "Bootstrap", "Fly.io", "Docker"],
@@ -383,7 +484,8 @@ export const projects = [
   },
   {
     title: "APO Gamma Website",
-    moreProjects: true,
+    section: "more",
+    rank: 7,
     tag: "Web",
     date: "2024-04-01",
     dateLabel: "2024",
@@ -392,8 +494,8 @@ export const projects = [
     image: {
       // Source: screenshot of apogamma.org; campus photo from the APO Gamma site.
       src: "assets/projects/apo-gamma.webp",
-      width: 884,
-      height: 480,
+      width: 630,
+      height: 342,
       alt: "Alpha Phi Omega Gamma Chapter homepage over an aerial photo of Cornell's campus",
     },
     stack: ["React", "Bootstrap", "Fly.io"],
@@ -402,7 +504,8 @@ export const projects = [
   },
   {
     title: "Sandcastle Tycoon",
-    moreProjects: true,
+    section: "more",
+    rank: 4,
     tag: "Game",
     date: "2024-02-01",
     dateLabel: "Feb 2024",
@@ -410,8 +513,8 @@ export const projects = [
       "A learn-then-play experience: an educational website on shoreline erosion paired with a game where players put that knowledge to work through interactive sandcastle mechanics.",
     image: {
       src: "assets/projects/sandy-shores.webp",
-      width: 881,
-      height: 480,
+      width: 630,
+      height: 343,
       alt: "Sandcastle Tycoon title screen: a beach between palm trees with Play and How to Play buttons",
     },
     stack: ["JavaScript", "p5.js", "Aseprite", "repl.it"],
@@ -420,7 +523,8 @@ export const projects = [
   },
   {
     title: "Cheezy Conundrum",
-    moreProjects: true,
+    section: "more",
+    rank: 5,
     tag: "Game",
     date: "2023-08-01",
     dateLabel: "Summer 2023",
@@ -428,8 +532,8 @@ export const projects = [
       "Help Timmy and Tommy chase cheese and dodge traps in this single-player puzzle game — control two rats with one keyboard to lead them to freedom!",
     image: {
       src: "assets/projects/cheezy-conundrum.webp",
-      width: 853,
-      height: 480,
+      width: 610,
+      height: 343,
       alt: "Cheezy Conundrum title screen: a white rat peeking out of a trash can below the game's logo",
     },
     stack: ["JavaScript", "p5.js", "Aseprite", "repl.it"],
@@ -438,6 +542,8 @@ export const projects = [
   },
   {
     title: "Turtleburg",
+    section: "more",
+    rank: 2,
     tag: "Game",
     date: "2021-02-01",
     dateLabel: "Oct 2022 – Feb 2023",
@@ -482,13 +588,18 @@ export const skills = [
 // Photos of my 3D prints! `large` is the bigger version that opens when you click
 // a photo (about 2x the viewer size, and it only loads when someone opens it).
 export const printGallery = {
+  // The whole shelf, shown big on top. srcSet lets phones download the 640px version
+  // (the original 2400px file is in design/source-images/).
   hero: {
-    src: "gallery/shelf-display.webp",
-    width: 2400,
-    height: 1024,
+    src: "gallery/shelf-display-1280.webp",
+    srcSet:
+      "gallery/shelf-display-640.webp 640w, gallery/shelf-display-1280.webp 1280w, gallery/shelf-display-2000.webp 2000w",
+    sizes: "(min-width: 1100px) 1018px, calc(100vw - 4.5rem)",
+    width: 1280,
+    height: 546,
     label: "Shelf Display",
     alt: "Wall shelf lined with dozens of colorful 3D prints",
-    large: { src: "gallery/shelf-display.webp", width: 2400, height: 1024 },
+    large: { src: "gallery/shelf-display-2000.webp", width: 2000, height: 853 },
   },
   thumbs: [
     {

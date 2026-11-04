@@ -6,7 +6,10 @@ import Lightbox from "./Lightbox";
 import RichText from "./RichText";
 import { about, contact, printGallery, story } from "../data";
 
+// The big shelf photo comes first (index 0), then the little photos; the big viewer
+// (Lightbox) flips through all of them in this order.
 const galleryPhotos = [printGallery.hero, ...printGallery.thumbs];
+const { hero } = printGallery;
 
 export default function AboutPage() {
   // Which photo is open in the big view (index into galleryPhotos), or null if none.
@@ -63,6 +66,7 @@ export default function AboutPage() {
           width={about.photo.width}
           height={about.photo.height}
           alt={about.photo.alt}
+          fetchpriority="high"
         />
       </div>
 
@@ -103,21 +107,24 @@ export default function AboutPage() {
         {/* Every photo is a button that opens it big. The alt says what clicking does,
             and the big view has the full description. */}
         <div className="printFrame">
-          <button type="button" className="printMain" onClick={() => setEnlarged(0)}>
+          <button type="button" className="printBtn printBtn--main" onClick={() => setEnlarged(0)}>
+            {/* srcSet: phones get the small file, big screens the big one. */}
             <img
-              src={printGallery.hero.src}
-              width={printGallery.hero.width}
-              height={printGallery.hero.height}
-              alt={`View larger: ${printGallery.hero.label}`}
+              src={hero.src}
+              srcSet={hero.srcSet}
+              sizes={hero.sizes}
+              width={hero.width}
+              height={hero.height}
+              alt={`View larger: ${hero.label}`}
               loading="lazy"
               decoding="async"
             />
           </button>
 
-          <ul className="printThumbRow" aria-label="More 3D prints">
+          <ul className="printGrid" aria-label="More 3D prints">
             {printGallery.thumbs.map((p, i) => (
-              <li key={p.src}>
-                <button type="button" className="printThumb" onClick={() => setEnlarged(i + 1)}>
+              <li key={p.src} className="printTile">
+                <button type="button" className="printBtn" onClick={() => setEnlarged(i + 1)}>
                   <img
                     src={p.src}
                     width={p.width}

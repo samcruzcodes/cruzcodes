@@ -466,6 +466,157 @@ img {
   font-size: 1.25rem;
 }
 
+/* Two big hero buttons: Projects is the filled one, About is outlined. */
+.heroCtas {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.heroBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 3.5rem;
+  padding: 0.5rem 1.75rem;
+  font-family: "VT323", "Space Mono", monospace;
+  font-size: 2rem;
+  letter-spacing: 1px;
+  line-height: 1;
+  text-align: center;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 2px solid;
+  border-radius: 14px;
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+
+.heroBtn--primary {
+  color: var(--bg);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.heroBtn--primary:hover,
+.heroBtn--primary:focus-visible {
+  background: var(--text);
+  box-shadow: 0 8px 0 rgba(0, 0, 0, 0.35);
+}
+
+.heroBtn--secondary {
+  color: var(--text);
+  background: rgba(0, 0, 0, 0.18);
+  border-color: rgba(var(--accent-rgb), 0.55);
+}
+
+.heroBtn--secondary:hover,
+.heroBtn--secondary:focus-visible {
+  background: var(--btn-hover);
+  border-color: var(--accent);
+  box-shadow: 0 8px 0 rgba(0, 0, 0, 0.35);
+}
+
+.heroBtn:active {
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.3);
+}
+
+@media (min-width: 480px) {
+  .heroBtn {
+    width: auto;
+    min-width: 15rem;
+  }
+}
+
+/* Featured: three compact tiles under the hero. Each one links to its card on Projects. */
+.homeFeatured {
+  margin-top: 1.25rem;
+}
+
+.featuredHeading {
+  margin: 0 0 0.75rem;
+  font-size: 2.75rem;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.featuredGrid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+}
+
+.featuredTile {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  height: 100%;
+  padding: 0.625rem;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.featuredTile:hover,
+.featuredTile:focus-visible {
+  border-color: rgba(var(--accent-rgb), 0.45);
+  box-shadow: 0 14px 0 rgba(0, 0, 0, 0.3);
+}
+
+.featuredTile:hover .featuredTitle,
+.featuredTile:focus-visible .featuredTitle {
+  color: var(--accent);
+}
+
+.featuredMedia {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.18);
+  border: 2px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+}
+
+.featuredMedia img,
+.featuredMedia > div {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.featuredMedia img {
+  object-fit: cover;
+}
+
+.featuredMedia .imagePlaceholder {
+  border: 0;
+  border-radius: 0;
+}
+
+.featuredTitle {
+  font-size: 1.875rem;
+  line-height: 1;
+}
+
+.featuredCta {
+  margin-top: auto;
+  color: var(--accent);
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+@media (min-width: 640px) {
+  .featuredGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
 @media (min-width: 500px) {
   .nameRow {
     align-items: baseline;
@@ -657,6 +808,12 @@ img {
   border-left: 4px solid rgba(var(--accent-rgb), 0.55);
 }
 
+/* Each org link is at least 24px tall (WCAG 2.2 target size) without changing how it looks. */
+.aboutMini .inlineLink {
+  display: inline-block;
+  padding-block: 0.25rem;
+}
+
 .aboutSocials {
   list-style: none;
   margin: 1rem 0 0;
@@ -754,65 +911,78 @@ img {
   background: rgba(0, 0, 0, 0.14);
   border: 2px solid rgba(255, 255, 255, 0.08);
   border-radius: 14px;
-  padding: 0.875rem;
+  padding: 0.75rem;
   box-shadow: 0 10px 0 rgba(0, 0, 0, 0.2);
 }
 
+/* The whole shelf on top at its real shape (never cropped), then the little photos below. */
+.printGrid {
+  list-style: none;
+  margin: 0.625rem 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.printTile {
+  min-width: 0;
+  aspect-ratio: 4 / 3;
+}
+
 /* Gallery photos are buttons that open the big view (Lightbox.jsx). */
-.printMain,
-.printThumb {
+.printBtn {
   display: block;
   width: 100%;
+  height: 100%;
   padding: 0;
   overflow: hidden;
   font: inherit;
   background: rgba(0, 0, 0, 0.12);
   border: 2px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
   cursor: zoom-in;
 }
 
-.printMain {
+.printBtn--main {
+  height: auto;
   border-radius: 12px;
 }
 
-.printMain:hover,
-.printMain:focus-visible,
-.printThumb:hover,
-.printThumb:focus-visible {
+.printBtn:hover,
+.printBtn:focus-visible {
   border-color: rgba(var(--accent-rgb), 0.6);
 }
 
-.printMain img {
+.printBtn img {
   display: block;
   width: 100%;
-  height: clamp(15rem, 42vh, 32.5rem);
+  height: 100%;
   object-fit: cover;
+  opacity: 0.92;
 }
 
-.printThumbRow {
-  list-style: none;
-  margin: 0.75rem 0 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.625rem;
+/* The big shelf photo keeps its own shape: the width/height attributes give the ratio. */
+.printBtn--main img {
+  height: auto;
+  object-fit: contain;
 }
 
-.printThumb {
-  border-radius: 10px;
-}
-
-.printThumb img {
-  display: block;
-  width: 100%;
-  height: 3.625rem;
-  object-fit: cover;
-  opacity: 0.9;
-}
-
-.printThumb:hover img,
-.printThumb:focus-visible img {
+.printBtn:hover img,
+.printBtn:focus-visible img {
   opacity: 1;
+}
+
+@media (min-width: 480px) {
+  .printGrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 768px) {
+  .printGrid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
 }
 
 /* ---------- Lightbox (enlarged gallery photo) ---------- */
@@ -878,12 +1048,6 @@ body:has(.lightbox[open]) {
   font-size: 0.875rem;
 }
 
-@media (min-width: 480px) {
-  .printThumbRow {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-  }
-}
-
 @media (min-width: 700px) {
   .carousel--story {
     --per-view: 2;
@@ -909,12 +1073,6 @@ body:has(.lightbox[open]) {
 
   .aboutHey {
     text-align: left;
-  }
-}
-
-@media (min-width: 901px) {
-  .printThumbRow {
-    grid-template-columns: repeat(8, minmax(0, 1fr));
   }
 }
 
@@ -1073,6 +1231,11 @@ body:has(.lightbox[open]) {
   padding: 0.875rem;
   align-items: stretch;
   width: 100%;
+}
+
+/* Jumping to a card from Home (or #project-…) stops below the sticky header. */
+.projectCard {
+  scroll-margin-top: calc(var(--header-h) + 1rem);
 }
 
 .projectCard:hover,
@@ -1300,7 +1463,7 @@ body:has(.lightbox[open]) {
   border-radius: 999px;
 }
 
-/* Extra screenshots under a card (3 placeholders for now). One compact column on phones. */
+/* Extra screenshots under a card: 3 across at every width (they open in the big viewer). */
 .projectGallery {
   grid-column: 1 / -1;
   order: 3; /* flipped cards reorder their media/body, so keep this last */
@@ -1308,23 +1471,41 @@ body:has(.lightbox[open]) {
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 0.625rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
 }
 
-.projectGallery .imagePlaceholder {
-  aspect-ratio: auto;
-  min-height: 5.5rem; /* tall enough for the text, so nothing clips in one column */
+.projectGallery li {
+  min-width: 0;
+}
+
+.projectShot {
+  display: block;
+  width: 100%;
+  padding: 0;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.14);
+  border: 2px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.2);
+  cursor: zoom-in;
+}
+
+.projectShot:hover,
+.projectShot:focus-visible {
+  border-color: rgba(var(--accent-rgb), 0.6);
+}
+
+.projectShot img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
 }
 
 @media (min-width: 480px) {
   .projectGallery {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .projectGallery .imagePlaceholder {
-    aspect-ratio: 4 / 3;
-    min-height: 0;
+    gap: 0.75rem;
   }
 }
 
@@ -1450,6 +1631,33 @@ body:has(.lightbox[open]) {
   }
 }
 
+/* "More Projects": smaller cards. Same card, just stacked, with a shorter picture;
+   two across on wide screens. Nothing is hidden or trimmed. */
+.projectList--compact .projectMedia {
+  height: 11rem;
+}
+
+.projectList--compact .projectTitle {
+  font-size: 2.25rem;
+}
+
+@media (min-width: 981px) {
+  .projectList--compact {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
+  }
+
+  .projectList--compact .projectCard {
+    grid-template-columns: minmax(0, 1fr);
+    align-content: start;
+  }
+
+  .projectList--compact .projectMedia {
+    height: 11rem;
+  }
+}
+
 /* =========================================================
    Motion! Only runs for people who haven't asked for reduced motion.
    With reduced motion on, hover/focus still change color, border,
@@ -1468,24 +1676,17 @@ body:has(.lightbox[open]) {
     transition: color 0.15s ease;
   }
 
-  .printMain,
-  .printThumb {
+  .printBtn {
     transition: border-color 0.15s ease;
   }
 
-  .printMain img,
-  .printThumb img {
+  .printBtn img {
     transition: transform 0.3s ease, opacity 0.2s ease;
   }
 
-  .printMain:hover img,
-  .printMain:focus-visible img {
-    transform: scale(1.03);
-  }
-
-  .printThumb:hover img,
-  .printThumb:focus-visible img {
-    transform: scale(1.1);
+  .printBtn:hover img,
+  .printBtn:focus-visible img {
+    transform: scale(1.05);
   }
 
   .lightbox[open] {
@@ -1514,6 +1715,7 @@ body:has(.lightbox[open]) {
   }
 
   .action_btn,
+  .heroBtn,
   .aboutSocialLink,
   .projectBtn,
   .projectTab,
@@ -1530,6 +1732,19 @@ body:has(.lightbox[open]) {
   .action_btn:hover,
   .action_btn:focus-visible {
     transform: translateY(-2px);
+  }
+
+  .heroBtn:hover,
+  .heroBtn:focus-visible {
+    transform: translateY(-3px);
+  }
+
+  .heroBtn:active {
+    transform: translateY(3px);
+  }
+
+  .featuredTile {
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
   }
 
   .aboutSocialLink:hover,

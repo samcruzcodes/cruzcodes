@@ -6,30 +6,51 @@ import Home from "./components/Home.jsx";
 import AboutPage from "./components/AboutPage.jsx";
 import ProjectsPage from "./components/ProjectsPage.jsx";
 import Footer from "./components/Footer.jsx";
+import { findProjectById, projectId } from "./data";
+
+// There's no router: `nav.page` picks the page, and `nav.target` (optional) is a project card
+// on the Projects page to jump to. The URL hash is only read when the site first loads, so
+// links like cruzcodes.com/#about or /#project-the-veil-sur open the right spot.
+function navFromHash() {
+  const hash = window.location.hash.slice(1);
+  if (hash === "about" || hash === "projects") return { page: hash, target: null };
+  // Also understands a card's old id (`legacyIds` in data.js), so older links keep working.
+  const project = findProjectById(hash);
+  if (project) return { page: "projects", target: projectId(project.title) };
+  return { page: "home", target: null };
+}
 
 export default function App() {
-  const [page, setPage] = useState("home");
+  const [nav, setNav] = useState(navFromHash);
   const mainRef = useRef(null);
   const isFirstRender = useRef(true);
 
+  const navigate = (page, target = null) => {
+    setNav({ page, target });
+    // Jumping to a project card scrolls itself; everything else starts at the top.
+    if (!target) window.scrollTo({ top: 0 });
+  };
+
   // When you switch pages, jump focus to the new heading so keyboard and
   // screen-reader users land on the new content (but not on first load).
+  // (Jumping to a project card focuses that card's title instead; see ProjectsPage.)
   useEffect(() => {
     if (isFirstRender.current) {
       isFirstRender.current = false;
       return;
     }
+    if (nav.target) return;
     mainRef.current?.querySelector("h1")?.focus({ preventScroll: true });
-  }, [page]);
+  }, [nav]);
 
   return (
     <div className="retro-bg">
-      <Header page={page} setPage={setPage} />
+      <Header page={nav.page} setPage={(key) => navigate(key)} />
 
-      <main ref={mainRef} className={`wrapper ${page === "home" ? "wrapper--home" : ""}`}>
-        {page === "home" && <Home />}
-        {page === "about" && <AboutPage />}
-        {page === "projects" && <ProjectsPage />}
+      <main ref={mainRef} className={`wrapper ${nav.page === "home" ? "wrapper--home" : ""}`}>
+        {nav.page === "home" && <Home onNavigate={navigate} />}
+        {nav.page === "about" && <AboutPage />}
+        {nav.page === "projects" && <ProjectsPage targetId={nav.target} />}
       </main>
 
       <Footer />

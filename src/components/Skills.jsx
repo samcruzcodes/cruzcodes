@@ -7,7 +7,7 @@ export default function Skills() {
       id="skills"
       title="Skills"
       titleClassName="skillsTitle"
-      description="Tools I use to build web projects + games."
+      description="Tools I use to build web, mobile, games, and data systems."
       itemName="skills"
       className="carousel--skills"
       items={skills}

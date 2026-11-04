@@ -33,28 +33,51 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;family=VT323&amp;display=swap">
+
+    <!-- Only used when JavaScript is off: makes the <noscript> content below match the site
+         (dark green, mint text, monospace). -->
+    <noscript>
+      <style>
+        body { margin: 0; background: #0f1a18; color: #d4f5e9; font-family: "Space Mono", ui-monospace, monospace; line-height: 1.6; }
+        .nojs { max-width: 42rem; margin: 0 auto; padding: 1.5rem 1rem 2rem; }
+        .nojs h1, .nojs h2 { margin: 0 0 0.5rem; font-family: "VT323", "Space Mono", monospace; font-weight: 400; letter-spacing: 1px; line-height: 1; }
+        .nojs h1 { font-size: 3.5rem; }
+        .nojs h2 { font-size: 2rem; }
+        .nojs p, .nojs ul { margin: 0 0 1rem; }
+        .nojs ul { padding-left: 1.25rem; }
+        .nojs li { margin-bottom: 0.35rem; }
+        .nojs .muted { color: #8ac7ad; }
+        .nojs a { color: #5cffb1; text-underline-offset: 0.2em; }
+        .nojs a:focus-visible { outline: 3px solid #5cffb1; outline-offset: 3px; }
+      </style>
+    </noscript>
   </head>
   <body>
-    <!-- Shown only when JavaScript is off. Keep the links in sync with `contact` in
-         src/data.js and the names with `projects` there. Inline styles use the
-         site's colors (--text #d4f5e9, --accent #5cffb1) so it stays readable. -->
+    <!-- Shown only when JavaScript is off. It's styled by the <noscript><style> in the <head>.
+         Keep the contact links in sync with `contact` in src/data.js, and the project list
+         (same order as "Selected Projects", with their View/GitHub links) with `projects` there. -->
     <noscript>
-      <div style="max-width: 40rem; margin: 0 auto; padding: 1.5rem 1rem; line-height: 1.6">
-        <h1 style="margin: 0 0 0.5rem">Sam Cruz</h1>
-        <p style="margin: 0 0 1rem">Software engineer building edtech, games, and apps.</p>
-        <p style="margin: 0 0 1rem">This site needs JavaScript to run, but you can still reach me here:</p>
-        <ul style="margin: 0 0 1rem; padding-left: 1.25rem">
-          <li><a style="color: #5cffb1" href="mailto:sjc365@cornell.edu">Email Sam (sjc365@cornell.edu)</a></li>
-          <li><a style="color: #5cffb1" href="https://www.linkedin.com/in/samanthajcruz/">Sam's LinkedIn</a></li>
-          <li><a style="color: #5cffb1" href="https://github.com/samcruzcodes">Sam's GitHub</a></li>
+      <div class="nojs">
+        <h1>Sam Cruz</h1>
+        <p>Software engineer building edtech, games, and apps.</p>
+        <p class="muted">This site needs JavaScript to run, but you can still reach me here:</p>
+        <ul>
+          <li><a href="mailto:sjc365@cornell.edu">Email Sam (sjc365@cornell.edu)</a></li>
+          <li><a href="https://www.linkedin.com/in/samanthajcruz/">Sam's LinkedIn</a></li>
+          <li><a href="https://github.com/samcruzcodes">Sam's GitHub</a></li>
         </ul>
-        <h2 style="margin: 0 0 0.5rem; font-size: 1.25rem">Top projects</h2>
-        <ul style="margin: 0; padding-left: 1.25rem">
-          <li>The Veil Sur</li>
-          <li>CourseLynx</li>
-          <li>Lerly Liz Studios</li>
-          <li>H4I — PPAC Healthcare Platform</li>
-          <li>Duke vs. The Gang</li>
+        <h2>Top projects</h2>
+        <ul>
+          <li><strong>CourseLynx</strong> <a href="https://courselynx.com" aria-label="View CourseLynx">View</a></li>
+          <li><strong>Veil Sur</strong> <a href="https://github.com/cornelldga/Veil-Sur" aria-label="GitHub repository for Veil Sur">GitHub</a></li>
+          <li><strong>Budget.io Watchdog</strong> <a href="https://github.com/samcruzcodes/budget-io-watchdog" aria-label="GitHub repository for Budget.io Watchdog">GitHub</a></li>
+          <li><strong>H4I — PPAC Healthcare Platform</strong> <a href="https://github.com/cornellh4i/PPAC" aria-label="GitHub repository for H4I — PPAC Healthcare Platform">GitHub</a></li>
+          <li><strong>Duke vs. The Gang</strong> <a href="https://store.steampowered.com/app/4662580/Duke_vs_The_Gang/" aria-label="View Duke vs. The Gang">View</a></li>
+          <li><strong>ThinkDraft AI</strong> <a href="https://gpt-abstract-assistant.vercel.app/" aria-label="View ThinkDraft AI">View</a></li>
+          <li><strong>H4I — Alaska Children's Trust</strong> <a href="https://play.google.com/store/apps/details?id=org.alaskachildrenstrust.act" aria-label="View H4I — Alaska Children's Trust">View</a> · <a href="https://github.com/cornellh4i/act" aria-label="GitHub repository for H4I — Alaska Children's Trust">GitHub</a></li>
+          <li><strong>Lerly Liz Studios</strong> <a href="https://lerlylizstudios.github.io/" aria-label="View Lerly Liz Studios">View</a> · <a href="https://github.com/lerlylizstudios/lerlylizstudios.github.io" aria-label="GitHub repository for Lerly Liz Studios">GitHub</a></li>
+          <li><strong>H4I — Ithaca Community Recovery</strong> <a href="https://ithaca-recovery.vercel.app/" aria-label="View H4I — Ithaca Community Recovery">View</a> · <a href="https://github.com/cornellh4i/ithaca-recovery" aria-label="GitHub repository for H4I — Ithaca Community Recovery">GitHub</a></li>
+          <li><strong>Cornell Med in Black Website</strong> <a href="https://medinblackcornell.github.io/index.html" aria-label="View Cornell Med in Black Website">View</a> · <a href="https://github.com/medinblackcornell/medinblackcornell.github.io" aria-label="GitHub repository for Cornell Med in Black Website">GitHub</a></li>
         </ul>
       </div>
     </noscript>
