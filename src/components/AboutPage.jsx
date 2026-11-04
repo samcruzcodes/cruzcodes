@@ -1,10 +1,10 @@
 import { useState } from "react";
-import Carousel from "./Carousel";
 import ExternalLink from "./ExternalLink";
 import Icon from "./Icon";
 import Lightbox from "./Lightbox";
 import RichText from "./RichText";
-import { about, contact, printGallery, story } from "../data";
+import StoryJourney from "./journey/StoryJourney";
+import { about, contact, printGallery } from "../data";
 
 // The big shelf photo comes first (index 0), then the little photos; the big viewer
 // (Lightbox) flips through all of them in this order.
@@ -70,33 +70,8 @@ export default function AboutPage() {
         />
       </div>
 
-      <Carousel
-        id="story"
-        title="My Story"
-        titleClassName="aboutStoryTitle"
-        itemName="story cards"
-        className="carousel--story"
-        items={story}
-        itemKey={(item) => item.year + item.image.src}
-        renderItem={(item) => (
-          <article className="aboutCard">
-            <h3 className="retro-title aboutCardTitle">{item.year}</h3>
-            <div className="aboutCardImg">
-              <img
-                src={item.image.src}
-                width={item.image.width}
-                height={item.image.height}
-                alt={item.image.alt}
-                loading="lazy"
-                decoding="async"
-              />
-            </div>
-            <p className="aboutCardBody">
-              <RichText parts={item.text} />
-            </p>
-          </article>
-        )}
-      />
+      {/* MY STORY: "Play My Story" road trip (p5.js) or "Read My Story" list. */}
+      <StoryJourney />
 
       {/* 3D PRINTING GALLERY */}
       <section className="aboutGallery" aria-labelledby="gallery-title">

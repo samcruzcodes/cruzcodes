@@ -7,7 +7,7 @@ Welcome to my portfolio website! I'm Sam Cruz, a software engineer and aspiring 
 CruzCodes.com is a front-end portfolio built with **React** (Create React App). It has:
 
 - **Home**: my name and an illustrated portrait whose eye follows your cursor 👀
-- **About**: a quick intro, my "My Story" carousel, and a 3D printing gallery (click any photo to see it big)
+- **About**: a quick intro, "My Story" (a p5.js road trip you can **Play**, or switch to **Read** for the plain list), and a 3D printing gallery (click any photo to see it big)
 - **Projects**: a skills carousel, my "Selected Projects" in a hand-picked order, and a collapsible "More Projects" list, all filterable by Game, Web, Mobile, and AI
 
 ## Running It Locally
@@ -56,6 +56,13 @@ Everything lives in `src/data.js`, so a new project is just a new object in `pro
 - File names are lowercase with hyphens and no spaces, like `my-project.webp`.
 - Every image gets `width`, `height`, and real `alt` text (`alt=""` if it's just decoration).
 
+## My Story (Play / Read)
+
+- The story lives in one array, `journey` in `src/data.js`. **Play My Story** and **Read My Story** both render from it, so they never drift apart. Add or edit a checkpoint there (the map is built for six; see `journeyRoute.js` if the count changes).
+- Code is in `src/components/journey/`. React owns the state (selected checkpoint, mode) and all the text, buttons, and links. The p5.js canvas (`journeySketch.js`) only draws the road and drives the car, and it's decorative (`aria-hidden`).
+- p5.js is loaded on demand (`loadSketch.js`) once the map is near the screen, as its own download, so it never touches the other pages. The sketch is `noLoop()` except while the car is moving.
+- If p5 can't load, Play shows plain checkpoint buttons and the same cards instead.
+
 ## Credits
 
 - **DGA Studios art:** The Veil Sur key art and in-game screenshots are by our DGA Studios *Veil Sur* team, and the Duke vs. The Gang key art and in-game screenshots are by the DGA Studios *Duke vs. The Gang* team.
@@ -71,5 +78,6 @@ Everything lives in `src/data.js`, so a new project is just a new object in `pro
 ## Technologies Used
 
 - **React**: The core framework used to build this website.
+- **p5.js**: Draws the "Play My Story" road trip (loaded only when needed).
 - **CSS/HTML**: For styling and layout.
 - **JavaScript**: For interactivity and dynamic content.

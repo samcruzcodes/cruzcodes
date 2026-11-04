@@ -38,93 +38,7 @@ export const about = {
   },
 };
 
-// My Story carousel on the About page, oldest → newest.
-export const story = [
-  {
-    year: "2020",
-    text: [
-      "Quarantine got me hooked on 3D printing, and I've been collecting ",
-      { text: "3D Benchies", href: "https://www.3dbenchy.com" },
-      " ever since.",
-    ],
-    image: {
-      src: "assets/story/3d-printing-shelf.webp",
-      width: 640,
-      height: 360,
-      alt: "Wall shelf of colorful 3D prints, with an inset of my 3D printer mid-print",
-    },
-  },
-  {
-    year: "2021–2023",
-    text: "A 25-hour school project turned into Turtleburg, my first educational game: an RPG about the global water crisis.",
-    image: {
-      src: "assets/story/turtleburg.webp",
-      width: 640,
-      height: 360,
-      alt: "Turtleburg's pixel-art title screen with a Clean Plumbing van",
-    },
-  },
-  {
-    year: "Summer 2023",
-    text: "Kode With Klossy introduced me to web dev and design, and I built my first site, EdVisor.",
-    image: {
-      src: "assets/story/edvisor.webp",
-      width: 640,
-      height: 358,
-      alt: "EdVisor homepage art: a composition notebook labeled EdVisor beside a pencil and phone",
-    },
-  },
-  {
-    year: "Summer 2023",
-    text: [
-      "At ",
-      // GWC took down the old SIP page, so this points to their programs page.
-      { text: "Girls Who Code's Summer Immersion Program", href: "https://girlswhocode.com/programs" },
-      ", I leveled up my game dev skills by building ",
-      { text: "Cheezy Conundrum", href: "https://cruzcodes.itch.io/cheezy-conundrum" },
-      " in p5.js.",
-    ],
-    image: {
-      src: "assets/projects/cheezy-conundrum.webp",
-      width: 610,
-      height: 343,
-      alt: "Cheezy Conundrum title screen: a white rat peeking out of a trash can",
-    },
-  },
-  {
-    year: "Fall 2024",
-    text: "I pledged Alpha Phi Omega, which pushed me to grow as a leader and give back through service.",
-    image: {
-      // Source: Alpha Phi Omega Gamma Chapter rush flyer.
-      src: "assets/story/apo-rush.webp",
-      width: 640,
-      height: 408,
-      alt: "Alpha Phi Omega rush flyer with photos of members making Meals on Wheels placemats",
-    },
-  },
-  {
-    year: "Spring 2025",
-    text: "Tutoring CS sharpened my fundamentals and taught me how to explain tricky concepts clearly.",
-    image: {
-      // Source: screenshot of my Varsity Tutors profile (varsitytutors.com).
-      src: "assets/story/tutoring.webp",
-      width: 640,
-      height: 456,
-      alt: "My Varsity Tutors profile card listing JavaScript and AP Computer Science Principles",
-    },
-  },
-  {
-    year: "Fall 2025",
-    text: "I pledged Latinas Promoviendo Comunidad / Lambda Pi Chi Sorority, Inc., and found my community at Cornell.",
-    image: {
-      // Source: Lambda Pi Chi chapter photo.
-      src: "assets/story/lambda-pi-chi.webp",
-      width: 640,
-      height: 468,
-      alt: "Fall 2025 line in line shirts in front of the chapter banner",
-    },
-  },
-];
+// My Story (the road trip on the About page) is the `journey` array further down, after `projects`.
 
 // These become the filter tabs on the Projects page (in this order).
 // A project has one main `tag`, and can show up under more tabs with `alsoTags` (e.g. ["AI"]).
@@ -558,6 +472,124 @@ export const projects = [
     stack: ["Godot", "GDScript", "Python", "Aseprite"],
     viewLink: "",
     githubLink: "https://github.com/samcruzcodes/Turtleburg",
+  },
+];
+
+// My Story on the About page: the checkpoints on the "Play My Story" road AND the cards in
+// "Read My Story" (JourneyMap + StoryCard both read this one array, oldest -> newest).
+//   id:      stable key
+//   title:   shown on the card and next to the checkpoint on the map
+//   stage:   (optional) only when every sentence in the card fits that date range
+//   text:    a string, or strings + { text, href } links (RichText.jsx)
+//   image:   (optional) same shape as other images; or `imagePlaceholder: "what it will show"`
+//            (needs a TODO with the exact filename + a row in IMAGE_REQUESTS.md)
+//   links:   (optional) related projects. Pulled from `projects` so the URLs stay verified.
+// Everything below comes from my old story cards, `about.intro`, and `projects`.
+const projectLink = (title, kind, label) => {
+  const project = projects.find((p) => p.title === title);
+  return { label, href: kind === "live" ? project.viewLink : project.githubLink };
+};
+
+export const journey = [
+  {
+    id: "where-it-started",
+    title: "Where It Started",
+    stage: "2020",
+    // TODO(content): this card is still just the 3D printing line. Add a sentence or two in my own
+    // words about what I was making / playing before 2020 (see the questions in the Phase 4.1 notes).
+    text: [
+      "Quarantine got me hooked on 3D printing, and I've been collecting ",
+      { text: "3D Benchies", href: "https://www.3dbenchy.com" },
+      " ever since.",
+    ],
+    image: {
+      src: "assets/story/3d-printing-shelf.webp",
+      width: 640,
+      height: 360,
+      alt: "Wall shelf of colorful 3D prints, with an inset of my 3D printer mid-print",
+    },
+  },
+  {
+    id: "learning-through-games",
+    title: "Learning Through Games",
+    stage: "2021–2024",
+    text: [
+      "A 25-hour school project turned into Turtleburg, my first educational game: an RPG about the global water crisis. I've loved creating interactive experiences that make complex ideas feel approachable and fun ever since. In Summer 2023, Kode With Klossy introduced me to web dev and design (I built my first site, EdVisor), and ",
+      // GWC took down the old SIP page, so this points to their programs page.
+      { text: "Girls Who Code's Summer Immersion Program", href: "https://girlswhocode.com/programs" },
+      " helped me level up my game dev skills with Cheezy Conundrum, built in p5.js. Sandcastle Tycoon followed in early 2024: a shoreline-erosion website paired with a game.",
+    ],
+    image: {
+      src: "assets/story/turtleburg.webp",
+      width: 640,
+      height: 360,
+      alt: "Turtleburg's pixel-art title screen with a Clean Plumbing van",
+    },
+    links: [
+      projectLink("Turtleburg", "github", "Turtleburg on GitHub"),
+      projectLink("Cheezy Conundrum", "live", "Play Cheezy Conundrum"),
+      projectLink("Sandcastle Tycoon", "live", "Play Sandcastle Tycoon"),
+    ],
+  },
+  {
+    id: "sharing-what-i-know",
+    title: "Sharing What I Know",
+    // TODO(content): the teaching jobs below have no dates yet, so they can't be put in order.
+    text: "Tutoring CS in Spring 2025 sharpened my fundamentals and taught me how to explain tricky concepts clearly. I've also taught game dev at Girls Who Code, TA'd Cornell's intro CS course, and taught English in Tokyo.",
+    image: {
+      // Source: screenshot of my Varsity Tutors profile (varsitytutors.com).
+      src: "assets/story/tutoring.webp",
+      width: 640,
+      height: 456,
+      alt: "My Varsity Tutors profile card listing JavaScript and AP Computer Science Principles",
+    },
+  },
+  {
+    id: "finding-my-direction",
+    title: "Finding My Direction",
+    text: "At Cornell I'm studying Information Science and Cognitive Science, with a minor in Game Design. Outside class, I pledged Alpha Phi Omega in Fall 2024, which pushed me to grow as a leader and give back through service, and Latinas Promoviendo Comunidad / Lambda Pi Chi Sorority, Inc. in Fall 2025, where I found my community at Cornell.",
+    image: {
+      // Source: Lambda Pi Chi chapter photo.
+      src: "assets/story/lambda-pi-chi.webp",
+      width: 640,
+      height: 468,
+      alt: "Four smiling members of the Fall 2025 line in matching Lambda Pi Chi shirts, holding batons and “Welcome Hermana!” signs in front of the chapter's red banner",
+    },
+  },
+  {
+    id: "building-beyond-the-classroom",
+    title: "Building Beyond the Classroom",
+    stage: "2025 – Present",
+    text: "Through Hack4Impact, I built team projects like the Ithaca Community Recovery platform, which supports about 30,000 people a year. At CourseLynx, a student chat app used by 40K+ students, I joined as a mobile engineer intern and now work as an engineer, building student organizations and redesigning course search. On my own, I built Budget.io Watchdog, a real-time fraud detection system on Kafka and Spring Boot that I tested through Kubernetes recovery, scaling, and rolling updates.",
+    image: {
+      // Source: CourseLynx App Store screenshots (courselynx.com), stitched into one collage.
+      src: "assets/projects/courselynx.webp",
+      width: 794,
+      height: 480,
+      alt: "Three CourseLynx app screens: .edu sign-up, a list of class group chats, and course search",
+    },
+    links: [
+      projectLink("CourseLynx", "live", "Visit CourseLynx"),
+      projectLink("Budget.io Watchdog", "github", "Watchdog on GitHub"),
+      projectLink("H4I — Ithaca Community Recovery", "live", "Ithaca Community Recovery"),
+    ],
+  },
+  {
+    id: "creating-whats-next",
+    title: "Creating What's Next",
+    stage: "Aug 2026 – Present",
+    text: "I lead a 24-person team at DGA Studios building Veil Sur, a photography-driven stealth-horror game. I own the roadmap and run weekly sprints across art, programming, design, and audio. Before that, I built the cutscene system, dialogue, and combat for Duke vs. The Gang, another DGA Studios game. I'm a software engineer and aspiring product manager, always up for collaborating at the intersection of EdTech, games, and product.",
+    image: {
+      // Source: key art by our DGA Studios Veil Sur team (credited in the README).
+      src: "assets/projects/the-veil-sur.webp",
+      width: 865,
+      height: 480,
+      alt: "Veil Sur key art: a camera-headed character beside shadowy creatures, under the game's logo",
+    },
+    links: [
+      projectLink("Veil Sur", "github", "Veil Sur on GitHub"),
+      projectLink("Duke vs. The Gang", "live", "Duke vs. The Gang on Steam"),
+    ],
   },
 ];
 

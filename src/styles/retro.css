@@ -655,7 +655,7 @@ img {
   }
 }
 
-/* ---------- Carousel (used by My Story + Skills) ---------- */
+/* ---------- Carousel (used by Skills) ---------- */
 /* Each slide is sized so --per-view slides fit, plus a --peek of the next one,
    so it's obvious there's more to scroll to. */
 .carousel {
@@ -843,10 +843,6 @@ img {
   color: var(--accent);
 }
 
-.carousel--story {
-  margin-top: 1.75rem;
-}
-
 .aboutStoryTitle {
   font-size: 3rem;
   font-weight: 400;
@@ -854,11 +850,321 @@ img {
   margin: 0;
 }
 
-.aboutCard {
-  height: 100%;
+/* ---------- My Story: "Play My Story" road trip / "Read My Story" list ---------- */
+/* Components: src/components/journey/. The p5.js canvas is just the picture under the real
+   HTML buttons, so every size here is measured from the buttons and cards, not the canvas. */
+.journey {
+  margin-top: 1.75rem;
+  min-width: 0;
+}
+
+.journeyHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+}
+
+.journeyToggle {
+  display: flex;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.journeyToggleBtn {
+  display: inline-flex;
+  flex: 1 1 0;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-height: 2.75rem;
+  padding: 0.25rem 0.5rem;
+  font-family: "VT323", "Space Mono", monospace;
+  font-size: 1.25rem;
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: var(--text);
+  background: var(--btn-bg);
+  border: 2px solid var(--btn-border);
+  border-radius: 12px;
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+
+.journeyToggleBtn:hover,
+.journeyToggleBtn:focus-visible {
+  background: var(--btn-hover);
+  border-color: rgba(var(--accent-rgb), 0.6);
+}
+
+/* The active mode is filled in AND gets a little play arrow, so it isn't only a color change. */
+.journeyToggleBtn[aria-pressed="true"] {
+  color: var(--bg);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.journeyToggleBtn[aria-pressed="true"]::before {
+  content: "";
+  width: 0.6rem;
+  height: 0.75rem;
+  background: currentColor;
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+
+.journeyIntro {
+  max-width: 110ch;
+  margin: 0.625rem 0 0;
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  opacity: 0.92;
+}
+
+.journeyPlay {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.875rem;
+  margin-top: 0.875rem;
+}
+
+/* The map. Its height comes from the canvas shape (aspect-ratio is set inline), so the page
+   doesn't jump when the canvas loads. Before then you see the plain pixel grid. */
+.journeyStage {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background:
+    repeating-linear-gradient(0deg, rgba(var(--accent-rgb), 0.05) 0 1px, transparent 1px 32px),
+    repeating-linear-gradient(90deg, rgba(var(--accent-rgb), 0.05) 0 1px, transparent 1px 32px),
+    var(--bg);
+  border-radius: 14px;
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 0.08),
+    0 10px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* Phones get a tall road; keep it from getting huge on a wide-but-short screen. */
+.journeyStage--tall {
+  max-width: 384px; /* = TALL_MAX_WIDTH in journeyRoute.js */
+  margin-inline: auto;
+}
+
+.journeyCanvas {
+  position: absolute;
+  inset: 0;
+}
+
+/* p5 sets the canvas's pixel size inline, so !important is needed to stretch the tiny canvas to
+   the container. `pixelated` keeps the chunky retro pixels crisp. */
+.journeyCanvas canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  image-rendering: pixelated;
+}
+
+.journeyPins,
+.journeyStepper {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.journeyPins {
+  position: absolute;
+  inset: 0;
+}
+
+/* Each <li> is a point on the map; the button is centered on it. */
+.journeyPin {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+.checkpoint {
+  position: absolute;
+  left: 0;
+  top: 0;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  width: max-content;
+  max-width: 9.5rem;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  transform: translate(-50%, -1.375rem);
+}
+
+/* Label above the number for checkpoints whose button sits above the road. */
+.journeyPin--up .checkpoint {
+  flex-direction: column-reverse;
+  transform: translate(-50%, calc(-100% + 1.375rem));
+}
+
+.checkpointNum {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  font-family: "VT323", "Space Mono", monospace;
+  font-size: 1.75rem;
+  line-height: 1;
+  color: var(--text);
+  background: var(--btn-bg);
+  border: 2px solid var(--btn-border);
+  border-radius: 12px;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.35);
+}
+
+.checkpointLabel {
+  padding: 0.125rem 0.4rem;
+  font-family: "VT323", "Space Mono", monospace;
+  font-size: 1.2rem;
+  line-height: 1.05;
+  text-align: center;
+  text-wrap: balance;
+  color: var(--text);
+  background: rgba(var(--panel-rgb), 0.92);
+  border-radius: 6px;
+}
+
+.checkpoint:hover .checkpointNum,
+.checkpoint:focus-visible .checkpointNum {
+  background: var(--btn-hover);
+  border-color: rgba(var(--accent-rgb), 0.8);
+}
+
+/* Already visited: mint outline + a check mark. */
+.checkpoint--reached .checkpointNum {
+  color: var(--accent);
+  background: rgba(var(--accent-rgb), 0.2);
+  border-color: var(--accent);
+}
+
+.checkpoint--reached .checkpointNum::after {
+  content: "\2713";
+  position: absolute;
+  top: -0.5rem;
+  right: -0.5rem;
+  display: grid;
+  place-items: center;
+  width: 1.125rem;
+  height: 1.125rem;
+  font-family: "Space Mono", monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--bg);
+  background: var(--accent);
+  border-radius: 4px;
+}
+
+/* Where you are: filled in, bigger, with a glow ring and an accent label. */
+.checkpoint--current .checkpointNum {
+  color: var(--bg);
+  background: var(--accent);
+  border-color: var(--text);
+  box-shadow:
+    0 0 0 4px rgba(var(--accent-rgb), 0.35),
+    0 4px 0 rgba(0, 0, 0, 0.35);
+  transform: scale(1.1);
+}
+
+.checkpoint--current .checkpointLabel {
+  color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+/* If the p5.js map can't load: just a row of the same buttons. */
+.journeyStepper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem 0.75rem;
+  padding: 1rem 0.75rem;
+  background: rgba(0, 0, 0, 0.14);
+  border-radius: 14px;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.08);
+}
+
+.journeyStepper .checkpoint {
+  position: static;
+  transform: none;
+}
+
+.journeyNav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   gap: 0.5rem;
+}
+
+.journeyNavBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-width: 6.5rem;
+  min-height: 2.75rem;
+  padding: 0.25rem 0.875rem;
+  font-family: "VT323", "Space Mono", monospace;
+  font-size: 1.5rem;
+  line-height: 1;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text);
+  background: linear-gradient(180deg, rgba(var(--accent-rgb), 0.18), rgba(0, 0, 0, 0.2));
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+
+.journeyNavBtn:not([aria-disabled="true"]):hover,
+.journeyNavBtn:not([aria-disabled="true"]):focus-visible {
+  background: linear-gradient(180deg, rgba(var(--accent-rgb), 0.26), rgba(0, 0, 0, 0.15));
+  border-color: rgba(var(--accent-rgb), 0.7);
+}
+
+.journeyNavBtn[aria-disabled="true"] {
+  opacity: 0.45;
+  box-shadow: none;
+  cursor: default;
+}
+
+.journeyCount {
+  margin: 0;
+  font-family: "VT323", "Space Mono", monospace;
+  font-size: 1.375rem;
+  line-height: 1.1;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+/* Story card (shared by both modes). Images are never cropped: they sit inside a fixed-shape
+   frame, so cards stay about the same height from stop to stop. */
+.storyList {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+  margin: 0.875rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.storyCard {
+  display: grid;
+  gap: 0.75rem;
+  min-width: 0;
   padding: 0.75rem;
   background: rgba(0, 0, 0, 0.12);
   border: 2px solid rgba(255, 255, 255, 0.08);
@@ -866,35 +1172,115 @@ img {
   box-shadow: 0 10px 0 rgba(0, 0, 0, 0.2);
 }
 
-.carouselTrack:focus-visible .aboutCard {
-  border-color: rgba(var(--accent-rgb), 0.35);
+.storyCard--current {
+  border-color: rgba(var(--accent-rgb), 0.45);
 }
 
-.aboutCardTitle {
-  font-size: 1.625rem;
-  font-weight: 400;
-  margin: 0;
-}
-
-.aboutCardImg {
-  border-radius: 12px;
+.storyCardMedia {
+  aspect-ratio: 2 / 1;
   overflow: hidden;
+  background: rgba(0, 0, 0, 0.25);
   border: 2px solid rgba(255, 255, 255, 0.08);
-  background: rgba(0, 0, 0, 0.12);
+  border-radius: 12px;
 }
 
-.aboutCardImg img {
+.storyCardMedia .imagePlaceholder {
+  height: 100%;
+  aspect-ratio: auto;
+  border-radius: 0;
+}
+
+.storyCardMedia img {
   display: block;
   width: 100%;
-  height: 7.5rem;
-  object-fit: cover;
+  height: 100%;
+  object-fit: contain;
 }
 
-.aboutCardBody {
+.storyCardBody {
+  min-width: 0;
+}
+
+.storyCardStage {
   margin: 0;
   font-size: 0.8125rem;
-  line-height: 1.5;
-  opacity: 0.92;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.storyCardTitle {
+  margin: 0.125rem 0 0.375rem;
+  font-size: 2rem;
+  font-weight: 400;
+  line-height: 1;
+  color: var(--accent);
+}
+
+.storyCardText {
+  max-width: 72ch;
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  opacity: 0.94;
+}
+
+.storyCardLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1rem;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.875rem;
+}
+
+.storyCardLinks .inlineLink {
+  display: inline-block;
+  padding-block: 0.25rem;
+}
+
+@media (min-width: 700px) {
+  .journeyToggle {
+    width: auto;
+  }
+
+  .journeyToggleBtn {
+    flex: 0 0 auto;
+    padding-inline: 1rem;
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+  }
+
+  .storyCard {
+    grid-template-columns: minmax(0, 14rem) minmax(0, 1fr);
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .storyCardMedia {
+    aspect-ratio: 16 / 10;
+  }
+
+  .storyCardText {
+    font-size: 0.9375rem;
+    line-height: 1.6;
+  }
+
+  .storyCardTitle {
+    font-size: 2.25rem;
+  }
+
+  .journeyPlay .storyCard {
+    min-height: 14.5rem;
+  }
+}
+
+@media (min-width: 1000px) {
+  .storyCard {
+    grid-template-columns: minmax(0, 18rem) minmax(0, 1fr);
+  }
 }
 
 .aboutGallery {
@@ -1048,12 +1434,6 @@ body:has(.lightbox[open]) {
   font-size: 0.875rem;
 }
 
-@media (min-width: 700px) {
-  .carousel--story {
-    --per-view: 2;
-  }
-}
-
 @media (min-width: 768px) {
   .aboutPanel {
     padding: 1.375rem;
@@ -1080,10 +1460,6 @@ body:has(.lightbox[open]) {
   .aboutHey {
     text-align: left;
     white-space: nowrap;
-  }
-
-  .carousel--story {
-    --per-view: 3;
   }
 }
 
@@ -1793,5 +2169,64 @@ body:has(.lightbox[open]) {
   .projectCard:hover .projectImg,
   .projectCard:has(:focus-visible) .projectImg {
     transform: scale(1.04);
+  }
+
+  /* My Story: checkpoint buttons, toggle and Previous/Next ease; the selected stop pings a few
+     times; a new story card fades in. (The car itself only moves in the p5 sketch, which jumps
+     instead when motion is reduced.) */
+  .checkpointNum,
+  .journeyToggleBtn,
+  .journeyNavBtn {
+    transition:
+      transform 0.15s ease,
+      box-shadow 0.15s ease,
+      background-color 0.15s ease,
+      border-color 0.15s ease,
+      color 0.15s ease;
+  }
+
+  .checkpoint:not(.checkpoint--current):hover .checkpointNum,
+  .checkpoint:not(.checkpoint--current):focus-visible .checkpointNum,
+  .journeyToggleBtn:hover,
+  .journeyToggleBtn:focus-visible,
+  .journeyNavBtn:not([aria-disabled="true"]):hover,
+  .journeyNavBtn:not([aria-disabled="true"]):focus-visible {
+    transform: translateY(-3px);
+  }
+
+  .journeyNavBtn:not([aria-disabled="true"]):active {
+    transform: translateY(3px);
+  }
+
+  @keyframes checkpoint-ping {
+    from {
+      opacity: 0.8;
+      transform: scale(1);
+    }
+    to {
+      opacity: 0;
+      transform: scale(1.6);
+    }
+  }
+
+  .checkpoint--current .checkpointNum::before {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    border: 2px solid var(--accent);
+    border-radius: 12px;
+    pointer-events: none;
+    animation: checkpoint-ping 1.2s ease-out 3;
+  }
+
+  @keyframes story-card-in {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+  }
+
+  .journeyPlay .storyCard {
+    animation: story-card-in 0.25s ease-out;
   }
 }
