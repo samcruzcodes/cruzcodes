@@ -127,12 +127,18 @@ export const story = [
 ];
 
 // These become the filter tabs on the Projects page (in this order).
-export const projectTags = ["Game", "Web", "Mobile"];
+// A project has one main `tag`, and can show up under more tabs with `alsoTags` (e.g. ["AI"]).
+export const projectTags = ["Game", "Web", "Mobile", "AI"];
 
 // How sorting works: anything I'm still working on (`ongoing: true`) goes first,
 // newest start date first. Everything else is sorted by end date.
 // So `date` = start date if ongoing, end date if not. `dateLabel` is what shows on the card.
 // `image` width/height = the file's real pixel size (keeps the page from jumping while it loads).
+// No screenshot yet? Use `imagePlaceholder: "what it will show"` instead of `image` (it renders an
+// ImagePlaceholder), add a TODO with the exact filename, and add a row to IMAGE_REQUESTS.md.
+// `galleryPlaceholders` does the same for a row of extra screenshots under the card.
+// `status` shows a small note (like "Coming Soon") where the buttons would be.
+// `moreProjects` (see bottom of the list) tucks older projects into the collapsible section.
 export const projects = [
   {
     title: "The Veil Sur",
@@ -152,17 +158,41 @@ export const projects = [
     },
     stack: ["Unity", "C#", "GitHub", "Milanote"],
     viewLink: "",
-    githubLink: "https://github.com/cornelldga/Veil-Sur",
+    githubLink: "https://github.com/cornelldga/Veil-Sur", // checked Nov 2026: public repo
+    // TODO(image): public/assets/projects/veilsur-1.png, veilsur-2.png, veilsur-3.png
+    galleryPlaceholders: [
+      "The Veil Sur gameplay screenshot 1",
+      "The Veil Sur gameplay screenshot 2",
+      "The Veil Sur gameplay screenshot 3",
+    ],
+  },
+  {
+    title: "Budget.io Watchdog",
+    tag: "Web",
+    alsoTags: ["AI"],
+    role: "Solo Project",
+    ongoing: true,
+    // Real start is Oct 2026, but sorting by that would put it above The Veil Sur. Ties keep
+    // list order, so sharing the Veil Sur date keeps Watchdog second. Only dateLabel shows.
+    date: "2026-08-01",
+    dateLabel: "Oct 2026 – Present",
+    description:
+      "A real-time fraud detection system that streams transactions through Kafka into a Java/Spring Boot service with PostgreSQL. Six rules catch duplicate charges, subscription price hikes, and suspicious spending. I tested it through Kubernetes recovery, scaling, and rolling updates with zero missing transactions across 1,503 transactions, and built a dashboard tracking per-rule precision/recall and ~26 ms p99 latency.",
+    // TODO(image): public/assets/projects/watchdog-dashboard.png
+    imagePlaceholder: "Budget.io Watchdog monitoring dashboard",
+    stack: ["Java", "Spring Boot", "Kafka", "PostgreSQL", "Docker", "Kubernetes", "React"],
+    viewLink: "",
+    githubLink: "https://github.com/samcruzcodes/budget-io-watchdog",
   },
   {
     title: "CourseLynx",
     tag: "Mobile",
-    role: "Mobile Engineer",
+    role: "Mobile Engineer Intern → Engineer",
     ongoing: true,
     date: "2026-06-01",
     dateLabel: "Jun 2026 – Present",
     description:
-      "Mobile engineer on a student chat app used by 40K+ students across 18 schools. Built student organizations, redesigned course search with token aliasing so cross-listed courses resolve to one chat, and led messaging and profile overhauls.",
+      "Mobile engineer on a student chat app used by 40K+ students across 18 schools. Built student organizations, redesigned course search with token aliasing so cross-listed courses resolve to one chat, and led messaging and profile overhauls. Also rebuilt our marketing site, cutting homepage transfer from 21.1 MiB to 5.6 MiB (73%) with zero violations across 28 axe accessibility scans.",
     image: {
       // Source: CourseLynx App Store screenshots (courselynx.com), stitched into one collage.
       src: "assets/projects/courselynx.webp",
@@ -196,6 +226,7 @@ export const projects = [
   {
     title: "H4I — PPAC Healthcare Platform",
     tag: "Web",
+    alsoTags: ["AI"],
     date: "2026-05-01",
     dateLabel: "Jan–May 2026",
     description:
@@ -217,7 +248,7 @@ export const projects = [
     date: "2026-05-01",
     dateLabel: "Sep 2025 – May 2026",
     description:
-      "A free-to-play Wild West bullet hell created with DGA Studios at Cornell. Fight eccentric bosses, experiment with drink-based combat, and defend your saloon from a growing bar empire.",
+      "A free-to-play Wild West bullet hell created with DGA Studios at Cornell. Fight eccentric bosses, experiment with drink-based combat, and defend your saloon from a growing bar empire. I built a cutscene system that adapts to player state, plus modular dialogue, combat, and state management.",
     image: {
       // Source: key art by the DGA Studios Duke vs. The Gang team (credited in the README).
       src: "assets/projects/duke-vs-the-gang.webp",
@@ -247,12 +278,26 @@ export const projects = [
     githubLink: "https://github.com/cureacademy/CureAcademy.github.io/",
   },
   {
+    title: "Cornell Med in Black Website",
+    tag: "Web",
+    role: "Freelance Web Developer",
+    date: "2026-08-01",
+    dateLabel: "Sep - Nov 2026",
+    status: "Coming Soon",
+    description: "An accessible, W3C-valid multi-page site for Cornell's Med in Black student org.",
+    // TODO(image): public/assets/projects/mib.png
+    imagePlaceholder: "Cornell Med in Black website",
+    stack: ["HTML", "CSS"],
+    viewLink: "",
+    githubLink: "",
+  },
+  {
     title: "H4I — Alaska Children's Trust",
     tag: "Mobile",
     date: "2025-12-01",
     dateLabel: "Sep–Dec 2025",
     description:
-      "Helped transform ACT’s online safety decks into an engaging mobile app, making digital safety lessons easier and more fun for kids to use.",
+      "Built an interactive dashboard for a mobile app that transforms ACT's online safety education materials into engaging, accessible resources.",
     image: {
       // Source: Hack4Impact Cornell ACT project graphic; logos © Alaska Children's Trust and Hack4Impact.
       src: "assets/projects/act.webp",
@@ -267,6 +312,7 @@ export const projects = [
   {
     title: "ThinkDraft AI",
     tag: "Web",
+    alsoTags: ["AI"],
     date: "2025-08-01",
     dateLabel: "Summer 2025",
     description:
@@ -301,6 +347,7 @@ export const projects = [
   },
   {
     title: "Circle K Website",
+    moreProjects: true,
     tag: "Web",
     date: "2025-02-01",
     dateLabel: "2025",
@@ -330,12 +377,13 @@ export const projects = [
       height: 480,
       alt: "Budget Planner with monthly income and expense inputs beside budget-tracking progress bars",
     },
-    stack: ["TypeScript", "Express", "React", "Bootstrap", "Fly.io", "Docker"],
+    stack: ["JavaScript", "Node.js", "React", "Bootstrap", "Fly.io", "Docker"],
     viewLink: "https://budget.cruzcodes.com",
     githubLink: "https://github.com/samcruzcodes/budget.io",
   },
   {
     title: "APO Gamma Website",
+    moreProjects: true,
     tag: "Web",
     date: "2024-04-01",
     dateLabel: "2024",
@@ -353,7 +401,8 @@ export const projects = [
     githubLink: "https://github.com/apogamma/apogamma",
   },
   {
-    title: "Sandy Shores",
+    title: "Sandcastle Tycoon",
+    moreProjects: true,
     tag: "Game",
     date: "2024-02-01",
     dateLabel: "Feb 2024",
@@ -371,6 +420,7 @@ export const projects = [
   },
   {
     title: "Cheezy Conundrum",
+    moreProjects: true,
     tag: "Game",
     date: "2023-08-01",
     dateLabel: "Summer 2023",
@@ -390,7 +440,7 @@ export const projects = [
     title: "Turtleburg",
     tag: "Game",
     date: "2021-02-01",
-    dateLabel: "2021–2023",
+    dateLabel: "Oct 2022 – Feb 2023",
     description:
       "Educational RPG exploring the global water crisis through narrative-driven gameplay, letting players learn by making meaningful choices.",
     image: {
@@ -408,6 +458,7 @@ export const projects = [
 // Sorted by what I use the most right now.
 // Source: Devicon icons (MIT, https://devicon.dev). I recolored Unity so it shows up on
 // the dark background, and React Native is Devicon's React atom inside a phone outline.
+// Java + Kafka use my own generic </> icon (code.svg) until I add their Devicon logos.
 export const skills = [
   { name: "TypeScript", icon: "typescript" },
   { name: "React", icon: "react" },
@@ -417,6 +468,8 @@ export const skills = [
   { name: "MongoDB", icon: "mongodb" },
   { name: "Firebase", icon: "firebase" },
   { name: "Docker", icon: "docker" },
+  { name: "Java", icon: "code" },
+  { name: "Kafka", icon: "code" },
   { name: "Python", icon: "python" },
   { name: "Next.js", icon: "nextjs" },
   { name: "Figma", icon: "figma" },

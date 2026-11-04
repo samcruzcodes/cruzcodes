@@ -113,7 +113,7 @@ export default function Carousel({
           <button
             type="button"
             className="iconBtn"
-            aria-label={`Previous ${itemName}`}
+            aria-label="Previous"
             aria-controls={`${id}-track`}
             aria-disabled={atStart}
             onClick={() => !atStart && move(-1, true)}
@@ -123,7 +123,7 @@ export default function Carousel({
           <button
             type="button"
             className="iconBtn"
-            aria-label={`Next ${itemName}`}
+            aria-label="Next"
             aria-controls={`${id}-track`}
             aria-disabled={atEnd}
             onClick={() => !atEnd && move(1, true)}

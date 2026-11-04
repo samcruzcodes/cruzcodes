@@ -20,7 +20,7 @@ export default function Header({ page, setPage }) {
   const logo = (
     <button type="button" className="logoBtn" onClick={() => go("home")}>
       {/* The rat is the only thing in this button, so its alt says where it takes you. */}
-      <img className="rat" src="assets/avatar.webp" width="128" height="128" alt="Home page" />
+      <img className="rat" src="assets/avatar.webp" width="128" height="128" alt="Home" />
     </button>
   );
 

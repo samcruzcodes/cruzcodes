@@ -1115,6 +1115,77 @@ body:has(.lightbox[open]) {
     rgba(0, 0, 0, 0.18);
 }
 
+/* ImagePlaceholder.jsx: holds an image's space until the real file exists.
+   The text scales down in small tiles (container query), and long text never overflows. */
+.imagePlaceholder {
+  container-type: inline-size;
+  width: 100%; /* needed: inline-size containment would otherwise shrink it to 0 in flex/grid */
+  max-width: 100%;
+  min-height: 4.5rem;
+  display: grid;
+  overflow: hidden;
+  color: var(--text-muted);
+  text-align: center;
+  background:
+    repeating-linear-gradient(0deg, rgba(var(--accent-rgb), 0.06) 0 2px, transparent 2px 16px),
+    repeating-linear-gradient(90deg, rgba(var(--accent-rgb), 0.06) 0 2px, transparent 2px 16px),
+    var(--panel);
+  border: 2px dashed var(--btn-border);
+  border-radius: 14px;
+}
+
+.imagePlaceholderInner {
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+}
+
+.imagePlaceholderIcon {
+  width: 2rem;
+  height: 2rem;
+  opacity: 0.8;
+}
+
+.imagePlaceholderText {
+  margin: 0;
+  max-width: 100%;
+  font-family: "VT323", "Space Mono", monospace;
+  font-size: 1.375rem;
+  line-height: 1.15;
+  overflow: hidden;
+}
+
+@container (max-width: 15rem) {
+  .imagePlaceholderInner {
+    gap: 0.25rem;
+    padding: 0.5rem;
+  }
+
+  .imagePlaceholderIcon {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  .imagePlaceholderText {
+    font-size: 1.125rem;
+  }
+}
+
+@container (max-width: 8rem) {
+  .imagePlaceholderIcon {
+    display: none;
+  }
+
+  .imagePlaceholderText {
+    font-size: 0.95rem;
+  }
+}
+
 .projectBody {
   display: flex;
   flex-direction: column;
@@ -1218,6 +1289,93 @@ body:has(.lightbox[open]) {
 .projectNoLink {
   opacity: 0.75;
   font-size: 0.8125rem;
+}
+
+/* Small "Coming Soon"-style note where the buttons would be. */
+.projectStatus {
+  padding: 0.25rem 0.625rem;
+  color: var(--text-muted);
+  font-size: 0.8125rem;
+  border: 2px dashed var(--btn-border);
+  border-radius: 999px;
+}
+
+/* Extra screenshots under a card (3 placeholders for now). One compact column on phones. */
+.projectGallery {
+  grid-column: 1 / -1;
+  order: 3; /* flipped cards reorder their media/body, so keep this last */
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.625rem;
+}
+
+.projectGallery .imagePlaceholder {
+  aspect-ratio: auto;
+  min-height: 5.5rem; /* tall enough for the text, so nothing clips in one column */
+}
+
+@media (min-width: 480px) {
+  .projectGallery {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .projectGallery .imagePlaceholder {
+    aspect-ratio: 4 / 3;
+    min-height: 0;
+  }
+}
+
+/* The media frame already has a border and rounded corners. */
+.projectMedia .imagePlaceholder {
+  border: 0;
+  border-radius: 0;
+}
+
+/* "More Projects" toggle: styled like the filter tabs, wide enough to be an easy target. */
+.moreToggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.375rem 0.875rem;
+  font: inherit;
+  letter-spacing: inherit;
+  text-shadow: inherit;
+  color: var(--text);
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.04);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.28);
+}
+
+.moreToggle:hover,
+.moreToggle:focus-visible,
+.moreToggle[aria-expanded="true"] {
+  border-color: rgba(var(--accent-rgb), 0.45);
+}
+
+.moreToggle[aria-expanded="true"] {
+  color: var(--accent);
+}
+
+.moreCount {
+  font-size: 0.6em;
+  opacity: 0.8;
+}
+
+.moreChevron {
+  font-size: 0.6em;
+}
+
+.moreToggle[aria-expanded="true"] .moreChevron {
+  transform: rotate(90deg);
+}
+
+#more-projects-list {
+  margin-top: 0.875rem;
 }
 
 .projectTabs {
@@ -1397,6 +1555,14 @@ body:has(.lightbox[open]) {
 
   .projectCard {
     transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+
+  .moreToggle {
+    transition: border-color 0.15s ease, color 0.15s ease;
+  }
+
+  .moreChevron {
+    transition: transform 0.2s ease;
   }
 
   .projectCard:hover,

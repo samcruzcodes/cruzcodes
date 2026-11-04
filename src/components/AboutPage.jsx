@@ -39,19 +39,19 @@ export default function AboutPage() {
             <li>
               <a href={contact.mailto} className="aboutSocialLink">
                 <Icon name="envelope" />
-                <span className="visuallyHidden">Email Samantha at {contact.email}</span>
+                <span className="visuallyHidden">Email Sam</span>
               </a>
             </li>
             <li>
               <ExternalLink href={contact.linkedin} className="aboutSocialLink">
                 <Icon name="linkedin" />
-                <span className="visuallyHidden">Samantha's LinkedIn profile</span>
+                <span className="visuallyHidden">Sam&apos;s LinkedIn</span>
               </ExternalLink>
             </li>
             <li>
               <ExternalLink href={contact.github} className="aboutSocialLink">
                 <Icon name="github" />
-                <span className="visuallyHidden">Samantha's GitHub profile</span>
+                <span className="visuallyHidden">Sam&apos;s GitHub</span>
               </ExternalLink>
             </li>
           </ul>

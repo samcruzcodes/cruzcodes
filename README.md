@@ -26,13 +26,18 @@ Everything lives in `src/data.js`, so a new project is just a new object in `pro
 ```js
 {
   title: "My Project",
-  tag: "Web",                 // one of projectTags: "Game" | "Web" | "Mobile"
+  tag: "Web",                 // one of projectTags: "Game" | "Web" | "Mobile" | "AI"
+  alsoTags: ["AI"],           // optional: also show up under these filter tabs
+  moreProjects: true,         // optional: put it in the collapsed "More Projects" section
+  status: "Coming Soon",      // optional: small note shown when there are no buttons
   role: "Software Engineer",  // optional
   ongoing: true,              // optional: stuff I'm still working on sorts first
   date: "2026-09-01",         // sort key (start date if ongoing, end date if not)
   dateLabel: "Sep 2026 – Present",
   description: "One or two sentences.",
   image: { src: "assets/projects/my-project.webp", width: 853, height: 480, alt: "What the image shows, concisely" },
+  // No screenshot yet? Use imagePlaceholder: "what it will show" instead of image, add a
+  // TODO with the exact filename, and add a row to IMAGE_REQUESTS.md.
   stack: ["React", "TypeScript"],
   viewLink: "https://…",      // leave "" to hide the button
   githubLink: "",

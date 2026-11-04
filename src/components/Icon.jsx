@@ -21,6 +21,12 @@ const ICONS = {
     viewBox: "0 0 384 512",
     d: "M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z",
   },
+  // Not from Font Awesome: a simple picture frame (hand-drawn path, evenodd) used by ImagePlaceholder.
+  image: {
+    viewBox: "0 0 512 512",
+    fillRule: "evenodd",
+    d: "M32 64h448v384H32zM80 112v288h352V112zM176 144a32 32 0 1 1 0 64 32 32 0 0 1 0-64zM96 384l96-112 64 64 80-112 80 160z",
+  },
   chevronLeft: {
     viewBox: "0 0 320 512",
     d: "M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 246.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z",
@@ -32,7 +38,7 @@ const ICONS = {
 };
 
 export default function Icon({ name, className = "" }) {
-  const { viewBox, d } = ICONS[name];
+  const { viewBox, d, fillRule } = ICONS[name];
   return (
     <svg
       className={`icon ${className}`}
@@ -40,7 +46,7 @@ export default function Icon({ name, className = "" }) {
       aria-hidden="true"
       focusable="false"
     >
-      <path fill="currentColor" d={d} />
+      <path fill="currentColor" fillRule={fillRule} d={d} />
     </svg>
   );
 }
