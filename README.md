@@ -62,6 +62,7 @@ Everything lives in `src/data.js`, so a new project is just a new object in `pro
 - Code is in `src/components/journey/`. React owns the state (selected checkpoint, mode) and all the text, buttons, and links. The p5.js canvas (`journeySketch.js`) only draws the road and drives the car, and it's decorative (`aria-hidden`).
 - p5.js is loaded on demand (`loadSketch.js`) once the map is near the screen, as its own download, so it never touches the other pages. The sketch is `noLoop()` except while the car is moving.
 - If p5 can't load, Play shows plain checkpoint buttons and the same cards instead.
+- **Drive Yourself** (a button under the map) lets you steer the car with WASD / arrow keys (Esc exits), or with on-screen buttons on touch screens. The physics is in `journeyDrive.js` (pure math). The keyboard listeners only exist while driving is on, and driving turns itself off if you click or tab outside My Story, scroll the map away, or switch to Read.
 
 ## Credits
 

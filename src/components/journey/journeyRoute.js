@@ -174,3 +174,19 @@ export function pointAt(route, s) {
   const y = route.ys[i] + (route.ys[i + 1] - route.ys[i]) * t;
   return { x, y, dx: route.xs[i + 1] - route.xs[i], dy: route.ys[i + 1] - route.ys[i] };
 }
+
+// The closest spot on the road to (x, y): its position, how far along the road it is (`s`), and
+// how far away it is (`d`). The road has only about a thousand sample points, so a plain scan
+// is cheap enough to do every frame.
+export function nearestOnRoad(route, x, y) {
+  let best = 0;
+  let bestD2 = Infinity;
+  for (let i = 0; i < route.xs.length; i++) {
+    const d2 = (route.xs[i] - x) ** 2 + (route.ys[i] - y) ** 2;
+    if (d2 < bestD2) {
+      bestD2 = d2;
+      best = i;
+    }
+  }
+  return { x: route.xs[best], y: route.ys[best], s: best * SAMPLE_STEP, d: Math.sqrt(bestD2) };
+}
