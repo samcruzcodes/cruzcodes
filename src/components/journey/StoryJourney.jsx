@@ -1,8 +1,6 @@
 import { Suspense, lazy, useEffect, useRef, useState } from "react";
 import { journey } from "../../data";
 import Icon from "../Icon";
-import CheckpointButton from "./CheckpointButton";
-import JourneyMap from "./JourneyMap";
 import StartMenu from "./StartMenu";
 import StoryCard from "./StoryCard";
 
@@ -12,26 +10,38 @@ const total = journey.length;
 const loadAdventure = () => import("./adventure/AdventureOverlay");
 const AdventureOverlay = lazy(loadAdventure);
 
+// ...and so is the full-screen road trip.
+const loadRoadTrip = () => import("./RoadTripOverlay");
+const RoadTripOverlay = lazy(loadRoadTrip);
+
+const warmAll = () => {
+  loadAdventure();
+  loadRoadTrip();
+};
+
 // My Story on the About page. It opens on a retro start screen with a choice (all three read the
 // same `journey` array in data.js):
 //   PLAY: the full-screen archery adventure (a native modal dialog, see adventure/).
 //   READ: every story card in order, with a Back to Menu button.
-//   Explore the Road Trip (a quiet link on the start screen, and inside the game): the original
-//                  road trip. Pick a checkpoint (or Previous/Next) and the little car drives there;
-//                  "Drive Yourself" lets you steer it with WASD / the arrow keys or on-screen buttons.
+//   Explore the Road Trip (a quiet link on the start screen, and inside the game): the road trip,
+//                  also a full-screen native dialog (see RoadTripOverlay). The pixel road sits beside
+//                  the story of the stop you're on; pick a stop, use Previous/Next, or "Drive Yourself"
+//                  (WASD / arrow keys / on-screen buttons) and the story follows. Nothing is locked.
 // If the p5.js map can't load, the road trip quietly becomes a plain row of checkpoint buttons.
+//
+// Which stop is selected, and how far you've been, live here and are shared by both overlays and the
+// Read view; the archery game's unlock progress is separate and only the game can change it.
 export default function StoryJourney() {
-  const [view, setView] = useState("menu"); // "menu" | "road" | "read"
+  const [view, setView] = useState("menu"); // "menu" | "read"
   const [selected, setSelected] = useState(0); // kept when you switch modes
   const [visitedMax, setVisitedMax] = useState(0); // the farthest checkpoint reached so far
-  const [driving, setDriving] = useState(false);
   const [adventure, setAdventure] = useState(false); // the full-screen archery game is open
+  const [roadTrip, setRoadTrip] = useState(false); // the full-screen road trip is open
   // The archery game's progress, kept here so it survives closing and reopening the game. Only the
   // game can change it: visiting Read or the road trip never unlocks anything, and the shared
   // `selected` checkpoint above is a separate thing.
   const [unlocked, setUnlocked] = useState(() => new Set());
   const [shots, setShots] = useState(0);
-  const [mapFailed, setMapFailed] = useState(false);
   const [announcement, setAnnouncement] = useState("");
   const sectionRef = useRef(null);
   const titleRef = useRef(null);
@@ -52,15 +62,8 @@ export default function StoryJourney() {
   }, [view]);
 
   const goTo = (next, scrollBack = false) => {
-    setDriving(false);
     moved.current = { scrollBack };
     setView(next);
-  };
-
-  const onMapFail = (error) => {
-    console.warn("My Story map couldn't start, so Play My Story is showing the simple version.", error);
-    setDriving(false);
-    setMapFailed(true);
   };
 
   const select = (index) => {
@@ -71,11 +74,6 @@ export default function StoryJourney() {
     setAnnouncement(`Checkpoint ${index + 1} of ${total}: ${journey[index].title}`);
   };
 
-  const turnDriving = (on) => {
-    setDriving(on);
-    setAnnouncement(on ? "Driving on. Use W A S D or the arrow keys. Escape exits." : "Driving off.");
-  };
-
   const unlockChapter = (index) => setUnlocked((prev) => (prev.has(index) ? prev : new Set(prev).add(index)));
 
   const restartAdventure = () => {
@@ -83,24 +81,31 @@ export default function StoryJourney() {
     setShots(0);
   };
 
-  const openAdventure = () => {
-    setDriving(false);
-    setAdventure(true);
-  };
+  const openAdventure = () => setAdventure(true);
 
   const closeAdventure = () => {
     setAdventure(false);
     setAnnouncement(`Adventure closed. Back at checkpoint ${selected + 1} of ${total}: ${journey[selected].title}.`);
   };
 
-  // From inside the game: close it and go to the story / the road trip.
+  // From inside the game: close it (never two modals at once), then go to the story / the road trip.
   const leaveAdventureTo = (next) => {
     setAdventure(false);
-    goTo(next);
+    if (next === "road") setRoadTrip(true);
+    else goTo(next);
   };
 
-  const atStart = selected === 0;
-  const atEnd = selected === total - 1;
+  const openRoadTrip = () => setRoadTrip(true);
+
+  const closeRoadTrip = () => {
+    setRoadTrip(false);
+    setAnnouncement(`Road trip closed. Back at checkpoint ${selected + 1} of ${total}: ${journey[selected].title}.`);
+  };
+
+  const readFromRoadTrip = () => {
+    setRoadTrip(false);
+    goTo("read");
+  };
 
   const backButton = (
     <button type="button" className="journeyBackBtn" onClick={() => goTo("menu", true)}>
@@ -116,8 +121,8 @@ export default function StoryJourney() {
           titleRef={titleRef}
           onPlay={openAdventure}
           onRead={() => goTo("read")}
-          onRoadTrip={() => goTo("road")}
-          onWarm={loadAdventure}
+          onRoadTrip={openRoadTrip}
+          onWarm={warmAll}
         />
       ) : (
         <>
@@ -128,91 +133,8 @@ export default function StoryJourney() {
             {backButton}
           </div>
 
-          <p className="journeyIntro">
-            {view === "road"
-              ? "Follow the road from where it started to what I'm building now: pick a stop, or hit Next to keep driving."
-              : "Prefer to skim? Here's the whole story, start to finish."}
-          </p>
+          <p className="journeyIntro">Prefer to skim? Here's the whole story, start to finish.</p>
         </>
-      )}
-
-      {view === "road" && (
-        <div className="journeyPlay">
-          {mapFailed ? (
-            <ol className="journeyStepper" aria-label="Story checkpoints">
-              {journey.map((item, i) => (
-                <li key={item.id}>
-                  <CheckpointButton
-                    item={item}
-                    index={i}
-                    state={i === selected ? "current" : i < selected ? "reached" : "upcoming"}
-                    onSelect={select}
-                    labelVisible={false}
-                  />
-                </li>
-              ))}
-            </ol>
-          ) : (
-            <JourneyMap
-              items={journey}
-              selected={selected}
-              visitedMax={visitedMax}
-              driving={driving}
-              onSelect={select}
-              onReach={select}
-              onExitDriving={() => turnDriving(false)}
-              onFail={onMapFail}
-            />
-          )}
-
-          <div className="journeyNav">
-            <button
-              type="button"
-              className="journeyNavBtn journeyNavBtn--prev"
-              aria-disabled={atStart}
-              onClick={() => select(selected - 1)}
-            >
-              <Icon name="chevronLeft" />
-              <span className="journeyNavLabel">Previous</span>
-            </button>
-            {!mapFailed && (
-              <button
-                type="button"
-                className="journeyDriveBtn"
-                aria-pressed={driving}
-                aria-describedby="journey-drive-hint"
-                onClick={() => turnDriving(!driving)}
-              >
-                Drive Yourself
-              </button>
-            )}
-            <button
-              type="button"
-              className="journeyNavBtn journeyNavBtn--next"
-              aria-disabled={atEnd}
-              onClick={() => select(selected + 1)}
-            >
-              <span className="journeyNavLabel">Next</span>
-              <Icon name="chevronRight" />
-            </button>
-          </div>
-
-          {!mapFailed && (
-            <p id="journey-drive-hint" className="journeyHint">
-              {driving
-                ? "WASD / Arrow Keys to Drive • Esc to Exit"
-                : "Want to drive? Switch on Drive Yourself, then use WASD or the arrow keys."}
-            </p>
-          )}
-
-          <StoryCard
-            key={journey[selected].id}
-            item={journey[selected]}
-            index={selected}
-            total={total}
-            variant="play"
-          />
-        </div>
       )}
 
       {view === "read" && (
@@ -242,6 +164,19 @@ export default function StoryJourney() {
             onClose={closeAdventure}
             onRead={() => leaveAdventureTo("read")}
             onRoadTrip={() => leaveAdventureTo("road")}
+          />
+        </Suspense>
+      )}
+
+      {roadTrip && (
+        <Suspense fallback={null}>
+          <RoadTripOverlay
+            items={journey}
+            selected={selected}
+            visitedMax={visitedMax}
+            onSelect={select}
+            onClose={closeRoadTrip}
+            onRead={readFromRoadTrip}
           />
         </Suspense>
       )}

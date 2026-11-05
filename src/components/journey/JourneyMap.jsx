@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import CheckpointButton from "./CheckpointButton";
 import DriveTouchPad from "./DriveTouchPad";
 import { buildRoute, getLayout } from "./journeyRoute";
@@ -18,20 +18,20 @@ const DRIVE_KEYS = {
 
 const NO_INPUT = { up: false, down: false, left: false, right: false };
 
-// Typing somewhere, or a dialog (the photo viewer) is open: don't steal keys.
-const isTypingTarget = (target) =>
-  target instanceof Element &&
-  Boolean(target.closest("input, textarea, select, [contenteditable]:not([contenteditable='false'])"));
-
 const checkpointState = (index, selected, visitedMax) =>
   index === selected ? "current" : index < selected || index <= visitedMax ? "reached" : "upcoming";
 
-// The "Play My Story" map. React owns everything that matters (which stop is selected, the
-// buttons, the labels). The p5.js canvas underneath is decoration that just draws the road and
-// drives the car; it is created once, never recreated when you pick a stop.
+// The road trip map. React owns everything that matters (which stop is selected, the buttons, the
+// labels). The p5.js canvas underneath is decoration that just draws the road and drives the car; it
+// is created once, never recreated when you pick a stop.
 //
-// `driving` = "Drive Yourself" is on. Only then does this listen for WASD / arrow keys (and only
-// until driving is switched off), so it never grabs keys while you're browsing the site.
+// `driving` = "Drive Yourself" is on. Even then, keys only drive the car while the road itself has
+// keyboard focus (the visitor chose to put it there): the handlers are on that one element, so
+// nothing is captured anywhere else, Tab and Shift+Tab are never touched, and everything is let go
+// the moment focus leaves.
+//   rangeRef:        gets the focusable road element, so the page around can focus it ("Focus Driving Area")
+//   onRangeActive:   told when the road gains / loses keyboard focus
+//   describedBy:     id of the text that explains the keys
 export default function JourneyMap({
   items,
   selected,
@@ -39,10 +39,19 @@ export default function JourneyMap({
   driving,
   onSelect,
   onReach,
-  onExitDriving,
   onFail,
+  rangeRef,
+  onRangeActive,
+  describedBy,
 }) {
   const stageRef = useRef(null);
+  const setStage = useCallback(
+    (node) => {
+      stageRef.current = node;
+      if (rangeRef) rangeRef.current = node;
+    },
+    [rangeRef]
+  );
   const canvasHostRef = useRef(null);
   const controllerRef = useRef(null);
   const [layout, setLayout] = useState(() => getLayout(1000));
@@ -50,8 +59,8 @@ export default function JourneyMap({
   const route = useMemo(() => buildRoute(layout), [layout]);
 
   // Latest values for effects below that only run once.
-  const latest = useRef({ layout, selected, driving, onReach, onExitDriving, onFail });
-  latest.current = { layout, selected, driving, onReach, onExitDriving, onFail };
+  const latest = useRef({ layout, selected, driving, onReach, onFail, onRangeActive });
+  latest.current = { layout, selected, driving, onReach, onFail, onRangeActive };
 
   // Size the map to its container (before the first paint, so nothing jumps) and keep it in sync.
   useLayoutEffect(() => {
@@ -105,8 +114,6 @@ export default function JourneyMap({
           visible = entry.isIntersecting;
           if (visible) start();
           controller?.setVisible(visible);
-          // Scrolled away: stop listening for driving keys.
-          if (!visible && latest.current.driving) latest.current.onExitDriving();
         },
         { rootMargin: "200px" }
       );
@@ -154,68 +161,49 @@ export default function JourneyMap({
     sendInput();
   };
 
-  // The keyboard listeners exist ONLY while "Drive Yourself" is on, and are removed when it's off
-  // (or the map goes away).
+  const releaseAll = () => {
+    Object.assign(keysHeld.current, NO_INPUT);
+    Object.assign(touchHeld.current, NO_INPUT);
+    sendInput();
+  };
+
+  // Switching driving off lets go of everything.
   useEffect(() => {
-    if (!driving) return undefined;
-    const section = stageRef.current.closest(".journey");
-    const keys = keysHeld.current;
-    const touch = touchHeld.current;
-
-    const releaseAll = () => {
-      Object.assign(keys, NO_INPUT);
-      Object.assign(touch, NO_INPUT);
-      sendInput();
-    };
-
-    const onKeyDown = (event) => {
-      if (event.ctrlKey || event.metaKey || event.altKey) return; // browser shortcuts stay theirs
-      if (isTypingTarget(event.target) || document.querySelector("dialog[open]")) return;
-      if (event.code === "Escape" || event.key === "Escape") {
-        latest.current.onExitDriving();
-        return;
-      }
-      const direction = DRIVE_KEYS[event.code];
-      if (!direction) return;
-      event.preventDefault(); // so the arrow keys don't scroll the page while driving
-      if (keys[direction]) return; // key repeat
-      keys[direction] = true;
-      sendInput();
-    };
-
-    const onKeyUp = (event) => {
-      const direction = DRIVE_KEYS[event.code];
-      if (!direction || !keys[direction]) return;
-      keys[direction] = false;
-      sendInput();
-    };
-
-    // Clicking or tabbing to anything outside My Story ends driving, so the keys go back to the page.
-    const leaveIfOutside = (event) => {
-      if (section && event.target instanceof Node && !section.contains(event.target)) {
-        latest.current.onExitDriving();
-      }
-    };
-
-    window.addEventListener("keydown", onKeyDown);
-    window.addEventListener("keyup", onKeyUp);
-    window.addEventListener("blur", releaseAll);
-    document.addEventListener("visibilitychange", releaseAll);
-    document.addEventListener("pointerdown", leaveIfOutside, true);
-    document.addEventListener("focusin", leaveIfOutside);
-
-    return () => {
-      window.removeEventListener("keydown", onKeyDown);
-      window.removeEventListener("keyup", onKeyUp);
-      window.removeEventListener("blur", releaseAll);
-      document.removeEventListener("visibilitychange", releaseAll);
-      document.removeEventListener("pointerdown", leaveIfOutside, true);
-      document.removeEventListener("focusin", leaveIfOutside);
-      releaseAll();
-    };
-    // sendInput only reads refs, so it's safe to leave out.
+    if (!driving) releaseAll();
+    // releaseAll only reads refs
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [driving]);
+
+  // Keys, only while the road itself has focus. (Key presses that started on a checkpoint button
+  // bubble up here too; they are the button's business, not the car's.)
+  const onKeyDown = (event) => {
+    if (!driving || event.target !== event.currentTarget) return;
+    if (event.ctrlKey || event.metaKey || event.altKey) return; // browser shortcuts stay theirs
+    const direction = DRIVE_KEYS[event.code];
+    if (!direction) return;
+    event.preventDefault(); // so the arrow keys steer instead of scrolling
+    if (keysHeld.current[direction]) return; // key repeat
+    keysHeld.current[direction] = true;
+    sendInput();
+  };
+
+  const onKeyUp = (event) => {
+    if (event.target !== event.currentTarget) return;
+    const direction = DRIVE_KEYS[event.code];
+    if (!direction || !keysHeld.current[direction]) return;
+    keysHeld.current[direction] = false;
+    sendInput();
+  };
+
+  const onFocus = (event) => {
+    if (event.target === event.currentTarget) latest.current.onRangeActive?.(true);
+  };
+
+  const onBlur = (event) => {
+    if (event.target !== event.currentTarget) return;
+    releaseAll(); // focus left the road: the car coasts to a stop
+    latest.current.onRangeActive?.(false);
+  };
 
   // Clicking the stop you're already on is how you tell the car to come back to it (after a drive).
   const selectStop = (index) => {
@@ -228,9 +216,18 @@ export default function JourneyMap({
   return (
     <div className="journeyMap">
       <div
-        ref={stageRef}
+        ref={setStage}
         className={`journeyStage journeyStage--${layout.kind}${ready ? " is-ready" : ""}${driving ? " is-driving" : ""}`}
         style={{ aspectRatio: `${layout.cols} / ${layout.rows}` }}
+        // Only focusable while driving is on: then it's the "driving area" you can Tab to.
+        tabIndex={driving ? 0 : undefined}
+        role={driving ? "group" : undefined}
+        aria-label={driving ? "Road trip driving area" : undefined}
+        aria-describedby={driving ? describedBy : undefined}
+        onKeyDown={onKeyDown}
+        onKeyUp={onKeyUp}
+        onFocus={onFocus}
+        onBlur={onBlur}
       >
         {/* Decorative: everything it shows is also in the buttons and cards. */}
         <div ref={canvasHostRef} className="journeyCanvas" aria-hidden="true" />

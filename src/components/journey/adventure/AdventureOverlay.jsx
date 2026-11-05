@@ -1,6 +1,7 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import Icon from "../../Icon";
 import StoryCard from "../StoryCard";
+import useModalDialog from "../useModalDialog";
 import { ROUNDS, roundOf } from "./archeryPhysics";
 import { loadArchery } from "./loadArchery";
 
@@ -52,8 +53,7 @@ export default function AdventureOverlay({
   onRead,
   onRoadTrip,
 }) {
-  const dialogRef = useRef(null);
-  const titleRef = useRef(null);
+  const { dialogRef, titleRef } = useModalDialog(); // opens it as a modal, locks scrolling, restores focus
   const stageRef = useRef(null);
   const hostRef = useRef(null);
   const controllerRef = useRef(null);
@@ -135,30 +135,6 @@ export default function AdventureOverlay({
   latest.current = { handleEvent, onClose, unlocked, shots };
 
   useEffect(() => () => clearTimeout(bannerTimer.current), []);
-
-  // Open as a modal dialog; lock the page behind it from scrolling; put focus on the title; and
-  // give everything back (including focus) when it closes.
-  useEffect(() => {
-    const dialog = dialogRef.current;
-    const opener = document.activeElement;
-    const html = document.documentElement;
-    const body = document.body;
-    const before = { overflow: html.style.overflow, padding: body.style.paddingRight };
-    const scrollbar = window.innerWidth - html.clientWidth;
-
-    html.style.overflow = "hidden";
-    if (scrollbar > 0) body.style.paddingRight = `${scrollbar}px`;
-    if (typeof dialog.showModal === "function") dialog.showModal();
-    else dialog.setAttribute("open", "");
-    titleRef.current?.focus({ preventScroll: true });
-
-    return () => {
-      html.style.overflow = before.overflow;
-      body.style.paddingRight = before.padding;
-      if (typeof dialog.close === "function" && dialog.open) dialog.close();
-      if (opener instanceof HTMLElement && document.contains(opener)) opener.focus({ preventScroll: true });
-    };
-  }, []);
 
   // Load p5 + the sketch, start the game (picking up where the visitor left off), keep it sized
   // to its stage, and clean up on the way out.

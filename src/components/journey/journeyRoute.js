@@ -75,7 +75,7 @@ export function getLayout(width) {
   const ps = kind === "wide" ? 4 : 3;
   const usable = kind === "wide" ? w : Math.min(w, TALL_MAX_WIDTH);
   const cols = Math.round(usable / ps);
-  const heightPx = kind === "wide" ? clamp(Math.round(w / 2.4), 360, 400) : Math.round(usable * 1.15);
+  const heightPx = kind === "wide" ? clamp(Math.round(w / 2), 360, 440) : Math.round(usable * 1.05);
   const rows = Math.round(heightPx / ps);
   return { kind, ps, cols, rows, key: `${kind}-${cols}x${rows}` };
 }

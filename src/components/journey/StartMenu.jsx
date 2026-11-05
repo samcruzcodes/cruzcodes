@@ -23,7 +23,7 @@ export default function StartMenu({ titleRef, onPlay, onRead, onRoadTrip, onWarm
           </button>
         </div>
 
-        <button type="button" className="startMenuLink" onClick={onRoadTrip}>
+        <button type="button" className="startMenuLink" onClick={onRoadTrip} onPointerEnter={onWarm} onFocus={onWarm}>
           Explore the Road Trip
         </button>
       </div>
