@@ -268,8 +268,8 @@ describe("the milestone panel", () => {
     expect(panel()).toHaveTextContent("Chapter 4 of 6 · Visited 4 of 6");
     fireEvent.click(checkpoint(2));
     expect(panel()).toHaveTextContent("Chapter 2 of 6 · Visited 4 of 6");
-    expect(document.querySelectorAll(".roadPip.is-visited")).toHaveLength(4);
-    expect(document.querySelectorAll(".roadPip.is-here")).toHaveLength(1);
+    expect(panel().querySelectorAll(".roadPip.is-visited")).toHaveLength(4);
+    expect(panel().querySelectorAll(".roadPip.is-here")).toHaveLength(1);
   });
 
   test("the choice is announced once per change, inside the dialog (the page behind is inert)", async () => {
@@ -303,16 +303,59 @@ describe("the milestone panel", () => {
     expect(mount).toHaveBeenCalledTimes(1);
   });
 
-  test("on a narrow screen the chapter can be opened and closed with a real button", async () => {
+  test("the summary under the road names what you're on, and follows every way of choosing a stop", async () => {
     render(<StoryJourney />);
     await openRoad();
-    const toggle = road().getByRole("button", { name: "Open chapter" });
-    expect(toggle).toHaveAttribute("aria-expanded", "false");
-    expect(toggle).toHaveAttribute("aria-controls", "road-story-body");
-    expect(panel()).toHaveAttribute("data-open", "false");
-    fireEvent.click(toggle);
-    expect(road().getByRole("button", { name: "Hide chapter" })).toHaveAttribute("aria-expanded", "true");
-    expect(panel()).toHaveAttribute("data-open", "true");
+    const summary = () => dialog().querySelector(".roadNow--summary");
+    const roadColumn = road().getByRole("region", { name: "Road trip" });
+    expect(roadColumn).toContainElement(summary()); // with the road and its controls, not down in the story
+    expect(within(summary()).getByText("Now exploring")).toBeInTheDocument();
+    expect(summary()).toHaveTextContent(`Chapter 1 of 6 · Visited 1 of 6${journey[0].title}`);
+    fireEvent.click(checkpoint(4));
+    expect(summary()).toHaveTextContent(`Chapter 4 of 6 · Visited 4 of 6${journey[3].title}`);
+    fireEvent.click(road().getByRole("button", { name: /^previous$/i }));
+    expect(summary()).toHaveTextContent(journey[2].title);
+    fireEvent.click(driveButton());
+    reach(4); // driving up to a stop
+    expect(summary()).toHaveTextContent(`Chapter 5 of 6 · Visited 5 of 6${journey[4].title}`);
+    expect(summary().querySelectorAll(".roadPip.is-here")).toHaveLength(1);
+    // the full story isn't repeated there
+    expect(within(summary()).queryByRole("heading")).not.toBeInTheDocument();
+    expect(summary().querySelector(".storyCardText")).toBeNull();
+  });
+
+  test("View Story opens the chapter and brings you to it; Hide Story brings you back to the button", async () => {
+    const scrollIntoView = jest.fn();
+    Element.prototype.scrollIntoView = scrollIntoView;
+    try {
+      render(<StoryJourney />);
+      await openRoad();
+      const view = road().getByRole("button", { name: "View Story" });
+      expect(view).toHaveAttribute("aria-expanded", "false");
+      expect(view).toHaveAttribute("aria-controls", "road-story-body");
+      expect(panel()).toHaveAttribute("data-open", "false");
+      // choosing and driving never move the page on their own
+      fireEvent.click(checkpoint(3));
+      fireEvent.click(driveButton());
+      reach(4);
+      expect(scrollIntoView).not.toHaveBeenCalled();
+
+      fireEvent.click(view);
+      expect(panel()).toHaveAttribute("data-open", "true");
+      expect(road().getAllByRole("button", { name: "Hide Story" })[0]).toHaveAttribute("aria-expanded", "true");
+      expect(scrollIntoView).toHaveBeenCalledTimes(1);
+      expect(within(panel()).getByRole("heading", { level: 3 })).toHaveFocus();
+      // it stays in step with the road while open
+      fireEvent.click(checkpoint(2));
+      expect(within(panel()).getByRole("heading", { level: 3 })).toHaveTextContent(journey[1].title);
+      expect(scrollIntoView).toHaveBeenCalledTimes(1);
+
+      fireEvent.click(within(panel()).getByRole("button", { name: "Hide Story" }));
+      expect(panel()).toHaveAttribute("data-open", "false");
+      expect(road().getByRole("button", { name: "View Story" })).toHaveFocus();
+    } finally {
+      delete Element.prototype.scrollIntoView;
+    }
   });
 
   test("the hint invites you to choose a stop or drive", async () => {

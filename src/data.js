@@ -82,7 +82,7 @@ export const projects = [
     date: "2026-08-01",
     dateLabel: "Aug 2026 – Present",
     description:
-      "Project Lead of a 24-person DGA Studios team building a photography-driven stealth-horror game. I own the roadmap and run weekly sprints across art, programming, design, and audio.",
+      "I lead a 24-person Cornell team at DGA Studios building a Unity stealth-investigation game where players use photography to solve puzzles. I own the roadmap and run weekly sprints across art, programming, design, and audio.",
     image: {
       // Source: key art by our DGA Studios Veil Sur team (credited in the README).
       src: "assets/projects/the-veil-sur.webp",
@@ -134,7 +134,7 @@ export const projects = [
     date: "2026-10-01",
     dateLabel: "Oct 2026 – Present",
     description:
-      "A real-time fraud detection system that streams transactions through Kafka into a Java/Spring Boot service with PostgreSQL. Six rules catch duplicate charges, subscription price hikes, and suspicious spending. I tested it through Kubernetes recovery, scaling, and rolling updates with zero missing transactions across 1,503 transactions, and built a dashboard tracking per-rule precision/recall and ~26 ms p99 latency.",
+      "Built a real-time fraud detection system with Java, Spring Boot, Kafka, and PostgreSQL, using six detection rules. Tested reliability through Kubernetes recovery, scaling, and rolling updates, with zero lost transactions across 1,503 events.",
     image: {
       // Source: screenshot of my Budget.io Watchdog dashboard (original: design/source-images/watchdog-latency.png).
       src: "assets/projects/watchdog.webp",
@@ -157,7 +157,7 @@ export const projects = [
     date: "2026-06-01",
     dateLabel: "Jun 2026 – Present",
     description:
-      "Mobile engineer on a student chat app used by 40K+ students across 18 schools. Built student organizations, redesigned course search with token aliasing so cross-listed courses resolve to one chat, and led messaging and profile overhauls. Also rebuilt our marketing site, cutting homepage transfer from 21.1 MiB to 5.6 MiB (73%) with zero violations across 28 axe accessibility scans.",
+      "Mobile engineer on a React Native chat app used by 40K+ students across 18 schools. Built student organizations, redesigned course search so cross-listed courses resolve to one chat, and led the messaging and profile overhauls.",
     image: {
       // Source: CourseLynx App Store screenshots (courselynx.com), stitched into one collage.
       src: "assets/projects/courselynx.webp",
@@ -178,7 +178,7 @@ export const projects = [
     date: "2026-07-01",
     dateLabel: "Jul 2026",
     description:
-      "In one month, I built the full website for Lerly Liz Studios, an artist's shop for custom hand-painted acrylic pet portraits. It includes an admin portal so the owner can edit the site's content herself without touching code.",
+      "In one month, I built the website for Lerly Liz Studios, an artist's custom pet portrait shop, plus an admin portal so the owner can update the site herself without touching code.",
     image: {
       // Source: screenshot of the site I built (lerlylizstudios.github.io); painting © Lerly Liz Studios.
       src: "assets/projects/lerly-liz-studios.webp",
@@ -219,7 +219,7 @@ export const projects = [
     date: "2026-05-01",
     dateLabel: "Sep 2025 – May 2026",
     description:
-      "A free-to-play Wild West bullet hell created with DGA Studios at Cornell. Fight eccentric bosses, experiment with drink-based combat, and defend your saloon from a growing bar empire. I built a cutscene system that adapts to player state, plus modular dialogue, combat, and state management.",
+      "A free-to-play Wild West bullet hell made with DGA Studios at Cornell, with eccentric bosses and drink-based combat. I built a cutscene system that adapts to player state, plus modular dialogue, combat, and state management.",
     image: {
       // Source: key art by the DGA Studios Duke vs. The Gang team (credited in the README).
       src: "assets/projects/duke-vs-the-gang.webp",
@@ -385,7 +385,7 @@ export const projects = [
     date: "2024-06-01",
     dateLabel: "2024",
     description:
-      "Developed an AI-powered budgeting app providing real-time insights and personalized recommendations to simplify budgeting.",
+      "Developed an AI-powered budgeting app that gives real-time insights and personalized recommendations.",
     image: {
       src: "assets/projects/budget-planner.webp",
       width: 640,

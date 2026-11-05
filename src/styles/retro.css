@@ -31,6 +31,9 @@ html {
   background: var(--bg);
   color: var(--text);
   font-family: "Space Mono", monospace;
+  /* The header is sticky: keyboard focus and #anchor jumps stop below it instead of behind it
+     (WCAG 2.4.11 Focus Not Obscured). Other scroll-margin-top rules below only add breathing room. */
+  scroll-padding-top: calc(var(--header-h) + 0.25rem); /* header + its 2px border + a little air */
 }
 
 body {
@@ -210,10 +213,13 @@ img {
   padding: 0;
 }
 
+/* Page links (real <a href>s) that look like the old nav buttons. */
 .navLink {
+  display: inline-block;
   background: transparent;
   border: none;
   cursor: pointer;
+  text-decoration: none;
   color: var(--text);
   font-family: "VT323", "Space Mono", monospace;
   font-size: 1.7rem;
@@ -1231,7 +1237,7 @@ img {
 /* ---------- My Story: the start screen (PLAY / READ) ---------- */
 /* Components: src/components/journey/StartMenu.jsx + startScene.js. The picture is an inline SVG. */
 .journey {
-  scroll-margin-top: calc(var(--header-h) + 0.75rem);
+  scroll-margin-top: 0.75rem;
 }
 
 .startMenu {
@@ -2505,6 +2511,13 @@ body:has(.lightbox[open]) {
   color: var(--accent);
 }
 
+/* The phone summary shares its row with the View Story button, so its label is a touch tighter. */
+.roadNow--summary .roadNowLabel {
+  font-size: 1.25rem;
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
 .roadNowLabel::before {
   content: "\25B6\00A0";
 }
@@ -2549,11 +2562,10 @@ body:has(.lightbox[open]) {
   text-wrap: balance;
 }
 
-.roadStory[data-open="true"] .roadNowTitle {
-  display: none; /* the card below carries the title */
-}
-
-.roadStoryToggle {
+/* View Story (in the summary under the road) and Hide Story (in the opened panel) sit where the
+   chapter number's bar has room for a button. */
+.roadStoryToggle,
+.roadStoryHide {
   grid-column: 3;
   grid-row: 1;
 }
@@ -2591,13 +2603,14 @@ body:has(.lightbox[open]) {
   }
 }
 
-/* Narrow screens: the story is a compact bar (number, title) and a button opens it, so the road
-   keeps the screen. Wider: the story is just there. */
+/* Phones: "Now exploring" + the chapter title + View Story sit right under the road, so a stop you
+   pick or drive to is always in view; the full chapter opens below only when asked for. Tablets and
+   up: the story panel is always there, and the summary hides. */
 .roadStoryBody {
   min-width: 0;
 }
 
-.roadStory[data-open="false"] .roadStoryBody {
+.roadStory[data-open="false"] {
   display: none;
 }
 
@@ -2619,13 +2632,13 @@ body:has(.lightbox[open]) {
     grid-template-columns: auto minmax(0, 1fr);
   }
 
-  .roadStoryToggle,
-  .roadNowTitle {
+  .roadNow--summary,
+  .roadStoryHide {
     display: none;
   }
 
-  .roadStory[data-open="false"] .roadStoryBody {
-    display: block;
+  .roadStory[data-open="false"] {
+    display: grid;
   }
 
   .roadStory .storyCard {
@@ -2824,9 +2837,10 @@ body:has(.lightbox[open]) {
   width: 100%;
 }
 
-/* Jumping to a card from Home (or #project-…) stops below the sticky header. */
+/* Jumping to a card from Home (or #project-…) leaves a little room under the sticky header
+   (html's scroll-padding-top is the header itself). */
 .projectCard {
-  scroll-margin-top: calc(var(--header-h) + 1rem);
+  scroll-margin-top: 1rem;
 }
 
 .projectCard:hover,
@@ -2965,7 +2979,7 @@ body:has(.lightbox[open]) {
 .projectDate {
   margin: 0;
   opacity: 0.85;
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   border: 2px solid rgba(255, 255, 255, 0.1);
   background: rgba(0, 0, 0, 0.12);
   padding: 0.375rem 0.625rem;
@@ -2975,15 +2989,19 @@ body:has(.lightbox[open]) {
 .projectRole {
   margin: 0;
   color: var(--accent);
-  font-size: 0.875rem;
+  font-size: 1rem;
   font-weight: 700;
+  line-height: 1.4;
 }
 
+/* The description is the point of the card, so it's the biggest body text on the page: 17px on
+   phones, 18px from tablets up. (More Projects cards step it down one notch, see below.) */
 .projectDesc {
+  max-width: 70ch;
   margin: 0;
-  opacity: 0.92;
-  font-size: 0.875rem;
-  line-height: 1.5;
+  opacity: 0.94;
+  font-size: 1.0625rem;
+  line-height: 1.55;
 }
 
 .projectStack {
@@ -2996,7 +3014,7 @@ body:has(.lightbox[open]) {
 }
 
 .projectChip {
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   opacity: 0.95;
   padding: 0.375rem 0.625rem;
   border-radius: 999px;
@@ -3042,14 +3060,14 @@ body:has(.lightbox[open]) {
 
 .projectNoLink {
   opacity: 0.75;
-  font-size: 0.8125rem;
+  font-size: 0.9375rem;
 }
 
 /* Small "Coming Soon"-style note where the buttons would be. */
 .projectStatus {
   padding: 0.25rem 0.625rem;
   color: var(--text-muted);
-  font-size: 0.8125rem;
+  font-size: 0.9375rem;
   border: 2px dashed var(--btn-border);
   border-radius: 999px;
 }
@@ -3198,6 +3216,10 @@ body:has(.lightbox[open]) {
   .projectsPage {
     padding: 1.125rem;
   }
+
+  .projectDesc {
+    font-size: 1.125rem;
+  }
 }
 
 @media (min-width: 981px) {
@@ -3230,6 +3252,11 @@ body:has(.lightbox[open]) {
 
 .projectList--compact .projectTitle {
   font-size: 2.25rem;
+}
+
+/* One step below the main cards (16px), still comfortable to read. */
+.projectList--compact .projectDesc {
+  font-size: 1rem;
 }
 
 @media (min-width: 981px) {

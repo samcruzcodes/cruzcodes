@@ -23,7 +23,7 @@ function navFromHash() {
 export default function App() {
   const [nav, setNav] = useState(navFromHash);
   const mainRef = useRef(null);
-  const isFirstRender = useRef(true);
+  const shownNav = useRef(nav); // the page we've already put focus on (the first one needs none)
 
   const navigate = (page, target = null) => {
     setNav({ page, target });
@@ -34,11 +34,11 @@ export default function App() {
   // When you switch pages, jump focus to the new heading so keyboard and
   // screen-reader users land on the new content (but not on first load).
   // (Jumping to a project card focuses that card's title instead; see ProjectsPage.)
+  // Comparing with the last page shown, instead of a "first render" flag, keeps this right in
+  // development too, where React StrictMode runs every effect twice on load.
   useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      return;
-    }
+    if (shownNav.current === nav) return;
+    shownNav.current = nav;
     if (nav.target) return;
     mainRef.current?.querySelector("h1")?.focus({ preventScroll: true });
   }, [nav]);

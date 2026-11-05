@@ -10,6 +10,38 @@ const pad = (n) => String(n).padStart(2, "0");
 // How long the "MILESTONE REACHED!" banner stays up.
 const BANNER_MS = 2400;
 
+// The "Now exploring" bar: the chapter number, where you are, and your progress. It is shown twice,
+// and CSS shows one at a time: on phones as a compact summary right under the road (so you see what
+// you just picked or drove to without scrolling), and from tablets up as the header of the story
+// panel. `children` are the extras each one adds (the title and View Story button, or Hide).
+function NowExploring({ items, selected, visitedMax, className, children }) {
+  const total = items.length;
+  const visited = Math.max(visitedMax, selected) + 1;
+  return (
+    <div className={`roadNow ${className}`}>
+      <span className="roadNowNum" key={selected} aria-hidden="true">
+        {selected + 1}
+      </span>
+      <div className="roadNowText">
+        <p className="roadNowLabel">Now exploring</p>
+        <p className="roadProgress">
+          Chapter {selected + 1} of {total} · Visited {visited} of {total}
+        </p>
+        {/* Six little squares: filled = visited, with a frame on the one you're at. */}
+        <span className="roadPips" aria-hidden="true">
+          {items.map((entry, i) => (
+            <span
+              key={entry.id}
+              className={`roadPip${i <= Math.max(visitedMax, selected) ? " is-visited" : ""}${i === selected ? " is-here" : ""}`}
+            />
+          ))}
+        </span>
+      </div>
+      {children}
+    </div>
+  );
+}
+
 // The road trip, full screen: the pixel-art road on one side and the story of the stop you're on on
 // the other, so picking (or driving to) a stop and reading about it happen in the same view.
 //
@@ -35,11 +67,13 @@ export default function RoadTripOverlay({ items, selected, visitedMax, onSelect,
   const [mapFailed, setMapFailed] = useState(false);
   const [reached, setReached] = useState(null); // { index, key }: the milestone you just drove up to
   const [storyOpen, setStoryOpen] = useState(false); // narrow screens: the full chapter is shown
+  const storyRef = useRef(null);
+  const viewBtnRef = useRef(null);
+  const moveForStory = useRef(null); // "show": scroll to the story once it's open; "hide": back to the button
   const [status, setStatus] = useState("");
 
   const total = items.length;
   const item = items[selected];
-  const visited = Math.max(visitedMax, selected) + 1;
 
   useEffect(() => () => clearTimeout(bannerTimer.current), []);
 
@@ -53,6 +87,26 @@ export default function RoadTripOverlay({ items, selected, visitedMax, onSelect,
       driveBtnRef.current?.focus();
     }
   }, [driving]);
+
+  // View Story / Hide Story (narrow screens): only ever moves the page because you asked it to.
+  useEffect(() => {
+    const move = moveForStory.current;
+    moveForStory.current = null;
+    if (move === "show" && storyOpen) {
+      const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+      storyRef.current?.scrollIntoView?.({ block: "start", behavior: reduce ? "auto" : "smooth" });
+      const heading = storyRef.current?.querySelector("h3");
+      heading?.setAttribute("tabindex", "-1"); // so it can take focus (it isn't a tab stop)
+      heading?.focus({ preventScroll: true });
+    } else if (move === "hide" && !storyOpen) {
+      viewBtnRef.current?.focus();
+    }
+  }, [storyOpen]);
+
+  const toggleStory = () => {
+    moveForStory.current = storyOpen ? "hide" : "show";
+    setStoryOpen(!storyOpen);
+  };
 
   const startDriving = () => {
     focusRoadNext.current = true;
@@ -177,6 +231,21 @@ export default function RoadTripOverlay({ items, selected, visitedMax, onSelect,
               )}
             </div>
 
+            {/* Phones: what you're on, right under the road and its controls (see NowExploring). */}
+            <NowExploring items={items} selected={selected} visitedMax={visitedMax} className="roadNow--summary">
+              <p className="roadNowTitle">{item.title}</p>
+              <button
+                type="button"
+                ref={viewBtnRef}
+                className="roadStoryToggle adventureBtn"
+                aria-expanded={storyOpen}
+                aria-controls="road-story-body"
+                onClick={toggleStory}
+              >
+                {storyOpen ? "Hide Story" : "View Story"}
+              </button>
+            </NowExploring>
+
             <div className="journeyNav">
               <button
                 type="button"
@@ -234,46 +303,13 @@ export default function RoadTripOverlay({ items, selected, visitedMax, onSelect,
             )}
           </section>
 
-          <section className="roadStory" aria-label="Current milestone" data-open={storyOpen}>
-            <div className="roadNow">
-              <span className="roadNowNum" key={selected} aria-hidden="true">
-                {selected + 1}
-              </span>
-              <div className="roadNowText">
-                <p className="roadNowLabel">Now exploring</p>
-                <p className="roadProgress">
-                  Chapter {selected + 1} of {total} · Visited {visited} of {total}
-                </p>
-                {/* Six little squares: filled = visited, with a frame on the one you're at. */}
-                <span className="roadPips" aria-hidden="true">
-                  {items.map((entry, i) => (
-                    <span
-                      key={entry.id}
-                      className={`roadPip${i <= Math.max(visitedMax, selected) ? " is-visited" : ""}${i === selected ? " is-here" : ""}`}
-                    />
-                  ))}
-                </span>
-              </div>
-              {/* Narrow screens: the story is a compact bar until you open it. */}
-              <button
-                type="button"
-                className="roadStoryToggle adventureBtn"
-                aria-expanded={storyOpen}
-                aria-controls="road-story-body"
-                onClick={() => setStoryOpen((open) => !open)}
-              >
-                {storyOpen ? (
-                  <>
-                    Hide<span className="roadWide"> chapter</span>
-                  </>
-                ) : (
-                  <>
-                    Open<span className="roadWide"> chapter</span>
-                  </>
-                )}
+          <section ref={storyRef} className="roadStory" aria-label="Current milestone" data-open={storyOpen}>
+            <NowExploring items={items} selected={selected} visitedMax={visitedMax} className="roadNow--panel">
+              {/* Phones only (the summary under the road opens it): a way back up. */}
+              <button type="button" className="roadStoryHide adventureBtn" onClick={toggleStory}>
+                Hide Story
               </button>
-              <p className="roadNowTitle">{item.title}</p>
-            </div>
+            </NowExploring>
 
             <div id="road-story-body" className="roadStoryBody">
               <StoryCard key={item.id} item={item} index={selected} total={total} variant="play" noun="Chapter" />

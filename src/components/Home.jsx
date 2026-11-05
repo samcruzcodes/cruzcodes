@@ -1,5 +1,6 @@
 import FollowEyeOnPNG from "./FollowEyeOnPNG";
 import ImagePlaceholder from "./ImagePlaceholder";
+import { isPlainClick } from "./navigation";
 import { projectId, projects } from "../data";
 
 // The Featured tiles: projects with a `featured` number in data.js, in that order.
@@ -9,7 +10,7 @@ export default function Home({ onNavigate }) {
   // Real links (so they can open in a new tab or be copied), but a plain click switches pages
   // in place, like the nav does.
   const go = (page, target) => (e) => {
-    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    if (!isPlainClick(e)) return;
     e.preventDefault();
     onNavigate(page, target);
   };

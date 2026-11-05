@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Icon from "./Icon";
+import { isPlainClick } from "./navigation";
 import { contact } from "../data";
 
 const menuItems = [
@@ -11,29 +12,33 @@ const menuItems = [
 export default function Header({ page, setPage }) {
   const [isOpen, setIsOpen] = useState(false);
 
-  const go = (key) => {
+  // These go to other pages, so they're real links (they can open in a new tab or be copied);
+  // a plain click switches pages in place instead of reloading.
+  const go = (key) => (event) => {
+    if (!isPlainClick(event)) return;
+    event.preventDefault();
     setPage(key);
     setIsOpen(false);
     window.scrollTo({ top: 0 });
   };
 
   const logo = (
-    <button type="button" className="logoBtn" onClick={() => go("home")}>
-      {/* The rat is the only thing in this button, so its alt says where it takes you. */}
+    <a className="logoBtn" href="#home" onClick={go("home")}>
+      {/* The rat is the only thing in this link, so its alt says where it takes you. */}
       <img className="rat" src="assets/avatar.webp" width="128" height="128" alt="Home" />
-    </button>
+    </a>
   );
 
   const navButtons = menuItems.map((item) => (
     <li key={item.key}>
-      <button
-        type="button"
+      <a
         className={`navLink retro-title ${page === item.key ? "active" : ""}`}
-        onClick={() => go(item.key)}
+        href={`#${item.key}`}
+        onClick={go(item.key)}
         aria-current={page === item.key ? "page" : undefined}
       >
         {item.name}
-      </button>
+      </a>
     </li>
   ));
 
