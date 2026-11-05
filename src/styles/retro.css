@@ -866,54 +866,6 @@ img {
   gap: 0.5rem 1rem;
 }
 
-.journeyToggle {
-  display: flex;
-  gap: 0.5rem;
-  width: 100%;
-}
-
-.journeyToggleBtn {
-  display: inline-flex;
-  flex: 1 1 0;
-  align-items: center;
-  justify-content: center;
-  gap: 0.4rem;
-  min-height: 2.75rem;
-  padding: 0.25rem 0.5rem;
-  font-family: "VT323", "Space Mono", monospace;
-  font-size: 1.25rem;
-  line-height: 1;
-  letter-spacing: 0;
-  text-transform: uppercase;
-  color: var(--text);
-  background: var(--btn-bg);
-  border: 2px solid var(--btn-border);
-  border-radius: 12px;
-  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.3);
-  cursor: pointer;
-}
-
-.journeyToggleBtn:hover,
-.journeyToggleBtn:focus-visible {
-  background: var(--btn-hover);
-  border-color: rgba(var(--accent-rgb), 0.6);
-}
-
-/* The active mode is filled in AND gets a little play arrow, so it isn't only a color change. */
-.journeyToggleBtn[aria-pressed="true"] {
-  color: var(--bg);
-  background: var(--accent);
-  border-color: var(--accent);
-}
-
-.journeyToggleBtn[aria-pressed="true"]::before {
-  content: "";
-  width: 0.6rem;
-  height: 0.75rem;
-  background: currentColor;
-  clip-path: polygon(0 0, 100% 50%, 0 100%);
-}
-
 .journeyIntro {
   max-width: 110ch;
   margin: 0.625rem 0 0;
@@ -1270,6 +1222,210 @@ img {
   }
 }
 
+/* ---------- My Story: the start screen (PLAY / READ) ---------- */
+/* Components: src/components/journey/StartMenu.jsx + startScene.js. The picture is an inline SVG. */
+.journey {
+  scroll-margin-top: calc(var(--header-h) + 0.75rem);
+}
+
+.startMenu {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--bg);
+  border-radius: 14px;
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 0.1),
+    0 10px 0 rgba(0, 0, 0, 0.25);
+}
+
+.startMenuText {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  gap: 0.5rem;
+  padding: 1.25rem 1rem 0.5rem;
+  text-align: center;
+}
+
+.startMenuTitle {
+  margin: 0;
+  font-size: clamp(3.5rem, 17vw, 6rem);
+  font-weight: 400;
+  line-height: 0.9;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+  text-shadow:
+    0 4px 0 rgba(0, 0, 0, 0.55),
+    0 0 18px rgba(var(--accent-rgb), 0.25);
+}
+
+.startMenuSub {
+  max-width: 34ch;
+  margin: 0 0 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--text);
+}
+
+.startMenuBtns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 24rem;
+}
+
+.startBtn {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 0.125rem;
+  min-height: 4rem;
+  padding: 0.25rem 0.5rem;
+  font-family: "VT323", "Space Mono", monospace;
+  color: var(--text);
+  background: var(--btn-bg);
+  border: 3px solid var(--btn-border);
+  border-radius: 14px;
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+}
+
+.startBtnLabel {
+  position: relative;
+  font-size: 2.25rem;
+  line-height: 1;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.startBtnHint {
+  font-size: 1.0625rem;
+  line-height: 1;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* PLAY is the one to press: filled in, with a "selected" arrow in front of it. */
+.startBtn--play {
+  color: var(--bg);
+  background: var(--accent);
+  border-color: var(--text);
+}
+
+.startBtn--play .startBtnHint {
+  color: rgba(15, 26, 24, 0.75);
+}
+
+.startBtn--play .startBtnLabel::before,
+.startBtn--read:hover .startBtnLabel::before,
+.startBtn--read:focus-visible .startBtnLabel::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: calc(100% + 0.4rem);
+  width: 0.7rem;
+  height: 1rem;
+  background: currentColor;
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+  transform: translateY(-50%);
+}
+
+.startBtn--play:hover,
+.startBtn--play:focus-visible {
+  background: var(--text);
+}
+
+.startBtn--read:hover,
+.startBtn--read:focus-visible {
+  background: var(--btn-hover);
+  border-color: rgba(var(--accent-rgb), 0.8);
+}
+
+/* The quiet way into the road trip: plain text, not another big button. */
+.startMenuLink {
+  min-height: 2.75rem;
+  padding: 0 0.75rem;
+  font-family: "VT323", "Space Mono", monospace;
+  font-size: 1.25rem;
+  color: var(--text-muted);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.startMenuLink:hover,
+.startMenuLink:focus-visible {
+  color: var(--accent);
+  text-decoration-thickness: 2px;
+}
+
+.startMenuScene {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 160 / 44;
+  margin-top: auto;
+}
+
+/* Back to Menu: top of the road trip / story, and again after the last story card. */
+.journeyBackBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0.25rem 0.875rem;
+  font-family: "VT323", "Space Mono", monospace;
+  font-size: 1.375rem;
+  line-height: 1;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text);
+  background: var(--btn-bg);
+  border: 2px solid var(--btn-border);
+  border-radius: 12px;
+  box-shadow: 0 5px 0 rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+
+.journeyBackBtn:hover,
+.journeyBackBtn:focus-visible {
+  background: var(--btn-hover);
+  border-color: rgba(var(--accent-rgb), 0.6);
+}
+
+.journeyBackRow {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.25rem;
+}
+
+@media (min-width: 700px) {
+  .startMenuText {
+    padding-top: 1.75rem;
+  }
+
+  .startMenuSub {
+    font-size: 0.9375rem;
+  }
+
+  .startBtn {
+    min-height: 4.5rem;
+  }
+
+  .startMenuScene {
+    aspect-ratio: 160 / 36;
+  }
+}
+
 /* Story card (shared by both modes). Images are never cropped: they sit inside a fixed-shape
    frame, so cards stay about the same height from stop to stop. */
 .storyList {
@@ -1361,16 +1517,7 @@ img {
 }
 
 @media (min-width: 700px) {
-  .journeyToggle {
-    width: auto;
-  }
 
-  .journeyToggleBtn {
-    flex: 0 0 auto;
-    padding-inline: 1rem;
-    font-size: 1.5rem;
-    letter-spacing: 1px;
-  }
 
   .journeyNav {
     grid-template-columns: 1fr auto 1fr;
@@ -1612,6 +1759,483 @@ body:has(.lightbox[open]) {
   .aboutHey {
     text-align: left;
     white-space: nowrap;
+  }
+}
+
+/* ---------- My Story: "Start Adventure" (the full-screen archery game) ---------- */
+/* Components: src/components/journey/adventure/. */
+/* The game fills the whole window (it's a modal <dialog>, not browser fullscreen). */
+.adventure {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  color: var(--text);
+  background:
+    repeating-linear-gradient(0deg, rgba(var(--accent-rgb), 0.04) 0 1px, transparent 1px 32px),
+    repeating-linear-gradient(90deg, rgba(var(--accent-rgb), 0.04) 0 1px, transparent 1px 32px),
+    var(--bg);
+  border: 0;
+}
+
+.adventure::backdrop {
+  background: var(--bg);
+}
+
+.adventureShell {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  height: 100%;
+}
+
+.adventureBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  padding: 0.625rem 0.875rem;
+  background: rgba(var(--panel-rgb), 0.95);
+  border-bottom: 2px solid var(--panel2);
+}
+
+.adventureTitle {
+  margin: 0;
+  font-size: 1.875rem;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.adventureBarBtns {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.adventureBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0.25rem 0.875rem;
+  font-family: "VT323", "Space Mono", monospace;
+  font-size: 1.375rem;
+  line-height: 1;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text);
+  background: var(--btn-bg);
+  border: 2px solid var(--btn-border);
+  border-radius: 12px;
+  box-shadow: 0 5px 0 rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+
+.adventureBtn:hover,
+.adventureBtn:focus-visible {
+  background: var(--btn-hover);
+  border-color: rgba(var(--accent-rgb), 0.6);
+}
+
+.adventureBtn--exit {
+  border-color: rgba(var(--accent-rgb), 0.55);
+}
+
+.adventureBtn--primary {
+  color: var(--bg);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+/* On a phone the whole overlay scrolls (the game stays at the top); on a big screen the game
+   and the story sit side by side and the game uses all the height there is. */
+.adventureBody {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: start;
+  gap: 0.875rem;
+  min-height: 0;
+  padding: 0.75rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.adventureGame {
+  display: grid;
+  grid-template-rows: auto auto auto;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.adventureHud {
+  margin: 0;
+  font-family: "VT323", "Space Mono", monospace;
+  font-size: 1.125rem;
+  line-height: 1.1;
+  color: var(--accent);
+}
+
+/* Narrow screens only: the story card is below the game, so this button takes you to it. */
+.adventureJump {
+  min-height: 2.75rem;
+  padding: 0.25rem 0.75rem;
+  font-family: "VT323", "Space Mono", monospace;
+  font-size: 1.25rem;
+  line-height: 1.1;
+  text-align: left;
+  color: var(--bg);
+  background: var(--accent);
+  border: 2px solid var(--accent);
+  border-radius: 12px;
+  box-shadow: 0 5px 0 rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+
+.adventureJump:hover,
+.adventureJump:focus-visible {
+  background: var(--text);
+  border-color: var(--text);
+}
+
+.adventureDone strong {
+  font-family: "VT323", "Space Mono", monospace;
+  font-size: 1.375rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.adventureDone {
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--bg);
+  background: var(--accent);
+  border-radius: 10px;
+}
+
+.adventureStage {
+  position: relative;
+  width: 100%;
+  height: clamp(15rem, 46vh, 28rem);
+  overflow: hidden;
+  background: var(--bg);
+  border-radius: 14px;
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 0.1),
+    0 8px 0 rgba(0, 0, 0, 0.25);
+  cursor: crosshair;
+  touch-action: none; /* dragging aims the bow instead of scrolling the page */
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.adventureStage:focus-visible {
+  outline-offset: -4px;
+}
+
+.adventureStage--failed {
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  text-align: center;
+  cursor: default;
+  touch-action: auto;
+}
+
+.adventureCanvas {
+  position: absolute;
+  inset: 0;
+}
+
+/* p5 sets the canvas's pixel size inline, so !important is needed to stretch the tiny canvas to
+   the stage. `pixelated` keeps the chunky retro pixels crisp. */
+.adventureCanvas canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  image-rendering: pixelated;
+}
+
+.adventureControls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+}
+
+.adventureHelp {
+  flex: 1 1 18rem;
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.adventureReadout {
+  margin: 0;
+  min-width: 14ch;
+  font-family: "VT323", "Space Mono", monospace;
+  font-size: 1.25rem;
+  color: var(--text);
+}
+
+.adventureSide {
+  display: grid;
+  gap: 0.75rem;
+  align-content: start;
+  min-width: 0;
+}
+
+.adventurePicks {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.adventurePick {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.25rem 0.5rem 0.25rem 0.25rem;
+  text-align: left;
+  font-family: "VT323", "Space Mono", monospace;
+  font-size: 1.125rem;
+  line-height: 1.05;
+  color: var(--text);
+  background: var(--btn-bg);
+  border: 2px solid var(--btn-border);
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.adventurePick:hover,
+.adventurePick:focus-visible {
+  background: var(--btn-hover);
+  border-color: rgba(var(--accent-rgb), 0.6);
+}
+
+.adventurePickNum {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  font-size: 1.5rem;
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
+}
+
+/* Where you are: filled in. Unlocked chapters: their title and a check mark. Locked ones: a lock
+   and "???", a dashed border and dimmed (so it's not only color that tells them apart). */
+.adventurePick.is-current {
+  color: var(--bg);
+  background: var(--accent);
+  border-color: var(--text);
+}
+
+.adventurePick.is-current .adventurePickNum {
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.adventurePick.is-open .adventurePickNum {
+  color: var(--accent);
+}
+
+.adventurePick.is-current.is-open .adventurePickNum {
+  color: var(--bg);
+}
+
+.adventurePick.is-open::after {
+  content: "\2713";
+  margin-left: auto;
+  font-family: "Space Mono", monospace;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.adventurePick.is-locked {
+  color: var(--text-muted);
+  background: rgba(0, 0, 0, 0.2);
+  border-style: dashed;
+  cursor: not-allowed;
+}
+
+.adventurePick.is-locked.is-current {
+  color: var(--text);
+  background: rgba(0, 0, 0, 0.3);
+  border-color: var(--accent);
+}
+
+.adventurePick.is-locked .adventurePickNum {
+  color: var(--text-muted);
+}
+
+.adventurePick.is-locked:hover,
+.adventurePick.is-locked:focus-visible {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.adventureLockIcon {
+  margin-right: 0.25rem;
+  font-size: 0.875em;
+}
+
+/* The locked chapter panel: shows only that it's locked, never what's in it. */
+.storyCard--locked {
+  align-items: center;
+  grid-template-columns: minmax(0, 1fr);
+  text-align: left;
+  border-style: dashed;
+}
+
+.lockedCardIcon {
+  display: grid;
+  place-items: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  font-size: 1.75rem;
+  color: var(--text-muted);
+  background: rgba(0, 0, 0, 0.25);
+  border: 2px dashed var(--btn-border);
+  border-radius: 12px;
+}
+
+.storyCardTitle--locked {
+  color: var(--text-muted);
+}
+
+.lockedHint {
+  margin: 0.5rem 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+/* "CHAPTER UNLOCKED!": a short banner over the top of the range. It ignores the pointer, so it
+   never gets in the way of aiming. */
+.adventureGame {
+  position: relative;
+}
+
+.adventureBanner {
+  position: absolute;
+  top: 3.25rem;
+  left: 50%;
+  z-index: 2;
+  display: grid;
+  gap: 0.125rem;
+  max-width: calc(100% - 1.5rem);
+  padding: 0.5rem 1rem;
+  text-align: center;
+  color: var(--bg);
+  background: var(--accent);
+  border: 3px solid var(--text);
+  border-radius: 12px;
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.35);
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.adventureBanner strong {
+  font-family: "VT323", "Space Mono", monospace;
+  font-size: 1.75rem;
+  line-height: 1;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.adventureBanner span {
+  font-size: 0.8125rem;
+  line-height: 1.3;
+}
+
+.adventureConfirm {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+}
+
+.adventureConfirm p,
+.adventureResetNote {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: var(--text-muted);
+}
+
+.adventureConfirm p {
+  flex: 1 1 100%;
+  color: var(--text);
+}
+
+@media (min-width: 560px) {
+  .adventureBar {
+    padding-inline: 1.125rem;
+  }
+
+  .adventureHud {
+    font-size: 1.375rem;
+  }
+
+  .adventureTitle {
+    font-size: 2.5rem;
+  }
+
+  .adventureBody {
+    padding: 1rem 1.125rem;
+  }
+}
+
+@media (min-width: 960px) {
+  .adventureBody {
+    grid-template-columns: minmax(0, 1fr) 21rem;
+    align-content: stretch;
+    gap: 1.125rem;
+    overflow: hidden;
+  }
+
+  .adventureGame {
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    min-height: 0;
+  }
+
+  .adventureGame:has(.adventureDone) {
+    grid-template-rows: auto auto minmax(0, 1fr) auto;
+  }
+
+  .adventureJump {
+    display: none; /* the story card is right there beside the game */
+  }
+
+  .adventureStage {
+    height: 100%;
+    min-height: 18rem;
+  }
+
+  /* The picker and card keep their natural size; this column scrolls if the window is short. */
+  .adventureSide {
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-bottom: 0.75rem;
+  }
+
+  .adventureSide .storyCard {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
@@ -2327,7 +2951,6 @@ body:has(.lightbox[open]) {
      times; a new story card fades in. (The car itself only moves in the p5 sketch, which jumps
      instead when motion is reduced.) */
   .checkpointNum,
-  .journeyToggleBtn,
   .journeyNavBtn {
     transition:
       transform 0.15s ease,
@@ -2339,8 +2962,6 @@ body:has(.lightbox[open]) {
 
   .checkpoint:not(.checkpoint--current):hover .checkpointNum,
   .checkpoint:not(.checkpoint--current):focus-visible .checkpointNum,
-  .journeyToggleBtn:hover,
-  .journeyToggleBtn:focus-visible,
   .journeyNavBtn:not([aria-disabled="true"]):hover,
   .journeyNavBtn:not([aria-disabled="true"]):focus-visible {
     transform: translateY(-3px);
@@ -2380,5 +3001,102 @@ body:has(.lightbox[open]) {
 
   .journeyPlay .storyCard {
     animation: story-card-in 0.25s ease-out;
+  }
+
+  /* The adventure overlay eases in; its buttons ease like the rest of the site's. */
+  @keyframes adventure-in {
+    from {
+      opacity: 0;
+    }
+  }
+
+  .adventure[open] {
+    animation: adventure-in 0.2s ease-out;
+  }
+
+  .adventureBtn,
+  .adventurePick {
+    transition:
+      transform 0.15s ease,
+      background-color 0.15s ease,
+      border-color 0.15s ease,
+      color 0.15s ease;
+  }
+
+  .adventureBtn:hover,
+  .adventureBtn:focus-visible {
+    transform: translateY(-3px);
+  }
+
+  /* The start screen: PLAY's arrow blinks, stars twinkle, and the buttons lift a little. */
+  @keyframes start-blink {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes start-twinkle {
+    50% {
+      opacity: 0.25;
+    }
+  }
+
+  .startBtn--play .startBtnLabel::before {
+    animation: start-blink 1.1s steps(1, end) infinite;
+  }
+
+  .startStar {
+    animation: start-twinkle 2.6s ease-in-out infinite;
+  }
+
+  .startBtn,
+  .startMenuLink,
+  .journeyBackBtn {
+    transition:
+      transform 0.15s ease,
+      background-color 0.15s ease,
+      border-color 0.15s ease,
+      color 0.15s ease;
+  }
+
+  .startBtn:hover,
+  .startBtn:focus-visible,
+  .journeyBackBtn:hover,
+  .journeyBackBtn:focus-visible {
+    transform: translateY(-3px);
+  }
+
+  .startBtn:active {
+    transform: translateY(3px);
+  }
+
+  /* Unlocking a chapter: the banner pops in, the new chapter in the list pings, and its story
+     card fades up. (With reduced motion the chapter simply appears.) */
+  @keyframes unlock-banner {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -0.75rem) scale(0.92);
+    }
+  }
+
+  .adventureBanner {
+    animation: unlock-banner 0.3s ease-out;
+  }
+
+  @keyframes unlock-ping {
+    from {
+      box-shadow: 0 0 0 0 rgba(var(--accent-rgb), 0.8);
+    }
+    to {
+      box-shadow: 0 0 0 0.75rem rgba(var(--accent-rgb), 0);
+    }
+  }
+
+  .adventurePick.is-new {
+    animation: unlock-ping 0.7s ease-out 2;
+  }
+
+  .adventureSide .storyCard {
+    animation: story-card-in 0.3s ease-out;
   }
 }

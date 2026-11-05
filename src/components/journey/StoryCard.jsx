@@ -4,7 +4,7 @@ import RichText from "../RichText";
 
 // One checkpoint's story. The same card is used for the selected stop in "Play My Story" and for
 // every stop in "Read My Story", so both modes show exactly the same content.
-export default function StoryCard({ item, index, total, variant, current = false }) {
+export default function StoryCard({ item, index, total, variant, current = false, noun = "Checkpoint" }) {
   const headingId = `story-${item.id}-title`;
 
   return (
@@ -31,7 +31,7 @@ export default function StoryCard({ item, index, total, variant, current = false
 
       <div className="storyCardBody">
         <p className="storyCardStage">
-          Checkpoint {index + 1} of {total}
+          {noun} {index + 1} of {total}
           {item.stage && <span className="storyCardDate"> · {item.stage}</span>}
         </p>
         <h3 id={headingId} className="retro-title storyCardTitle">
