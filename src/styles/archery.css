@@ -1,0 +1,665 @@
+/* Archery adventure: the full-screen dialog. Its shell (.adventure, .adventureBar, .adventureBtn)
+   is reused by the road trip. */
+
+/* ---------- My Story: "Start Adventure" (the full-screen archery game) ---------- */
+
+/* Components: src/components/journey/adventure/. */
+
+/* The game fills the whole window (it's a modal <dialog>, not browser fullscreen). */
+
+.adventure {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  color: var(--text);
+  background:
+    repeating-linear-gradient(0deg, rgba(var(--accent-rgb), 0.04) 0 1px, transparent 1px 32px),
+    repeating-linear-gradient(90deg, rgba(var(--accent-rgb), 0.04) 0 1px, transparent 1px 32px),
+    var(--bg);
+  border: 0;
+}
+
+.adventure::backdrop {
+  background: var(--bg);
+}
+
+.adventureShell {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  height: 100%;
+}
+
+.adventureBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  padding: 0.625rem 0.875rem;
+  background: rgba(var(--panel-rgb), 0.95);
+  border-bottom: 2px solid var(--panel2);
+}
+
+.adventureTitle {
+  margin: 0;
+  font-size: 1.875rem;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.adventureBarBtns {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.adventureBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0.25rem 0.875rem;
+  font-family: "VT323", "Space Mono", monospace;
+  font-size: 1.375rem;
+  line-height: 1;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text);
+  background: var(--btn-bg);
+  border: 2px solid var(--btn-border);
+  border-radius: 12px;
+  box-shadow: 0 5px 0 rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+
+.adventureBtn:hover,
+.adventureBtn:focus-visible {
+  background: var(--btn-hover);
+  border-color: rgba(var(--accent-rgb), 0.6);
+}
+
+.adventureBtn--exit {
+  border-color: rgba(var(--accent-rgb), 0.55);
+}
+
+.adventureBtn--primary {
+  color: var(--bg);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+/* On a phone the whole overlay scrolls (the game stays at the top); on a big screen the game
+   and the story sit side by side and the game uses all the height there is. */
+
+.adventureBody {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: start;
+  gap: 0.875rem;
+  min-height: 0;
+  padding: 0.75rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.adventureGame {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+/* The goal (so a first-time visitor knows what to do) beside the progress readout. */
+
+.adventureTop {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.25rem 1rem;
+}
+
+.adventureGoal {
+  display: grid;
+  margin: 0;
+}
+
+.adventureGoal strong {
+  font-family: "VT323", "Space Mono", monospace;
+  font-size: 1.5rem;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 1px;
+  color: var(--text);
+}
+
+.adventureGoal span {
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: var(--text-muted);
+}
+
+.adventureHud {
+  margin: 0;
+  font-family: "VT323", "Space Mono", monospace;
+  font-size: 1.125rem;
+  line-height: 1.1;
+  color: var(--accent);
+}
+
+/* Narrow screens only: the story card is below the game, so this button takes you to it. */
+
+.adventureJump {
+  min-height: 2.75rem;
+  padding: 0.25rem 0.75rem;
+  font-family: "VT323", "Space Mono", monospace;
+  font-size: 1.25rem;
+  line-height: 1.1;
+  text-align: left;
+  color: var(--bg);
+  background: var(--accent);
+  border: 2px solid var(--accent);
+  border-radius: 12px;
+  box-shadow: 0 5px 0 rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+
+.adventureJump:hover,
+.adventureJump:focus-visible {
+  background: var(--text);
+  border-color: var(--text);
+}
+
+.adventureDone strong {
+  font-family: "VT323", "Space Mono", monospace;
+  font-size: 1.375rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.adventureDone {
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--bg);
+  background: var(--accent);
+  border-radius: 10px;
+}
+
+.adventureStageWrap {
+  position: relative;
+  display: flex;
+  min-height: 0;
+}
+
+.adventureStage {
+  position: relative;
+  width: 100%;
+  height: clamp(15rem, 46vh, 28rem);
+  overflow: hidden;
+  background: var(--bg);
+  border-radius: 14px;
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 0.1),
+    0 8px 0 rgba(0, 0, 0, 0.25);
+  cursor: crosshair;
+  touch-action: none; /* dragging aims the bow instead of scrolling the page */
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* Keyboard focus on the range: an obvious mint frame (also shown when the "Play with Keyboard"
+   button put focus there, which the browser's own focus ring can skip after a mouse click). */
+
+.adventureStage:focus-visible,
+.adventureStage.is-active {
+  outline: 3px solid var(--accent);
+  outline-offset: -6px;
+}
+
+.adventureStage.is-active {
+  box-shadow:
+    0 0 0 2px var(--accent),
+    0 0 20px rgba(var(--accent-rgb), 0.3),
+    0 8px 0 rgba(0, 0, 0, 0.25);
+}
+
+.adventureStage--failed {
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  text-align: center;
+  cursor: default;
+  touch-action: auto;
+}
+
+.adventureCanvas {
+  position: absolute;
+  inset: 0;
+}
+
+/* p5 sets the canvas's pixel size inline, so !important is needed to stretch the tiny canvas to
+   the stage. `pixelated` keeps the chunky retro pixels crisp. */
+
+.adventureCanvas canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  image-rendering: pixelated;
+}
+
+/* The control dock: short hints on top; angle, power and the buttons together underneath. Plain
+   wrapping (no side-by-side columns), so nothing is ever squeezed into a narrow strip. */
+
+.adventureDock {
+  display: grid;
+  gap: 0.375rem;
+}
+
+.adventureHints {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.125rem 1.75rem;
+  min-width: 0;
+}
+
+.adventureHint {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--text);
+  text-wrap: balance; /* if a hint has to wrap, no lonely last word */
+}
+
+.adventureHintLabel {
+  margin-right: 0.25rem;
+  font-family: "VT323", "Space Mono", monospace;
+  font-size: 1.125rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--accent);
+}
+
+.adventureNoBreak {
+  white-space: nowrap; /* "Space / Enter" stays together if the hint wraps */
+}
+
+.adventureHintMore {
+  color: var(--text-muted);
+}
+
+/* Shown on the range while it has keyboard focus. */
+
+.adventureKbdReady {
+  position: absolute;
+  right: 0.5rem;
+  bottom: 0.5rem;
+  left: 0.5rem;
+  z-index: 1;
+  margin: 0;
+  padding: 0.25rem 0.625rem;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: var(--text);
+  background: rgba(var(--panel-rgb), 0.94);
+  border-left: 4px solid var(--accent);
+  border-radius: 6px;
+  pointer-events: none; /* never in the way of aiming */
+}
+
+.adventureDockRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.375rem 1rem;
+}
+
+.adventureDockBtns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.adventureReadoutBlock {
+  display: grid;
+}
+
+.adventureReadout {
+  margin: 0;
+  font-family: "VT323", "Space Mono", monospace;
+  font-size: 1.25rem;
+  line-height: 1.1;
+  color: var(--text);
+}
+
+.adventureHowTo {
+  padding: 0.625rem 1rem;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  background: rgba(0, 0, 0, 0.2);
+  border: 2px dashed var(--btn-border);
+  border-radius: 12px;
+}
+
+.adventureHowTo ul {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+
+.adventureSide {
+  display: grid;
+  gap: 0.75rem;
+  align-content: start;
+  min-width: 0;
+}
+
+.adventurePicks {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.adventurePick {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.25rem 0.5rem 0.25rem 0.25rem;
+  text-align: left;
+  font-family: "VT323", "Space Mono", monospace;
+  font-size: 1.125rem;
+  line-height: 1.05;
+  color: var(--text);
+  background: var(--btn-bg);
+  border: 2px solid var(--btn-border);
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.adventurePick:hover,
+.adventurePick:focus-visible {
+  background: var(--btn-hover);
+  border-color: rgba(var(--accent-rgb), 0.6);
+}
+
+.adventurePickNum {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  font-size: 1.5rem;
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
+}
+
+/* Where you are: filled in. Unlocked chapters: their title and a check mark. Locked ones: a lock
+   and "???", a dashed border and dimmed (so it's not only color that tells them apart). */
+
+.adventurePick.is-current {
+  color: var(--bg);
+  background: var(--accent);
+  border-color: var(--text);
+}
+
+.adventurePick.is-current .adventurePickNum {
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.adventurePick.is-open .adventurePickNum {
+  color: var(--accent);
+}
+
+.adventurePick.is-current.is-open .adventurePickNum {
+  color: var(--bg);
+}
+
+.adventurePick.is-open::after {
+  content: "\2713";
+  margin-left: auto;
+  font-family: "Space Mono", monospace;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.adventurePick.is-locked {
+  color: var(--text-muted);
+  background: rgba(0, 0, 0, 0.2);
+  border-style: dashed;
+  cursor: not-allowed;
+}
+
+.adventurePick.is-locked.is-current {
+  color: var(--text);
+  background: rgba(0, 0, 0, 0.3);
+  border-color: var(--accent);
+}
+
+.adventurePick.is-locked .adventurePickNum {
+  color: var(--text-muted);
+}
+
+.adventurePick.is-locked:hover,
+.adventurePick.is-locked:focus-visible {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.adventureLockIcon {
+  margin-right: 0.25rem;
+  font-size: 0.875em;
+}
+
+/* The locked chapter panel: shows only that it's locked, never what's in it. */
+
+.storyCard--locked {
+  align-items: center;
+  grid-template-columns: minmax(0, 1fr);
+  text-align: left;
+  border-style: dashed;
+}
+
+.lockedCardIcon {
+  display: grid;
+  place-items: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  font-size: 1.75rem;
+  color: var(--text-muted);
+  background: rgba(0, 0, 0, 0.25);
+  border: 2px dashed var(--btn-border);
+  border-radius: 12px;
+}
+
+.storyCardTitle--locked {
+  color: var(--text-muted);
+}
+
+.lockedHint {
+  margin: 0.5rem 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+/* "CHAPTER UNLOCKED!": a short banner over the top of the range. It ignores the pointer, so it
+   never gets in the way of aiming. */
+
+.adventureBanner {
+  position: absolute;
+  top: 0.75rem;
+  left: 50%;
+  z-index: 2;
+  display: grid;
+  gap: 0.125rem;
+  max-width: calc(100% - 1.5rem);
+  padding: 0.5rem 1rem;
+  text-align: center;
+  color: var(--bg);
+  background: var(--accent);
+  border: 3px solid var(--text);
+  border-radius: 12px;
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.35);
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.adventureBanner strong {
+  font-family: "VT323", "Space Mono", monospace;
+  font-size: 1.75rem;
+  line-height: 1;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.adventureBanner span {
+  font-size: 0.8125rem;
+  line-height: 1.3;
+}
+
+.adventureConfirm {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+}
+
+.adventureConfirm p,
+.adventureResetNote {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: var(--text-muted);
+}
+
+.adventureConfirm p {
+  flex: 1 1 100%;
+  color: var(--text);
+}
+
+@media (min-width: 560px) {
+  .adventureBar {
+    padding-inline: 1.125rem;
+  }
+
+  .adventureHud {
+    font-size: 1.375rem;
+  }
+
+  .adventureTitle {
+    font-size: 2.5rem;
+  }
+
+  .adventureBody {
+    padding: 1rem 1.125rem;
+  }
+}
+
+/* Wide screens: the game and the story sit side by side. The dialog scrolls as a whole when the
+   window is short (nothing is clipped, and there's no second scrollbar for the story), and the game
+   stays in view while you scroll down to read a long chapter. */
+
+@media (min-width: 960px) {
+  .adventureBody {
+    grid-template-columns: minmax(0, 1fr) 21rem;
+    align-items: start;
+    gap: 1.125rem;
+  }
+
+  .adventureGame {
+    position: sticky;
+    top: 0;
+    height: max(34rem, calc(100vh - 6.25rem));
+    height: max(34rem, calc(100dvh - 6.25rem));
+  }
+
+  .adventureJump {
+    display: none; /* the story card is right there beside the game */
+  }
+
+  .adventureStageWrap {
+    flex: 1 1 0;
+  }
+
+  .adventureStage {
+    height: auto;
+    min-height: 15rem;
+  }
+
+  .adventureSide .storyCard {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ---------- Motion (only when reduced motion is not requested) ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  /* The overlay eases in; its buttons ease like the rest of the site's. */
+  @keyframes adventure-in {
+    from {
+      opacity: 0;
+    }
+  }
+
+  .adventure[open] {
+    animation: adventure-in 0.2s ease-out;
+  }
+
+  .adventureBtn,
+  .adventurePick {
+    transition:
+      transform 0.15s ease,
+      background-color 0.15s ease,
+      border-color 0.15s ease,
+      color 0.15s ease;
+  }
+
+  .adventureBtn:hover,
+  .adventureBtn:focus-visible {
+    transform: translateY(-3px);
+  }
+
+  /* Unlocking a chapter: the banner pops in, the new chapter in the list pings, and its story
+     card fades up. (With reduced motion the chapter simply appears.) */
+  @keyframes unlock-banner {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -0.75rem) scale(0.92);
+    }
+  }
+
+  .adventureBanner {
+    animation: unlock-banner 0.3s ease-out;
+  }
+
+  @keyframes unlock-ping {
+    from {
+      box-shadow: 0 0 0 0 rgba(var(--accent-rgb), 0.8);
+    }
+    to {
+      box-shadow: 0 0 0 0.75rem rgba(var(--accent-rgb), 0);
+    }
+  }
+
+  .adventurePick.is-new {
+    animation: unlock-ping 0.7s ease-out 2;
+  }
+
+  .adventureSide .storyCard {
+    animation: story-card-in 0.3s ease-out;
+  }
+}

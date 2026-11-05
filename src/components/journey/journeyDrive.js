@@ -4,6 +4,7 @@
 // Kept deliberately simple: the car accelerates, brakes, and turns while it's moving. There are no
 // walls. The grass just slows you down, and an invisible corridor around the road gently holds
 // you in (so you can cut corners but never get lost or stuck).
+import { clamp } from "../../utils";
 import { ROAD_RADIUS, nearestOnRoad } from "./journeyRoute";
 
 // Speeds are in CSS pixels per second, so the car feels the same on the wide map (4px art
@@ -28,8 +29,6 @@ const CORRIDOR = { wide: 11, tall: 8 };
 
 // How close (art pixels) counts as "at" a checkpoint. Generous on purpose: no precise parking.
 export const REACH_RADIUS = 8;
-
-const clamp = (n, min, max) => Math.min(max, Math.max(min, n));
 
 // Which checkpoint (index) the point is close enough to, or -1.
 export function checkpointNear(route, x, y, radius = REACH_RADIUS) {

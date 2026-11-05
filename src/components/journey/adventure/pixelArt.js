@@ -1,7 +1,7 @@
 // Pixel art shared by the archery game and the My Story start screen, so both use the same
 // archer, trees and colors.
 
-// The site's palette (see :root in retro.css).
+// The site's palette (see :root in base.css).
 export const C = {
   bg: "#0f1a18",
   panel: "#1a2e2a",

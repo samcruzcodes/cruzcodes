@@ -1,8 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { prefersReducedMotion } from "../utils";
 import Icon from "./Icon";
-
-const prefersReducedMotion = () =>
-  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 // Which slides (1-based) are fully on screen right now: [first, last].
 function visibleRange(track) {

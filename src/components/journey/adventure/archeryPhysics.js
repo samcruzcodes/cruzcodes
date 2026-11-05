@@ -1,4 +1,5 @@
 // The archery challenge's rules: plain math (no p5, no React), so it can be unit tested.
+import { clamp } from "../../../utils";
 //
 // The world is 160 units wide and measured from the ground up: (x, h) = across, height above the
 // ground. The sketch scales it to whatever size the screen is, so a shot behaves the same on a
@@ -11,8 +12,8 @@ export const GRAVITY = 65; // units per second squared
 export const BOW = { x: 20, h: 13, reach: 6 };
 
 // An arrow leaves at SPEED_MIN..SPEED_MAX units/second, depending on how far you draw.
-export const SPEED_MIN = 30;
-export const SPEED_MAX = 100;
+const SPEED_MIN = 30;
+const SPEED_MAX = 100;
 export const MIN_POWER = 0.12; // a tiny tug does nothing (so a click without a pull isn't a shot)
 
 // Aim limits, in radians (about 2 and 83 degrees).
@@ -33,12 +34,10 @@ export const TARGETS = [
 export const ROUNDS = 3;
 export const roundOf = (targetIndex) => Math.floor(targetIndex / 2);
 
-const clamp = (n, min, max) => Math.min(max, Math.max(min, n));
-
 export const launchSpeed = (power) => SPEED_MIN + (SPEED_MAX - SPEED_MIN) * clamp(power, 0, 1);
 
 // Where the arrow starts for a given aim.
-export const arrowStart = (angle) => ({
+const arrowStart = (angle) => ({
   x: BOW.x + Math.cos(angle) * BOW.reach,
   h: BOW.h + Math.sin(angle) * BOW.reach,
 });

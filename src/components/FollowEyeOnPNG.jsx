@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-// Keep these synced with .eyePupil's left/top in retro.css!
+// Keep these synced with .eyePupil's left/top in home.css!
 const EYE_CENTER_PCT = { x: 0.46, y: 0.315 };
 const EYE_ELLIPSE_RADIUS_PCT = { rx: 0.05, ry: 0.012 };
 

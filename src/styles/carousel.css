@@ -1,0 +1,169 @@
+/* Carousel: the scroll-snap carousel (Carousel.jsx) and the Skills slides that use it. */
+
+/* ---------- Carousel (used by Skills) ---------- */
+
+/* Each slide is sized so --per-view slides fit, plus a --peek of the next one,
+   so it's obvious there's more to scroll to. */
+
+.carousel {
+  --gap: 1rem;
+  --per-view: 1;
+  --peek: 0.25;
+  --slide-max: 20rem;
+  min-width: 0;
+}
+
+.carouselHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.75rem;
+}
+
+.carouselControls {
+  display: flex;
+  gap: 0.625rem;
+}
+
+.carouselDesc {
+  margin: 0.25rem 0 0;
+  opacity: 0.9;
+}
+
+/* Only the track scrolls sideways, never the whole page. */
+
+.carouselTrack {
+  position: relative;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: min(
+    var(--slide-max),
+    calc((100% - var(--per-view) * var(--gap)) / (var(--per-view) + var(--peek)))
+  );
+  gap: var(--gap);
+  margin-top: 0.75rem;
+  padding: 0.5rem 0.25rem 1rem;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 0.25rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--btn-border) transparent;
+  border-radius: 12px;
+}
+
+.carouselTrack::-webkit-scrollbar {
+  height: 8px;
+}
+
+.carouselTrack::-webkit-scrollbar-thumb {
+  background: var(--btn-border);
+  border-radius: 8px;
+}
+
+.carouselSlide {
+  min-width: 0;
+  scroll-snap-align: start;
+}
+
+/* Lets the last slide snap to the right edge so you can always reach the end. */
+
+.carouselSlide:last-child {
+  scroll-snap-align: end;
+}
+
+/* ---------- Skills ---------- */
+
+.carousel--skills {
+  --gap: 0.75rem;
+  --per-view: 2;
+  --peek: 0.35;
+  --slide-max: 8rem;
+}
+
+.skillsTitle {
+  font-size: 2.75rem;
+  line-height: 1;
+  margin: 0;
+}
+
+.skillItem {
+  text-align: center;
+}
+
+.skillIconFrame {
+  height: 5.25rem;
+  display: grid;
+  place-items: center;
+  background: rgba(0, 0, 0, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  box-shadow: 0 8px 0 rgba(0, 0, 0, 0.2);
+  padding: 0.625rem;
+}
+
+.skillItem:hover .skillIconFrame {
+  border-color: rgba(var(--accent-rgb), 0.55);
+  box-shadow: 0 10px 0 rgba(0, 0, 0, 0.28);
+}
+
+.carouselTrack:focus-visible .skillIconFrame {
+  border-color: rgba(var(--accent-rgb), 0.35);
+}
+
+.skillIconFrame img {
+  width: 3.5rem;
+  height: 3.5rem;
+}
+
+.skillLabel {
+  display: block;
+  margin-top: 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.3;
+}
+
+@media (min-width: 420px) {
+  .carousel--skills {
+    --per-view: 3;
+  }
+}
+
+@media (min-width: 560px) {
+  .carousel--skills {
+    --per-view: 4;
+  }
+}
+
+@media (min-width: 768px) {
+  .carousel--skills {
+    --per-view: 6;
+  }
+
+  .skillIconFrame img {
+    width: 4rem;
+    height: 4rem;
+  }
+}
+
+@media (min-width: 1001px) {
+  .carousel--skills {
+    --per-view: 8;
+  }
+}
+
+/* ---------- Motion (only when reduced motion is not requested) ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  .carouselTrack {
+    scroll-behavior: smooth;
+  }
+
+  .skillIconFrame {
+    transition: var(--control-transition);
+  }
+
+  .skillItem:hover .skillIconFrame {
+    transform: translateY(-4px);
+  }
+}

@@ -1,12 +1,10 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
+import { clamp, pad2, scrollToElement } from "../../../utils";
 import Icon from "../../Icon";
 import StoryCard from "../StoryCard";
 import useModalDialog from "../useModalDialog";
 import { ROUNDS, roundOf } from "./archeryPhysics";
 import { loadArchery } from "./loadArchery";
-
-const clamp = (n, min, max) => Math.min(max, Math.max(min, n));
-const pad = (n) => String(n).padStart(2, "0");
 
 // "Angle 36° · Power 0%". It has its own state, so the aim updates the game sends many times a
 // second re-render just this line, not the whole overlay (story card, chapter list and all).
@@ -304,8 +302,7 @@ export default function AdventureOverlay({
 
   // On a narrow screen the story card is below the game; this takes you to it.
   const showStory = () => {
-    const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-    storyRef.current?.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+    scrollToElement(storyRef.current);
   };
 
   const viewedUnlocked = unlocked.has(viewed);
@@ -376,7 +373,7 @@ export default function AdventureOverlay({
                 <div className="adventureBanner" aria-hidden="true" key={`${fresh}-${unlocked.size}`}>
                   <strong>Chapter unlocked!</strong>
                   <span>
-                    Chapter {pad(fresh + 1)} — {items[fresh].title}
+                    Chapter {pad2(fresh + 1)} — {items[fresh].title}
                   </span>
                 </div>
               )}
@@ -545,7 +542,7 @@ export default function AdventureOverlay({
                     Chapter {viewed + 1} of {total}
                   </p>
                   <h3 id="locked-chapter-title" className="retro-title storyCardTitle storyCardTitle--locked">
-                    Chapter {pad(viewed + 1)} — ???
+                    Chapter {pad2(viewed + 1)} — ???
                   </h3>
                   <p className="storyCardText">Locked. Hit the target to discover this story.</p>
                   {targetNotOut && (

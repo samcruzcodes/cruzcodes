@@ -1,3 +1,5 @@
+import { clamp } from "../../utils";
+
 // The geometry for the My Story road. Plain math, no p5 and no React, so both the canvas sketch
 // and the HTML checkpoint buttons use the exact same numbers (and it can be unit tested).
 //
@@ -6,10 +8,10 @@
 // retro look for almost no memory.
 
 // Containers narrower than this get the tall (phone) road.
-export const WIDE_MIN_WIDTH = 560;
+const WIDE_MIN_WIDTH = 560;
 
 // The tall (phone) road is never wider than this many CSS pixels (keep .journeyStage--tall's
-// max-width in retro.css the same).
+// max-width in roadtrip.css the same).
 export const TALL_MAX_WIDTH = 384;
 
 // How far apart (in art pixels) the sampled points along the road are.
@@ -64,7 +66,6 @@ const SHAPES = (() => {
   return { wide: build("wide", wideAnchors, "y"), tall: build("tall", tallAnchors, "x") };
 })();
 
-const clamp = (n, min, max) => Math.min(max, Math.max(min, n));
 
 // Picks the canvas size for a container that is `width` CSS pixels wide (the space available,
 // not the map itself, so it can switch back to the wide road when there's room).

@@ -1,11 +1,10 @@
 import { useEffect, useRef, useState } from "react";
+import { pad2, scrollToElement } from "../../utils";
 import Icon from "../Icon";
 import CheckpointButton from "./CheckpointButton";
 import JourneyMap from "./JourneyMap";
 import StoryCard from "./StoryCard";
 import useModalDialog from "./useModalDialog";
-
-const pad = (n) => String(n).padStart(2, "0");
 
 // How long the "MILESTONE REACHED!" banner stays up.
 const BANNER_MS = 2400;
@@ -93,8 +92,7 @@ export default function RoadTripOverlay({ items, selected, visitedMax, onSelect,
     const move = moveForStory.current;
     moveForStory.current = null;
     if (move === "show" && storyOpen) {
-      const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-      storyRef.current?.scrollIntoView?.({ block: "start", behavior: reduce ? "auto" : "smooth" });
+      scrollToElement(storyRef.current);
       const heading = storyRef.current?.querySelector("h3");
       heading?.setAttribute("tabindex", "-1"); // so it can take focus (it isn't a tab stop)
       heading?.focus({ preventScroll: true });
@@ -196,7 +194,7 @@ export default function RoadTripOverlay({ items, selected, visitedMax, onSelect,
                 <div className="roadBanner" aria-hidden="true" key={reached.key}>
                   <strong>Milestone reached!</strong>
                   <span>
-                    Chapter {pad(reached.index + 1)} — {items[reached.index].title}
+                    Chapter {pad2(reached.index + 1)} — {items[reached.index].title}
                   </span>
                 </div>
               )}

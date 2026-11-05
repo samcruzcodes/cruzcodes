@@ -1,0 +1,791 @@
+/* Road trip: the p5.js road map (JourneyMap.jsx) and the full-screen dialog around it. The dialog builds on
+   the archery shell (archery.css) and on the story card (journey.css). */
+
+/* ---------- The road map ---------- */
+/* The p5.js canvas is just the picture under the real HTML buttons, so every size here is measured from
+   the buttons and cards, not the canvas. */
+
+/* The map. Its height comes from the canvas shape (aspect-ratio is set inline), so the page
+   doesn't jump when the canvas loads. Before then you see the plain pixel grid. */
+
+.journeyStage {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background:
+    repeating-linear-gradient(0deg, rgba(var(--accent-rgb), 0.05) 0 1px, transparent 1px 32px),
+    repeating-linear-gradient(90deg, rgba(var(--accent-rgb), 0.05) 0 1px, transparent 1px 32px),
+    var(--bg);
+  border-radius: 14px;
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 0.08),
+    0 10px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* Phones get a tall road; keep it from getting huge on a wide-but-short screen. */
+
+.journeyStage--tall {
+  max-width: 384px; /* = TALL_MAX_WIDTH in journeyRoute.js */
+  margin-inline: auto;
+}
+
+.journeyCanvas {
+  position: absolute;
+  inset: 0;
+}
+
+/* p5 sets the canvas's pixel size inline, so !important is needed to stretch the tiny canvas to
+   the container. `pixelated` keeps the chunky retro pixels crisp. */
+
+.journeyCanvas canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  image-rendering: pixelated;
+}
+
+.journeyPins,
+.journeyStepper {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.journeyPins {
+  position: absolute;
+  inset: 0;
+}
+
+/* Each <li> is a point on the map; the button is centered on it. */
+
+.journeyPin {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+.checkpoint {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  width: max-content;
+  max-width: 9.5rem;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  transform: translate(-50%, -1.375rem);
+}
+
+/* Label above the number for checkpoints whose button sits above the road. */
+
+.journeyPin--up .checkpoint {
+  flex-direction: column-reverse;
+  transform: translate(-50%, calc(-100% + 1.375rem));
+}
+
+.checkpointNum {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  font-family: "VT323", "Space Mono", monospace;
+  font-size: 1.75rem;
+  line-height: 1;
+  color: var(--text);
+  background: var(--btn-bg);
+  border: 2px solid var(--btn-border);
+  border-radius: 12px;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.35);
+}
+
+.checkpointLabel {
+  padding: 0.125rem 0.4rem;
+  font-family: "VT323", "Space Mono", monospace;
+  font-size: 1.2rem;
+  line-height: 1.05;
+  text-align: center;
+  text-wrap: balance;
+  color: var(--text);
+  background: rgba(var(--panel-rgb), 0.92);
+  border-radius: 6px;
+}
+
+.checkpoint:hover .checkpointNum,
+.checkpoint:focus-visible .checkpointNum {
+  background: var(--btn-hover);
+  border-color: rgba(var(--accent-rgb), 0.8);
+}
+
+/* Already visited: mint outline + a check mark. */
+
+.checkpoint--reached .checkpointNum {
+  color: var(--accent);
+  background: rgba(var(--accent-rgb), 0.2);
+  border-color: var(--accent);
+}
+
+.checkpoint--reached .checkpointNum::after {
+  content: "\2713";
+  position: absolute;
+  top: -0.5rem;
+  right: -0.5rem;
+  display: grid;
+  place-items: center;
+  width: 1.125rem;
+  height: 1.125rem;
+  font-family: "Space Mono", monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--bg);
+  background: var(--accent);
+  border-radius: 4px;
+}
+
+/* Where you are: filled in, bigger, with a glow ring and an accent label. */
+
+.checkpoint--current .checkpointNum {
+  color: var(--bg);
+  background: var(--accent);
+  border-color: var(--text);
+  box-shadow:
+    0 0 0 4px rgba(var(--accent-rgb), 0.35),
+    0 4px 0 rgba(0, 0, 0, 0.35);
+  transform: scale(1.1);
+}
+
+/* A little pointer over the number: you can tell where you are without relying on color. */
+
+.checkpoint--current .checkpointNum::before {
+  content: "";
+  position: absolute;
+  top: -0.8rem;
+  left: 50%;
+  width: 0.8rem;
+  height: 0.5rem;
+  background: var(--text);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  transform: translateX(-50%);
+}
+
+.checkpoint--current .checkpointLabel {
+  color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+/* If the p5.js map can't load: just a row of the same buttons. */
+
+.journeyStepper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem 0.75rem;
+  padding: 1rem 0.75rem;
+  background: rgba(0, 0, 0, 0.14);
+  border-radius: 14px;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.08);
+}
+
+.journeyStepper .checkpoint {
+  position: static;
+  transform: none;
+}
+
+/* Previous / Drive Yourself / Next. On phones Previous and Next are just arrows so all three fit. */
+
+.journeyNav {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.journeyNavBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  padding: 0.25rem 0.625rem;
+  font-family: "VT323", "Space Mono", monospace;
+  font-size: 1.5rem;
+  line-height: 1;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text);
+  background: linear-gradient(180deg, rgba(var(--accent-rgb), 0.18), rgba(0, 0, 0, 0.2));
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+
+.journeyNavBtn:not([aria-disabled="true"]):hover,
+.journeyNavBtn:not([aria-disabled="true"]):focus-visible {
+  background: linear-gradient(180deg, rgba(var(--accent-rgb), 0.26), rgba(0, 0, 0, 0.15));
+  border-color: rgba(var(--accent-rgb), 0.7);
+}
+
+.journeyNavBtn[aria-disabled="true"] {
+  opacity: 0.45;
+  box-shadow: none;
+  cursor: default;
+}
+
+/* The words on Previous / Next are only for 700px and up; they stay in the accessible name. */
+
+.journeyNavLabel {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.journeyDriveBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0.25rem 0.75rem;
+  font-family: "VT323", "Space Mono", monospace;
+  font-size: 1.375rem;
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: var(--text);
+  background: var(--btn-bg);
+  border: 2px solid var(--btn-border);
+  border-radius: 12px;
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+
+.journeyDriveBtn:hover,
+.journeyDriveBtn:focus-visible {
+  background: var(--btn-hover);
+  border-color: rgba(var(--accent-rgb), 0.6);
+}
+
+/* On: filled in with a play arrow (not just a color change). */
+
+.journeyDriveBtn.is-on {
+  color: var(--bg);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.journeyDriveBtn.is-on::before {
+  content: "";
+  width: 0.6rem;
+  height: 0.75rem;
+  background: currentColor;
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+
+.journeyHint {
+  min-height: 2.5em;
+  margin: 0;
+  font-family: "VT323", "Space Mono", monospace;
+  font-size: 1.25rem;
+  line-height: 1.15;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+/* While you're driving the map gets a mint frame, so it's clear the keys are live. */
+
+.journeyStage.is-driving {
+  box-shadow:
+    0 0 0 2px var(--accent),
+    0 10px 0 rgba(0, 0, 0, 0.2);
+}
+
+.journeyMap {
+  min-width: 0;
+}
+
+/* On-screen driving buttons: only for touch screens (hidden when there's a mouse). */
+
+.driveTouch {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.875rem;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.driveTouchGroup {
+  display: flex;
+  gap: 0.625rem;
+}
+
+.driveBtn {
+  display: grid;
+  place-items: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  padding: 0;
+  font-size: 1.5rem;
+  color: var(--text);
+  background: linear-gradient(180deg, rgba(var(--accent-rgb), 0.18), rgba(0, 0, 0, 0.2));
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.3);
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+}
+
+.driveBtn:active {
+  color: var(--bg);
+  background: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.3);
+}
+
+.driveBtn--up .icon {
+  transform: rotate(-90deg);
+}
+
+.driveBtn--down .icon {
+  transform: rotate(90deg);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .driveTouch {
+    display: none;
+  }
+}
+
+@media (min-width: 700px) {
+  .journeyNav {
+      grid-template-columns: 1fr auto 1fr;
+    }
+
+  .journeyNavBtn {
+      min-width: 6.5rem;
+      padding-inline: 0.875rem;
+    }
+
+  .journeyNavBtn--prev {
+      justify-self: start;
+    }
+
+  .journeyNavBtn--next {
+      justify-self: end;
+    }
+
+  .journeyNavLabel {
+      position: static;
+      width: auto;
+      height: auto;
+      margin: 0;
+      overflow: visible;
+      clip: auto;
+    }
+
+  .journeyDriveBtn {
+      min-width: 14rem;
+      font-size: 1.5rem;
+      letter-spacing: 1px;
+    }
+}
+
+/* ---------- Full-screen dialog ---------- */
+
+/* Same shell as the archery game (.adventure*). Component: RoadTripOverlay.jsx. The road and the
+   story of the stop you're on are one view: side by side on a big screen, stacked below that.
+   The body is the only scroller (no scrollbars inside scrollbars); on a big screen the road stays
+   put while the story scrolls past it. */
+
+.roadBody {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: start;
+  gap: 0.875rem;
+  min-height: 0;
+  padding: 0.75rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.roadMapCol {
+  display: grid;
+  gap: 0.625rem;
+  min-width: 0;
+  align-content: start;
+}
+
+.roadHint {
+  margin: 0;
+  font-family: "VT323", "Space Mono", monospace;
+  font-size: 1.25rem;
+  line-height: 1.15;
+  text-align: center;
+  color: var(--text);
+}
+
+.roadMapWrap {
+  position: relative;
+  min-width: 0;
+}
+
+/* "MILESTONE REACHED!": over the top of the road for a couple of seconds; it ignores the pointer. */
+
+.roadBanner {
+  position: absolute;
+  top: 0.625rem;
+  left: 50%;
+  z-index: 3;
+  display: grid;
+  gap: 0.125rem;
+  max-width: calc(100% - 1.5rem);
+  padding: 0.375rem 0.875rem;
+  text-align: center;
+  color: var(--bg);
+  background: var(--accent);
+  border: 3px solid var(--text);
+  border-radius: 12px;
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.35);
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.roadBanner strong {
+  font-family: "VT323", "Space Mono", monospace;
+  font-size: 1.625rem;
+  line-height: 1;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.roadBanner span {
+  font-size: 0.8125rem;
+  line-height: 1.3;
+}
+
+.roadDriveRow {
+  display: grid;
+  justify-items: center;
+  gap: 0.5rem;
+}
+
+.roadDriveRow .journeyHint {
+  min-height: 0;
+}
+
+/* Shown while the road has keyboard focus, in words as well as a frame. */
+
+.journeyHint--ready {
+  color: var(--text);
+}
+
+.roadHintLabel {
+  padding: 0.0625rem 0.375rem;
+  color: var(--bg);
+  background: var(--accent);
+  border-radius: 4px;
+}
+
+/* The road itself, when it's the focused "driving area". */
+
+.journeyStage:focus-visible {
+  outline: 3px solid var(--text);
+  outline-offset: 3px;
+}
+
+/* ----- The story panel ----- */
+
+.roadStory {
+  display: grid;
+  gap: 0.625rem;
+  min-width: 0;
+  align-content: start;
+}
+
+.roadNow {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.375rem 0.75rem;
+  padding: 0.625rem 0.75rem;
+  background: rgba(var(--accent-rgb), 0.1);
+  border: 2px solid rgba(var(--accent-rgb), 0.55);
+  border-left-width: 6px;
+  border-radius: 14px;
+}
+
+.roadNowNum {
+  display: grid;
+  place-items: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  font-family: "VT323", "Space Mono", monospace;
+  font-size: 2.5rem;
+  line-height: 1;
+  color: var(--bg);
+  background: var(--accent);
+  border: 2px solid var(--text);
+  border-radius: 12px;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.35);
+}
+
+.roadNowText {
+  display: grid;
+  gap: 0.125rem;
+  min-width: 0;
+}
+
+.roadNowLabel {
+  margin: 0;
+  font-family: "VT323", "Space Mono", monospace;
+  font-size: 1.375rem;
+  line-height: 1;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* The phone summary shares its row with the View Story button, so its label is a touch tighter. */
+
+.roadNow--summary .roadNowLabel {
+  font-size: 1.25rem;
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
+.roadNowLabel::before {
+  content: "\25B6\00A0";
+}
+
+.roadProgress {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: var(--text-muted);
+}
+
+.roadPips {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.roadPip {
+  width: 1.125rem;
+  height: 0.625rem;
+  background: transparent;
+  border: 2px solid var(--btn-border);
+  border-radius: 3px;
+}
+
+.roadPip.is-visited {
+  background: rgba(var(--accent-rgb), 0.55);
+  border-color: var(--accent);
+}
+
+.roadPip.is-here {
+  background: var(--accent);
+  border-color: var(--text);
+}
+
+.roadNowTitle {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  margin: 0;
+  font-family: "VT323", "Space Mono", monospace;
+  font-size: 1.75rem;
+  line-height: 1.05;
+  text-wrap: balance;
+}
+
+/* View Story (in the summary under the road) and Hide Story (in the opened panel) sit where the
+   chapter number's bar has room for a button. */
+
+.roadStoryToggle,
+.roadStoryHide {
+  grid-column: 3;
+  grid-row: 1;
+}
+
+/* Phones: the title and the Read button share the top bar's row, and some words are only said to
+   screen readers (they stay in the accessible names). */
+
+@media (max-width: 559px) {
+  .roadTitleLead,
+  .roadWide {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .roadTrip .adventureBar {
+    flex-wrap: nowrap;
+  }
+
+  /* Small banner on phones so the road stays visible (the chapter is already in the bar below). */
+  .roadBanner {
+    padding: 0.25rem 0.75rem;
+  }
+
+  .roadBanner strong {
+    font-size: 1.25rem;
+    letter-spacing: 1px;
+  }
+
+  .roadBanner span {
+    display: none;
+  }
+}
+
+/* Phones: "Now exploring" + the chapter title + View Story sit right under the road, so a stop you
+   pick or drive to is always in view; the full chapter opens below only when asked for. Tablets and
+   up: the story panel is always there, and the summary hides. */
+
+.roadStoryBody {
+  min-width: 0;
+}
+
+.roadStory[data-open="false"] {
+  display: none;
+}
+
+.roadStory .storyCard {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.roadStory .storyCardMedia {
+  aspect-ratio: 16 / 9;
+  max-height: 16rem;
+}
+
+@media (min-width: 700px) {
+  .roadBody {
+    padding: 1rem;
+  }
+
+  .roadNow {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .roadNow--summary,
+  .roadStoryHide {
+    display: none;
+  }
+
+  .roadStory[data-open="false"] {
+    display: grid;
+  }
+
+  .roadStory .storyCard {
+    grid-template-columns: minmax(0, 14rem) minmax(0, 1fr);
+  }
+}
+
+/* Big screens: road beside the story. The road column stays in view while the story scrolls. */
+
+@media (min-width: 1100px) {
+  .roadBody {
+    grid-template-columns: minmax(0, 1fr) minmax(24rem, 30rem);
+    align-items: start;
+    gap: 1.25rem;
+  }
+
+  .roadMapCol {
+    position: sticky;
+    top: 0;
+  }
+
+  .roadStory .storyCard {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .roadStory .storyCardTitle {
+    font-size: 2.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Checkpoint buttons and Previous/Next ease; the selected stop pings a few times; a new story card
+     fades in. (The car itself only moves in the p5 sketch, which jumps instead when motion is reduced.) */
+  .checkpointNum,
+  .journeyNavBtn {
+    transition: var(--control-transition);
+  }
+
+  .checkpoint:not(.checkpoint--current):hover .checkpointNum,
+  .checkpoint:not(.checkpoint--current):focus-visible .checkpointNum,
+  .journeyNavBtn:not([aria-disabled="true"]):hover,
+  .journeyNavBtn:not([aria-disabled="true"]):focus-visible {
+    transform: translateY(-3px);
+  }
+
+  .journeyNavBtn:not([aria-disabled="true"]):active {
+    transform: translateY(3px);
+  }
+
+  @keyframes checkpoint-ping {
+    from {
+      opacity: 0.8;
+      transform: scale(1);
+    }
+    to {
+      opacity: 0;
+      transform: scale(1.6);
+    }
+  }
+
+  .checkpoint--current .checkpointNum::before {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    border: 2px solid var(--accent);
+    border-radius: 12px;
+    pointer-events: none;
+    animation: checkpoint-ping 1.2s ease-out 3;
+  }
+
+  .roadStory .storyCard {
+    animation: story-card-in 0.25s ease-out;
+  }
+
+  @keyframes road-banner-in {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -0.75rem) scale(0.92);
+    }
+  }
+
+  .roadBanner {
+    animation: road-banner-in 0.25s ease-out;
+  }
+
+  @keyframes road-num-pop {
+    from {
+      transform: scale(0.7);
+    }
+  }
+
+  .roadNowNum {
+    animation: road-num-pop 0.25s ease-out;
+  }
+}

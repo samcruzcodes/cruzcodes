@@ -1,0 +1,303 @@
+/* Home page: hero, call-to-action buttons, and the Featured project tiles. */
+
+/* ---------- Home ---------- */
+
+.homeOnly {
+  min-height: clamp(28.75rem, 68vh, 46.875rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 1rem;
+}
+
+/* Phones + desktop: Sam / face / Cruz in a row (it wraps on phones).
+   500–1000px: "Sam Cruz" on one line with my face underneath. */
+
+.nameRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  width: 100%;
+  margin: 0;
+  font-weight: 400;
+  line-height: 0.9;
+}
+
+.bigName {
+  font-size: clamp(4.5rem, 30vw, 7.5rem);
+  white-space: nowrap;
+}
+
+.nameFirst {
+  order: 1;
+}
+
+.faceSlot {
+  order: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 0;
+  max-width: 100%;
+  padding: 0.625rem;
+}
+
+.nameLast {
+  order: 3;
+}
+
+/* Lets the face shrink below 300px on tiny screens. */
+
+.eyeWrap {
+  position: relative;
+  display: block;
+  flex: 0 1 18.75rem;
+  min-width: 0;
+  user-select: none;
+}
+
+.eyeFace {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Keep this lined up with EYE_CENTER_PCT in FollowEyeOnPNG.jsx! */
+
+.eyePupil {
+  position: absolute;
+  left: 46%;
+  top: 31.5%;
+  width: 5%;
+  height: 4%;
+  margin-left: -2.5%;
+  margin-top: -2%;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.85);
+  box-shadow: inset 2px 2px 0 rgba(255, 255, 255, 0.15);
+  pointer-events: none;
+}
+
+.homeSub {
+  text-align: center;
+  margin: 0.75rem 0 0;
+  opacity: 0.9;
+  font-size: 1.25rem;
+}
+
+/* Two big hero buttons: Projects is the filled one, About is outlined. */
+
+.heroCtas {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.heroBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 3.5rem;
+  padding: 0.5rem 1.75rem;
+  font-family: "VT323", "Space Mono", monospace;
+  font-size: 2rem;
+  letter-spacing: 1px;
+  line-height: 1;
+  text-align: center;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 2px solid;
+  border-radius: 14px;
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+
+.heroBtn--primary {
+  color: var(--bg);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.heroBtn--primary:hover,
+.heroBtn--primary:focus-visible {
+  background: var(--text);
+  box-shadow: 0 8px 0 rgba(0, 0, 0, 0.35);
+}
+
+.heroBtn--secondary {
+  color: var(--text);
+  background: rgba(0, 0, 0, 0.18);
+  border-color: rgba(var(--accent-rgb), 0.55);
+}
+
+.heroBtn--secondary:hover,
+.heroBtn--secondary:focus-visible {
+  background: var(--btn-hover);
+  border-color: var(--accent);
+  box-shadow: 0 8px 0 rgba(0, 0, 0, 0.35);
+}
+
+.heroBtn:active {
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.3);
+}
+
+@media (min-width: 480px) {
+  .heroBtn {
+    width: auto;
+    min-width: 15rem;
+  }
+}
+
+/* Featured: three compact tiles under the hero. Each one links to its card on Projects. */
+
+.homeFeatured {
+  margin-top: 1.25rem;
+}
+
+.featuredHeading {
+  margin: 0 0 0.75rem;
+  font-size: 2.75rem;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.featuredGrid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+}
+
+.featuredTile {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  height: 100%;
+  padding: 0.625rem;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.featuredTile:hover,
+.featuredTile:focus-visible {
+  border-color: rgba(var(--accent-rgb), 0.45);
+  box-shadow: 0 14px 0 rgba(0, 0, 0, 0.3);
+}
+
+.featuredTile:hover .featuredTitle,
+.featuredTile:focus-visible .featuredTitle {
+  color: var(--accent);
+}
+
+.featuredMedia {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.18);
+  border: 2px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+}
+
+.featuredMedia img,
+.featuredMedia > div {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.featuredMedia img {
+  object-fit: cover;
+}
+
+.featuredMedia .imagePlaceholder {
+  border: 0;
+  border-radius: 0;
+}
+
+.featuredTitle {
+  font-size: 1.875rem;
+  line-height: 1;
+}
+
+.featuredCta {
+  margin-top: auto;
+  color: var(--accent);
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+@media (min-width: 640px) {
+  .featuredGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 500px) {
+  .nameRow {
+    align-items: baseline;
+    gap: 0.875rem 1.375rem;
+  }
+
+  .nameLast {
+    order: 2;
+  }
+
+  .faceSlot {
+    order: 3;
+    flex-basis: 100%;
+  }
+}
+
+@media (min-width: 768px) {
+  .homeOnly {
+    padding: 1.375rem;
+  }
+}
+
+@media (min-width: 1001px) {
+  .nameRow {
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  .faceSlot {
+    order: 2;
+    flex-basis: auto;
+  }
+
+  .nameLast {
+    order: 3;
+  }
+}
+
+/* ---------- Motion (only when reduced motion is not requested) ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  .eyePupil {
+    transition: transform 60ms linear;
+  }
+
+  .heroBtn {
+    transition: var(--control-transition);
+  }
+
+  .heroBtn:hover,
+  .heroBtn:focus-visible {
+    transform: translateY(-3px);
+  }
+
+  .heroBtn:active {
+    transform: translateY(3px);
+  }
+
+  .featuredTile {
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+}

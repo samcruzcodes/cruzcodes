@@ -11,10 +11,11 @@
 //    p5.Graphics: p5 would leave extra hidden <canvas> elements in the page for those.)
 //  * The loop only runs while the car is moving. Otherwise it is noLoop() and we redraw() once
 //    whenever something changes.
+import { prefersReducedMotion } from "../../utils";
 import { stepCar, checkpointNear } from "./journeyDrive";
 import { ROAD_RADIUS, buildRoute, nearestOnRoad, pointAt } from "./journeyRoute";
 
-// The site's palette (see :root in retro.css).
+// The site's palette (see :root in base.css).
 const C = {
   bg: "#0f1a18",
   grid: "#14241f",
@@ -105,9 +106,6 @@ function makeRandom(seedText) {
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
   };
 }
-
-const prefersReducedMotion = () =>
-  typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 // Every pixel the road covers: its position, which colour slot it uses, and how far along the
 // road it is (so we can light it up from the start up to the car).

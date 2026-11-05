@@ -23,6 +23,7 @@ import {
   stepArrow,
   targetAt,
 } from "./archeryPhysics";
+import { clamp, prefersReducedMotion } from "../../../utils";
 import { ARCHER, ARCHER_COLORS, ARCHER_PIVOT, ARCHER_SHOULDER, C, PINE, PINE_COLORS, SKY } from "./pixelArt";
 
 // A tiny 3 x 5 number font, for the digits above the targets (they match the checkpoint buttons).
@@ -35,13 +36,8 @@ const DIGITS = {
   6: [".##", "#..", "###", "#.#", "###"],
 };
 
-const prefersReducedMotion = () =>
-  typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-const clamp = (n, min, max) => Math.min(max, Math.max(min, n));
-
 // Picks the canvas size for a stage `width` x `height` CSS pixels. `s` converts world units to art pixels.
-export function makeLayout(width, height) {
+function makeLayout(width, height) {
   const w = Math.max(240, Math.round(width) || 0);
   const h = Math.max(200, Math.round(height) || 0);
   const ps = w >= 900 ? 5 : w >= 560 ? 4 : 3;

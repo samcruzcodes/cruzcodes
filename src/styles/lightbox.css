@@ -1,0 +1,119 @@
+/* Lightbox: the enlarged photo dialog used by the 3D printing gallery and project screenshots. */
+
+/* ---------- Lightbox (enlarged gallery photo) ---------- */
+
+body:has(.lightbox[open]) {
+  overflow: hidden;
+}
+
+/* The box hugs the photo: the image's max-height decides how wide it gets. */
+
+.lightbox {
+  width: fit-content;
+  max-width: min(64rem, calc(100vw - 1.5rem));
+  max-height: calc(100vh - 1.5rem);
+  padding: 0;
+  overflow: hidden;
+  color: var(--text);
+  background: var(--panel);
+  border: 3px solid var(--panel2);
+  border-radius: 14px;
+  box-shadow: 0 10px 0 rgba(0, 0, 0, 0.35);
+}
+
+.lightbox::backdrop {
+  background: rgba(5, 10, 9, 0.85);
+}
+
+.lightboxTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.625rem 0.75rem 0.5rem 1rem;
+}
+
+.lightboxTitle {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.lightboxImg {
+  display: block;
+  width: auto;
+  max-width: calc(100% - 1.5rem);
+  max-height: calc(100vh - 10.5rem);
+  margin: 0 auto;
+  border-radius: 10px;
+}
+
+.lightboxBar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 0.625rem 0.75rem 0.875rem;
+}
+
+.lightboxCount {
+  margin: 0;
+  min-width: 6ch;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
+@media (min-width: 768px) {
+  .aboutPanel {
+    padding: 1.375rem;
+  }
+
+  /* Text column stops at a comfy line length; my photo centers in the space left. */
+  .aboutHero {
+    grid-template-columns: minmax(0, 36rem) minmax(14rem, 1fr);
+    align-items: center;
+    gap: 1.75rem;
+  }
+
+  .aboutPhoto {
+    order: 0;
+    width: min(100%, 21rem);
+  }
+
+  .aboutHey {
+    text-align: left;
+  }
+}
+
+@media (min-width: 1001px) {
+  .aboutHey {
+    text-align: left;
+    white-space: nowrap;
+  }
+}
+
+/* ---------- Motion (only when reduced motion is not requested) ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  .lightbox[open] {
+    animation: lightbox-in 0.2s ease-out;
+  }
+
+  .lightbox[open]::backdrop {
+    animation: lightbox-fade 0.2s ease-out;
+  }
+
+  @keyframes lightbox-in {
+    from {
+      opacity: 0;
+      transform: scale(0.96);
+    }
+  }
+
+  @keyframes lightbox-fade {
+    from {
+      opacity: 0;
+    }
+  }
+}

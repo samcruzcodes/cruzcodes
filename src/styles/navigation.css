@@ -1,0 +1,241 @@
+/* Navigation: the sticky header, the mobile menu, and the footer. */
+
+/* ---------- Header ---------- */
+
+.siteHeader {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 0 1.5rem;
+  background-color: rgba(var(--panel-rgb), 0.95);
+  border-bottom: 2px solid var(--panel2);
+}
+
+.navbar {
+  display: none;
+}
+
+.navbar .links {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.rat {
+  display: block;
+  object-fit: cover;
+  height: 2.5rem;
+  width: 2.5rem;
+}
+
+.navbar .rat {
+  height: 4rem;
+  width: 4rem;
+}
+
+.logoBtn {
+  display: block;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+/* Page links (real <a href>s) that look like the old nav buttons. */
+
+.navLink {
+  display: inline-block;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--text);
+  font-family: "VT323", "Space Mono", monospace;
+  font-size: 1.7rem;
+  padding: 0.375rem 0.625rem;
+}
+
+.navLink:hover,
+.navLink:focus-visible {
+  color: var(--text-muted);
+}
+
+.navLink.active {
+  color: var(--accent);
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.35);
+}
+
+.action_btn {
+  background-color: var(--btn-bg);
+  border: 2px solid var(--btn-border);
+  color: var(--text);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-family: "VT323", "Space Mono", monospace;
+  font-size: 1.6rem;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.action_btn:hover,
+.action_btn:focus-visible {
+  color: var(--text);
+  background-color: var(--btn-hover);
+  border-color: rgba(var(--accent-rgb), 0.6);
+}
+
+.toggle_btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1rem 2.8rem;
+}
+
+.menuIcon {
+  display: grid;
+  place-items: center;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-size: 1.7rem;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  cursor: pointer;
+}
+
+.dropdown_menu {
+  display: none;
+  width: 100%;
+  max-width: var(--page-w);
+  margin: 1rem auto;
+  background: var(--panel2);
+  border-radius: 16px;
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 0 rgba(0, 0, 0, 0.25);
+}
+
+.dropdown_menu.is-open {
+  display: block;
+}
+
+.dropdown_list {
+  list-style: none;
+  margin: 0;
+  padding: 1.625rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.375rem;
+}
+
+.dropdown_list li {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.dropdown_list .navLink {
+  font-size: 2.4rem;
+  padding: 0.75rem 1.125rem;
+}
+
+.dropdown_list .action_btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.75rem 1.125rem;
+  font-size: 2.2rem;
+}
+
+@media (min-width: 768px) {
+  .siteHeader {
+    padding: 0 2rem;
+  }
+
+  .navbar {
+    min-height: var(--header-h);
+    max-width: 75rem;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 1rem;
+  }
+
+  .toggle_btn,
+  .dropdown_menu.is-open {
+    display: none;
+  }
+}
+
+/* ---------- Footer (small + quiet on purpose) ---------- */
+
+.siteFooter {
+  padding: 0.375rem 1rem 0.625rem;
+  text-align: center;
+  background-color: rgba(var(--panel-rgb), 0.95);
+  border-top: 2px solid var(--panel2);
+}
+
+.footerLinks {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0 1.25rem;
+}
+
+.footerLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  min-height: 2rem;
+  color: var(--text-muted);
+  font-size: 0.8125rem;
+  text-decoration: none;
+}
+
+.footerLink .icon {
+  font-size: 0.875rem;
+}
+
+.footerLink:hover,
+.footerLink:focus-visible {
+  color: var(--accent);
+}
+
+.footerNote {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+/* Space Mono's © looks tiny and floaty, so this one uses a system font instead. */
+
+.copyMark {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+/* ---------- Motion (only when reduced motion is not requested) ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  .navLink,
+  .footerLink {
+    transition: color 0.15s ease;
+  }
+
+  .action_btn {
+    transition: var(--control-transition);
+  }
+
+  .action_btn:hover,
+  .action_btn:focus-visible {
+    transform: translateY(-2px);
+  }
+}

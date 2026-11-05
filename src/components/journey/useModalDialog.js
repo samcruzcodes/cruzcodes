@@ -9,6 +9,12 @@ import { useEffect, useRef } from "react";
 // and when the overlay goes away it gives everything back, including sending focus to whatever had it
 // when the overlay opened (the button that opened it).
 // Each overlay still decides what Esc does: it handles the dialog's `cancel` event itself.
+//
+// React StrictMode (development only) runs this effect as open -> close -> open on mount. The browser
+// delivers a dialog's `close` event a moment *after* close() is called, so by then the dialog is open
+// again. Any `onClose` handler on one of these dialogs must therefore check `dialog.open` before treating
+// the event as "the visitor closed it" (RoadTripOverlay does; its StrictMode tests guard this). Production
+// builds don't double-run effects, which is why the bug it once caused only showed up in `npm start`.
 export default function useModalDialog() {
   const dialogRef = useRef(null);
   const titleRef = useRef(null);

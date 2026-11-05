@@ -1,5 +1,6 @@
 import { Suspense, lazy, useEffect, useRef, useState } from "react";
 import { journey } from "../../data";
+import { scrollToElement } from "../../utils";
 import Icon from "../Icon";
 import StartMenu from "./StartMenu";
 import StoryCard from "./StoryCard";
@@ -56,8 +57,7 @@ export default function StoryJourney() {
     titleRef.current?.focus({ preventScroll: true });
     const section = sectionRef.current;
     if (scrollBack && section && section.getBoundingClientRect().top < 0) {
-      const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-      section.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+      scrollToElement(section);
     }
   }, [view]);
 
