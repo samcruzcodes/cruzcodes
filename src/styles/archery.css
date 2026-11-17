@@ -95,6 +95,15 @@
   border-color: var(--accent);
 }
 
+/* It keeps its mint face on hover and focus. (The shared hover green under its dark text was only
+   2.2:1.) The pale border, the focus ring and the lift show the state instead. */
+.adventureBtn--primary:hover,
+.adventureBtn--primary:focus-visible {
+  color: var(--bg);
+  background: var(--accent);
+  border-color: var(--text);
+}
+
 /* On a phone the whole overlay scrolls (the game stays at the top); on a big screen the game
    and the story sit side by side and the game uses all the height there is. */
 
@@ -316,6 +325,32 @@
   border-left: 4px solid var(--accent);
   border-radius: 6px;
   pointer-events: none; /* never in the way of aiming */
+}
+
+/* Tap play: a row of chunky pixel buttons (no dragging needed). On a phone it wraps, but the
+   Aim pair and the Power pair always stay together. */
+
+.adventureTapPad,
+.adventureTapPair {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.adventureTapPair {
+  flex: 2 1 12rem;
+  flex-wrap: nowrap;
+}
+
+.adventureTapBtn {
+  flex: 1 1 0;
+  white-space: nowrap;
+}
+
+.adventureTapBtn--shoot {
+  flex: 1 1 6rem;
+  color: var(--accent);
+  border-color: rgba(var(--accent-rgb), 0.6);
 }
 
 .adventureDockRow {

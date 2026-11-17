@@ -8,9 +8,13 @@
 // Like the road map, it draws a tiny canvas (about 180 x 120 "art pixels") that CSS scales up
 // crisply, and it stops drawing (noLoop) whenever nothing is moving.
 import {
+  ANGLE_MAX,
+  ANGLE_MIN,
   BOW,
   MIN_POWER,
   ROUNDS,
+  TAP_POWER_MIN,
+  TAP_POWER_START,
   TARGETS,
   WORLD_W,
   aimFromPull,
@@ -80,6 +84,7 @@ export function mountArcherySketch(P5, host, options) {
   const aim = { angle: 0.62, power: 0, drawing: false, mode: null, valid: false };
   const keys = { up: false, down: false };
   let keyDrawTime = 0;
+  let tapPower = TAP_POWER_START; // the pull the tap buttons have set (it stays put between shots)
   let lastAimEmit = 0;
   let fps = 60;
 
@@ -414,7 +419,7 @@ export function mountArcherySketch(P5, host, options) {
   const needsFrames = () =>
     arrows.length > 0 ||
     particles.length > 0 ||
-    aim.drawing ||
+    (aim.drawing && aim.mode !== "tap") || // a bow held by the tap buttons stands still
     keys.up ||
     keys.down ||
     roundDelay > 0 ||
@@ -564,9 +569,33 @@ export function mountArcherySketch(P5, host, options) {
       keys.down = !!next.down;
       if (keys.up || keys.down) wake();
     },
-    // Keyboard: hold to draw the bow, let go to shoot.
+    // Tap buttons (no dragging, no holding): each tap tilts the bow or changes the pull by one step,
+    // and the bow stays drawn at that pull, with the aim dots showing, until you shoot.
+    // Returns the new aim, or null while a pointer pull or a key draw is in progress.
+    nudge({ angle = 0, power = 0 }) {
+      if (aim.drawing && aim.mode !== "tap") return null;
+      aim.angle = clamp(aim.angle + angle, ANGLE_MIN, ANGLE_MAX);
+      tapPower = clamp(Math.round((tapPower + power) * 100) / 100, TAP_POWER_MIN, 1);
+      aim.drawing = true;
+      aim.mode = "tap";
+      aim.power = tapPower;
+      emitAim(true);
+      wake();
+      return { angle: aim.angle, power: tapPower };
+    },
+    // Tap "Shoot": fire at the angle and pull the buttons set, then draw again at the same pull.
+    tapShoot() {
+      if (aim.drawing && aim.mode !== "tap") return;
+      aim.power = tapPower;
+      fire();
+      aim.drawing = true;
+      aim.mode = "tap";
+      emitAim(true);
+      wake();
+    },
+    // Keyboard: hold to draw the bow, let go to shoot. (It takes over from a bow held by the tap buttons.)
     keyDraw(on) {
-      if (on && !aim.drawing) {
+      if (on && (!aim.drawing || aim.mode === "tap")) {
         aim.drawing = true;
         aim.mode = "key";
         aim.power = 0;

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Icon from "./Icon";
 import { isPlainClick } from "./navigation";
 import { contact } from "../data";
@@ -11,6 +11,21 @@ const menuItems = [
 
 export default function Header({ page, setPage }) {
   const [isOpen, setIsOpen] = useState(false);
+  const menuButtonRef = useRef(null);
+
+  // The open menu lives in the sticky header, so it must never sit over the page while you're
+  // using the page: Esc closes it (back to the menu button), and so does Tabbing (or clicking) out.
+  const onKeyDown = (event) => {
+    if (!isOpen || event.key !== "Escape") return;
+    event.preventDefault();
+    setIsOpen(false);
+    menuButtonRef.current?.focus();
+  };
+
+  const onBlur = (event) => {
+    const next = event.relatedTarget; // where focus went (null if it didn't go anywhere focusable)
+    if (isOpen && next && !event.currentTarget.contains(next)) setIsOpen(false);
+  };
 
   // These go to other pages, so they're real links (they can open in a new tab or be copied);
   // a plain click switches pages in place instead of reloading.
@@ -43,7 +58,7 @@ export default function Header({ page, setPage }) {
   ));
 
   return (
-    <header className="siteHeader">
+    <header className={`siteHeader${isOpen ? " is-menu-open" : ""}`} onKeyDown={onKeyDown} onBlur={onBlur}>
       {/* ===== MAIN NAVBAR ===== */}
       <nav className="navbar" aria-label="Main">
         <div className="logo">{logo}</div>
@@ -61,6 +76,7 @@ export default function Header({ page, setPage }) {
 
         <button
           type="button"
+          ref={menuButtonRef}
           className="menuIcon"
           onClick={() => setIsOpen((v) => !v)}
           aria-expanded={isOpen}

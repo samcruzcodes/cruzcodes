@@ -62,6 +62,33 @@ img {
   outline: none;
 }
 
+/* "Skip to main content": off screen until it has keyboard focus, then a mint pixel button over the
+   top-left corner (above the sticky header). */
+
+.skipLink {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 200;
+  padding: 0.5rem 1rem;
+  font-family: "VT323", "Space Mono", monospace;
+  font-size: 1.5rem;
+  line-height: 1;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--bg);
+  background: var(--accent);
+  border: 2px solid var(--text);
+  border-radius: 12px;
+  box-shadow: 0 5px 0 rgba(0, 0, 0, 0.3);
+  transform: translateY(calc(-100% - 2rem));
+}
+
+.skipLink:focus {
+  transform: none;
+}
+
 /* ---------- Utilities ---------- */
 
 .visuallyHidden {

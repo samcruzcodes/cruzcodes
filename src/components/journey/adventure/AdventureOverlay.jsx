@@ -3,17 +3,21 @@ import { clamp, pad2, scrollToElement } from "../../../utils";
 import Icon from "../../Icon";
 import StoryCard from "../StoryCard";
 import useModalDialog from "../useModalDialog";
-import { ROUNDS, roundOf } from "./archeryPhysics";
+import { ROUNDS, TAP_ANGLE, TAP_POWER, roundOf } from "./archeryPhysics";
 import { loadArchery } from "./loadArchery";
+
+const degrees = (radians) => Math.round((radians * 180) / Math.PI);
+const percent = (fraction) => Math.round(fraction * 100);
 
 // "Angle 36° · Power 0%". It has its own state, so the aim updates the game sends many times a
 // second re-render just this line, not the whole overlay (story card, chapter list and all).
+// Screen readers can read it too (it isn't a live region, so it never talks over the game).
 const AimReadout = forwardRef(function AimReadout(_props, ref) {
   const [aim, setAim] = useState({ angle: 0.62, power: 0 });
   useImperativeHandle(ref, () => ({ update: setAim }), []);
   return (
-    <p className="adventureReadout" aria-hidden="true">
-      Angle {Math.round((aim.angle * 180) / Math.PI)}° · Power {Math.round(aim.power * 100)}%
+    <p className="adventureReadout">
+      Angle {degrees(aim.angle)}° · Power {percent(aim.power)}%
     </p>
   );
 });
@@ -270,6 +274,15 @@ export default function AdventureOverlay({
     setKeyboardReady(true);
   };
 
+  // ---- Tap buttons: the same game with single taps (no pull-and-release drag, no holding a key).
+  // Each step is said out loud, so screen reader users (VoiceOver on a phone, too) know the aim.
+  const nudge = (change) => {
+    const aim = controllerRef.current?.nudge(change);
+    if (aim) setStatus(`Angle ${degrees(aim.angle)} degrees, power ${percent(aim.power)}%.`);
+  };
+
+  const tapShoot = () => controllerRef.current?.tapShoot();
+
   // ---- The chapter list: unlocked chapters open; locked ones just say they're locked.
   const pickChapter = (i) => {
     setViewed(i);
@@ -421,7 +434,8 @@ export default function AdventureOverlay({
             <div className="adventureDock">
               <div className="adventureHints">
                 <p className="adventureHint">
-                  <span className="adventureHintLabel">Mouse / Touch</span> Pull back and release to shoot
+                  <span className="adventureHintLabel">Mouse / Touch</span> Pull back and release, or tap Aim, Power
+                  and Shoot
                 </p>
                 {!failed && (
                   <p className="adventureHint" id="adventure-kbd-hint">
@@ -431,6 +445,35 @@ export default function AdventureOverlay({
                   </p>
                 )}
               </div>
+
+              {/* Tap play: everything the pull-and-release drag does, one tap at a time. */}
+              {!failed && (
+                <div className="adventureTapPad" role="group" aria-label="Tap controls">
+                  <div className="adventureTapPair">
+                    <button type="button" className="adventureBtn adventureTapBtn" onClick={() => nudge({ angle: TAP_ANGLE })}>
+                      Aim <span aria-hidden="true">▲</span>
+                      <span className="visuallyHidden">up</span>
+                    </button>
+                    <button type="button" className="adventureBtn adventureTapBtn" onClick={() => nudge({ angle: -TAP_ANGLE })}>
+                      Aim <span aria-hidden="true">▼</span>
+                      <span className="visuallyHidden">down</span>
+                    </button>
+                  </div>
+                  <div className="adventureTapPair">
+                    <button type="button" className="adventureBtn adventureTapBtn" onClick={() => nudge({ power: -TAP_POWER })}>
+                      Power <span aria-hidden="true">−</span>
+                      <span className="visuallyHidden">down</span>
+                    </button>
+                    <button type="button" className="adventureBtn adventureTapBtn" onClick={() => nudge({ power: TAP_POWER })}>
+                      Power <span aria-hidden="true">+</span>
+                      <span className="visuallyHidden">up</span>
+                    </button>
+                  </div>
+                  <button type="button" className="adventureBtn adventureTapBtn adventureTapBtn--shoot" onClick={tapShoot}>
+                    Shoot
+                  </button>
+                </div>
+              )}
 
               <div className="adventureDockRow">
                 <div className="adventureReadoutBlock">
@@ -485,6 +528,10 @@ export default function AdventureOverlay({
               <div id="adventure-howto" className="adventureHowTo">
                 <ul>
                   <li>Press anywhere on the range, pull back, and let go. A longer pull is a stronger shot.</li>
+                  <li>
+                    No dragging needed: tap Aim ▲ or ▼ to tilt the bow, Power − or + to set the pull, then Shoot. The aim
+                    stays put between shots, so you can adjust a step at a time.
+                  </li>
                   <li>Hit a target to unlock its chapter. There are two targets per round, and three rounds.</li>
                   <li>Keyboard: choose Play with Keyboard (or Tab to the range), then ↑↓ to aim, hold Space or Enter to draw, release to shoot.</li>
                   <li>Tab and Shift+Tab always move on as usual. Esc closes the game.</li>

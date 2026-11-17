@@ -20,6 +20,14 @@ export const MIN_POWER = 0.12; // a tiny tug does nothing (so a click without a 
 export const ANGLE_MIN = 0.03;
 export const ANGLE_MAX = 1.45;
 
+// One tap of the tap buttons (the no-drag way to play): 2 degrees of aim, or 5% of pull. The tap
+// pull starts at 60% and goes from 15% to 100%. archeryPhysics.test.js checks every target can be
+// hit in these steps.
+export const TAP_ANGLE = (2 * Math.PI) / 180;
+export const TAP_POWER = 0.05;
+export const TAP_POWER_START = 0.6;
+export const TAP_POWER_MIN = 0.15;
+
 // The six targets, one per story checkpoint (`checkpoint` = its index in `journey` in data.js).
 // They come in three rounds of two, each round harder than the last: farther away, smaller,
 // and (from round 2) bobbing up and down. Motion is skipped for reduced-motion visitors.

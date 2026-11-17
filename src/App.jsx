@@ -43,11 +43,22 @@ export default function App() {
     mainRef.current?.querySelector("h1")?.focus({ preventScroll: true });
   }, [nav]);
 
+  // "Skip to main content": the first Tab stop on every page. Focus moves into <main> itself, so the
+  // next Tab goes to the page's first link or button (the URL hash is left alone).
+  const skipToMain = (event) => {
+    event.preventDefault();
+    mainRef.current?.focus();
+  };
+
   return (
     <div className="retro-bg">
+      <a className="skipLink" href="#main" onClick={skipToMain}>
+        Skip to main content
+      </a>
+
       <Header page={nav.page} setPage={(key) => navigate(key)} />
 
-      <main ref={mainRef} className={`wrapper ${nav.page === "home" ? "wrapper--home" : ""}`}>
+      <main id="main" ref={mainRef} tabIndex={-1} className={`wrapper ${nav.page === "home" ? "wrapper--home" : ""}`}>
         {nav.page === "home" && <Home onNavigate={navigate} />}
         {nav.page === "about" && <AboutPage />}
         {nav.page === "projects" && <ProjectsPage targetId={nav.target} />}
