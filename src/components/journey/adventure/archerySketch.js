@@ -10,6 +10,7 @@
 import {
   ANGLE_MAX,
   ANGLE_MIN,
+  ANGLE_START,
   BOW,
   MIN_POWER,
   ROUNDS,
@@ -81,7 +82,7 @@ export function mountArcherySketch(P5, host, options) {
   let shake = 0;
   let recoil = 0;
   const flash = new Map(); // target index -> seconds left of the hit flash
-  const aim = { angle: 0.62, power: 0, drawing: false, mode: null, valid: false };
+  const aim = { angle: ANGLE_START, power: 0, drawing: false, mode: null, valid: false };
   const keys = { up: false, down: false };
   let keyDrawTime = 0;
   let tapPower = TAP_POWER_START; // the pull the tap buttons have set (it stays put between shots)
@@ -433,7 +434,10 @@ export function mountArcherySketch(P5, host, options) {
     const now = performance.now();
     if (!force && now - lastAimEmit < 100) return;
     lastAimEmit = now;
-    emit({ type: "aim", angle: aim.angle, power: aim.power, drawing: aim.drawing });
+    // While the bow is being pulled (pointer, key or tap buttons) that's the pull; otherwise it's the
+    // pull the tap Shoot button would use, so the readout never says 0% for a shot that fires at 60%.
+    const power = aim.drawing ? aim.power : tapPower;
+    emit({ type: "aim", angle: aim.angle, power, drawing: aim.drawing });
   };
 
   const fire = () => {
@@ -616,10 +620,16 @@ export function mountArcherySketch(P5, host, options) {
       roundDelay = 0;
       shake = 0;
       flash.clear();
+      // The bow goes back to its starting aim and tap pull too (what the readout shows on a new game).
       aim.drawing = false;
+      aim.mode = null;
       aim.power = 0;
+      aim.angle = ANGLE_START;
+      keyDrawTime = 0;
+      tapPower = TAP_POWER_START;
       shownRound = 0;
       emit({ type: "replay" });
+      emitAim(true);
       emit({ type: "round", round: 1, targets: TARGETS.filter((_, i) => roundOf(i) === 0).map((t) => t.checkpoint) });
       p.redraw();
       if (movingTargetsOut()) wake();

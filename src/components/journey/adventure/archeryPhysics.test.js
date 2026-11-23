@@ -1,6 +1,7 @@
 import {
   ANGLE_MAX,
   ANGLE_MIN,
+  ANGLE_START,
   TAP_ANGLE,
   TAP_POWER,
   TAP_POWER_MIN,
@@ -25,8 +26,8 @@ function hits(angle, power, target) {
 
 // Every angle and pull a tap-only player can reach from the starting aim (0.62 rad, 60%).
 const tapAngles = [];
-for (let a = 0.62; a >= ANGLE_MIN; a -= TAP_ANGLE) tapAngles.push(a);
-for (let a = 0.62 + TAP_ANGLE; a <= ANGLE_MAX; a += TAP_ANGLE) tapAngles.push(a);
+for (let a = ANGLE_START; a >= ANGLE_MIN; a -= TAP_ANGLE) tapAngles.push(a);
+for (let a = ANGLE_START + TAP_ANGLE; a <= ANGLE_MAX; a += TAP_ANGLE) tapAngles.push(a);
 const tapPowers = [];
 for (let p = TAP_POWER_START; p >= TAP_POWER_MIN - 1e-9; p -= TAP_POWER) tapPowers.push(Math.round(p * 100) / 100);
 for (let p = TAP_POWER_START + TAP_POWER; p <= 1 + 1e-9; p += TAP_POWER) tapPowers.push(Math.round(p * 100) / 100);

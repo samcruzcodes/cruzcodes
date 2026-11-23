@@ -116,6 +116,7 @@
   padding: 0.75rem;
   overflow-y: auto;
   overscroll-behavior: contain;
+  scroll-padding: 0.5rem; /* Tab scrolls focus in with room for the browser's focus ring */
 }
 
 .adventureGame {
@@ -227,14 +228,9 @@
   -webkit-touch-callout: none;
 }
 
-/* Keyboard focus on the range: an obvious mint frame (also shown when the "Play with Keyboard"
-   button put focus there, which the browser's own focus ring can skip after a mouse click). */
-
-.adventureStage:focus-visible,
-.adventureStage.is-active {
-  outline: 3px solid var(--accent);
-  outline-offset: -6px;
-}
+/* "Keyboard ready": a mint frame while the range takes the keys. It's shown with the browser's own
+   focus ring, not instead of it, and also when a mouse click on "Play with Keyboard" put focus
+   there (the browser skips its focus ring after a mouse click). */
 
 .adventureStage.is-active {
   box-shadow:

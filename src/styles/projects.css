@@ -286,12 +286,18 @@
   border-radius: 0;
 }
 
-/* "More Projects" toggle: styled like the filter tabs, wide enough to be an easy target. */
+/* "More Projects" toggle: styled like the filter tabs, wide enough to be an easy target. It wraps
+   instead of sticking out: the label's words wrap first, and only when the count and arrow still
+   don't fit beside it (very narrow screens, or bigger text spacing, WCAG 1.4.12) do they drop to the
+   next line, together. */
 
 .moreToggle {
   display: inline-flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 0.625rem;
+  justify-content: center;
+  gap: 0.25rem 0.625rem;
+  max-width: 100%;
   padding: 0.375rem 0.875rem;
   font: inherit;
   letter-spacing: inherit;
@@ -312,6 +318,16 @@
 
 .moreToggle[aria-expanded="true"] {
   color: var(--accent);
+}
+
+.moreLabel {
+  flex: 1 1 0; /* counts as its longest word when the line is laid out, then takes the room left */
+}
+
+.moreMeta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
 }
 
 .moreCount {

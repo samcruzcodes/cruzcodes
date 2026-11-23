@@ -134,6 +134,7 @@
     max-height: 100dvh;
     overflow-y: auto;
     overscroll-behavior: contain;
+    scroll-padding: 0.5rem; /* room for the browser's focus ring at the edges */
   }
 }
 

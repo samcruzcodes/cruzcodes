@@ -3,22 +3,23 @@ import { clamp, pad2, scrollToElement } from "../../../utils";
 import Icon from "../../Icon";
 import StoryCard from "../StoryCard";
 import useModalDialog from "../useModalDialog";
-import { ROUNDS, TAP_ANGLE, TAP_POWER, roundOf } from "./archeryPhysics";
+import { ANGLE_START, ROUNDS, TAP_ANGLE, TAP_POWER, TAP_POWER_START, roundOf } from "./archeryPhysics";
 import { loadArchery } from "./loadArchery";
 
 const degrees = (radians) => Math.round((radians * 180) / Math.PI);
 const percent = (fraction) => Math.round(fraction * 100);
 
-// "Angle 36° · Power 0%". It has its own state, so the aim updates the game sends many times a
+// "Angle 36° · Power 60%": the aim, and the pull the next shot uses (the live pull while you draw,
+// otherwise the tap buttons' pull). It starts where the game starts, so it's right before the game
+// sends its first update. It has its own state, so the aim updates the game sends many times a
 // second re-render just this line, not the whole overlay (story card, chapter list and all).
-// Screen readers can read it too (it isn't a live region, so it never talks over the game).
+// Screen readers can read it too (it isn't a live region, so it never talks over the game), and it's
+// one string, so it's one piece of text to them rather than five.
 const AimReadout = forwardRef(function AimReadout(_props, ref) {
-  const [aim, setAim] = useState({ angle: 0.62, power: 0 });
+  const [aim, setAim] = useState({ angle: ANGLE_START, power: TAP_POWER_START });
   useImperativeHandle(ref, () => ({ update: setAim }), []);
   return (
-    <p className="adventureReadout">
-      Angle {degrees(aim.angle)}° · Power {percent(aim.power)}%
-    </p>
+    <p className="adventureReadout">{`Angle ${degrees(aim.angle)}° · Power ${percent(aim.power)}%`}</p>
   );
 });
 

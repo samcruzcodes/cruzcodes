@@ -16,9 +16,10 @@ const SPEED_MIN = 30;
 const SPEED_MAX = 100;
 export const MIN_POWER = 0.12; // a tiny tug does nothing (so a click without a pull isn't a shot)
 
-// Aim limits, in radians (about 2 and 83 degrees).
+// Aim limits, in radians (about 2 and 83 degrees), and where the bow points at the start (about 36).
 export const ANGLE_MIN = 0.03;
 export const ANGLE_MAX = 1.45;
+export const ANGLE_START = 0.62;
 
 // One tap of the tap buttons (the no-drag way to play): 2 degrees of aim, or 5% of pull. The tap
 // pull starts at 60% and goes from 15% to 100%. archeryPhysics.test.js checks every target can be

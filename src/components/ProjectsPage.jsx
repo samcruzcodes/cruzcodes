@@ -226,8 +226,11 @@ export default function ProjectsPage({ targetId = null }) {
               aria-controls="more-projects-list"
               onClick={() => setMoreOpen((open) => !open)}
             >
-              More Projects <span className="moreCount">({visibleMore.length})</span>
-              <Icon name="chevronRight" className="moreChevron" />
+              <span className="moreLabel">More Projects</span>{" "}
+              <span className="moreMeta">
+                <span className="moreCount">({visibleMore.length})</span>
+                <Icon name="chevronRight" className="moreChevron" />
+              </span>
             </button>
           </h2>
 

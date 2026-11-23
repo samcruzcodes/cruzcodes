@@ -51,16 +51,8 @@ img {
   min-height: 100vh;
 }
 
-:focus-visible {
-  outline: 3px solid var(--accent);
-  outline-offset: 3px;
-}
-
-/* No focus ring on headings I focus with JS after switching pages. */
-
-[tabindex="-1"]:focus {
-  outline: none;
-}
+/* Focus rings are the browser's own default outline (Safari draws it in the macOS accent colour).
+   Nothing on the site sets or removes `outline`; hover/focus styles only change borders and backgrounds. */
 
 /* "Skip to main content": off screen until it has keyboard focus, then a mint pixel button over the
    top-left corner (above the sticky header). */
