@@ -4,6 +4,7 @@ import ExternalLink from "./ExternalLink";
 import Icon from "./Icon";
 import ImagePlaceholder from "./ImagePlaceholder";
 import Lightbox from "./Lightbox";
+import VideoPreview from "./VideoPreview";
 import { findProjectById, projectId, projects, projectTags } from "../data";
 
 // The order is hand-picked in data.js (`section` + `rank`), not by date. Filters keep it.
@@ -50,10 +51,16 @@ function ProjectCard({ project, flipped, compact }) {
     imagePlaceholder,
     gallery,
     status,
+    badge,
+    platforms,
+    details,
+    video,
     dateLabel,
     stack,
     viewLink,
+    viewLabel,
     githubLink,
+    githubLabel,
   } = project;
   const hasLinks = Boolean(viewLink) || Boolean(githubLink);
   const [imageFailed, setImageFailed] = useState(false);
@@ -65,10 +72,17 @@ function ProjectCard({ project, flipped, compact }) {
       id={projectId(title)}
       className={`projectCard panel ${flipped ? "projectCard--flipped" : ""} ${
         compact ? "projectCard--compact" : ""
-      }`}
+      } ${video ? "projectCard--showcase" : ""}`}
     >
       <div className="projectMedia">
-        {image && !imageFailed ? (
+        {video && image && !imageFailed ? (
+          <VideoPreview
+            video={video}
+            image={image}
+            title={title}
+            onImageError={() => setImageFailed(true)}
+          />
+        ) : image && !imageFailed ? (
           <img
             className="projectImg"
             src={image.src}
@@ -97,21 +111,48 @@ function ProjectCard({ project, flipped, compact }) {
           {dateLabel && <p className="projectDate">{dateLabel}</p>}
         </header>
 
+        {badge && <p className="projectBadge">{badge}</p>}
+
         {role && <p className="projectRole">{role}</p>}
 
         <p className="projectDesc">{description}</p>
+
+        {details?.length > 0 && (
+          // Built-in disclosure: keyboard and screen-reader friendly with no extra JavaScript.
+          <details className="projectDetails">
+            <summary>Restoration story</summary>
+            <ul>
+              {details.map((d) => (
+                <li key={d}>{d}</li>
+              ))}
+            </ul>
+          </details>
+        )}
+
+        {platforms?.length > 0 && (
+          <p className="projectPlatforms">
+            <span className="projectPlatformsLabel">Platforms:</span> {platforms.join(", ")}
+          </p>
+        )}
 
         <Stack items={stack} />
 
         <footer className="projectActions">
           {viewLink && (
-            <ExternalLink className="projectBtn" href={viewLink}>
-              View<span className="visuallyHidden"> {title}</span>
+            <ExternalLink
+              className={`projectBtn ${viewLabel ? "projectBtn--primary" : ""}`}
+              href={viewLink}
+            >
+              {viewLabel || "View"}
+              <span className="visuallyHidden"> {title}</span>
             </ExternalLink>
           )}
           {githubLink && (
             <ExternalLink className="projectBtn" href={githubLink}>
-              GitHub<span className="visuallyHidden"> repository for {title}</span>
+              {githubLabel || "GitHub"}
+              <span className="visuallyHidden">
+                {githubLabel ? ` for ${title} on GitHub` : ` repository for ${title}`}
+              </span>
             </ExternalLink>
           )}
           {!hasLinks && status && <span className="projectStatus">{status}</span>}

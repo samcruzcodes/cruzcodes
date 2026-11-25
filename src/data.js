@@ -47,6 +47,9 @@ export const projectTags = ["Game", "Web", "Mobile", "AI"];
 // How the Projects page is ordered (on purpose: recruiter-focused, not by date):
 //   section: "selected" -> the main "Selected Projects" list, or "more" -> the "More Projects" list
 //   rank:    1, 2, 3... the order inside its section (filters keep this order)
+//   badge / platforms / viewLabel / githubLabel / details / video: optional extras (Turtleburg uses
+//     them): a small status pill, a "Platforms" line, custom button text (the viewLabel button is the
+//     main one), a "Restoration story" list, and a muted looping preview clip with the image as its poster.
 //   featured: 1, 2, 3 (optional) -> the three Featured tiles on Home, in that order
 // `date` and `ongoing` are no longer used for sorting; they're just notes about when I worked on it.
 // `dateLabel` is what shows on the card.
@@ -125,7 +128,7 @@ export const projects = [
   {
     title: "Budget.io Watchdog",
     section: "selected",
-    rank: 3,
+    rank: 4,
     featured: 3,
     tag: "Web",
     alsoTags: ["AI"],
@@ -172,7 +175,7 @@ export const projects = [
   {
     title: "Lerly Liz Studios",
     section: "selected",
-    rank: 8,
+    rank: 9,
     tag: "Web",
     role: "Freelance Web Developer",
     date: "2026-07-01",
@@ -193,7 +196,7 @@ export const projects = [
   {
     title: "H4I — PPAC Healthcare Platform",
     section: "selected",
-    rank: 4,
+    rank: 5,
     tag: "Web",
     alsoTags: ["AI"],
     date: "2026-05-01",
@@ -214,7 +217,7 @@ export const projects = [
   {
     title: "Duke vs. The Gang",
     section: "selected",
-    rank: 5,
+    rank: 6,
     tag: "Game",
     date: "2026-05-01",
     dateLabel: "Sep 2025 – May 2026",
@@ -280,7 +283,7 @@ export const projects = [
   {
     title: "Cornell Med in Black Website",
     section: "selected",
-    rank: 10,
+    rank: 11,
     tag: "Web",
     role: "Freelance Web Developer",
     date: "2026-09-01",
@@ -300,7 +303,7 @@ export const projects = [
   {
     title: "H4I — Alaska Children's Trust",
     section: "selected",
-    rank: 7,
+    rank: 8,
     tag: "Mobile",
     date: "2025-12-01",
     dateLabel: "Sep–Dec 2025",
@@ -320,7 +323,7 @@ export const projects = [
   {
     title: "ThinkDraft AI",
     section: "selected",
-    rank: 6,
+    rank: 7,
     tag: "Web",
     alsoTags: ["AI"],
     date: "2025-08-01",
@@ -340,7 +343,7 @@ export const projects = [
   {
     title: "H4I — Ithaca Community Recovery",
     section: "selected",
-    rank: 9,
+    rank: 10,
     tag: "Web",
     date: "2025-05-01",
     dateLabel: "Jan–May 2025",
@@ -360,7 +363,7 @@ export const projects = [
   {
     title: "Circle K Website",
     section: "more",
-    rank: 6,
+    rank: 5,
     tag: "Web",
     date: "2025-02-01",
     dateLabel: "2025",
@@ -380,7 +383,7 @@ export const projects = [
   {
     title: "Budget Planner",
     section: "more",
-    rank: 3,
+    rank: 2,
     tag: "Web",
     date: "2024-06-01",
     dateLabel: "2024",
@@ -399,7 +402,7 @@ export const projects = [
   {
     title: "APO Gamma Website",
     section: "more",
-    rank: 7,
+    rank: 6,
     tag: "Web",
     date: "2024-04-01",
     dateLabel: "2024",
@@ -419,7 +422,7 @@ export const projects = [
   {
     title: "Sandcastle Tycoon",
     section: "more",
-    rank: 4,
+    rank: 3,
     tag: "Game",
     date: "2024-02-01",
     dateLabel: "Feb 2024",
@@ -438,7 +441,7 @@ export const projects = [
   {
     title: "Cheezy Conundrum",
     section: "more",
-    rank: 5,
+    rank: 4,
     tag: "Game",
     date: "2023-08-01",
     dateLabel: "Summer 2023",
@@ -456,22 +459,47 @@ export const projects = [
   },
   {
     title: "Turtleburg",
-    section: "more",
-    rank: 2,
+    section: "selected",
+    rank: 3,
     tag: "Game",
-    date: "2021-02-01",
-    dateLabel: "Oct 2022 – Feb 2023",
+    // First built Oct 2022 – Feb 2023 (age 14); restored and officially released on itch.io in 2026.
+    date: "2026-11-01",
+    dateLabel: "2022 – 2026",
+    badge: "Released · Playable",
+    platforms: ["Web", "Windows", "macOS"],
     description:
-      "Educational RPG exploring the global water crisis through narrative-driven gameplay, letting players learn by making meaningful choices.",
+      "An educational pixel-art RPG about water conservation, originally developed when I was 14 and recently restored, polished, and officially released. Explore a seaside community, meet its residents, and discover how small everyday actions can make a difference.",
     image: {
-      src: "assets/projects/turtleburg.webp",
-      width: 646,
-      height: 381,
-      alt: "Turtleburg's pixel-art title screen: a character driving a Clean Plumbing van",
+      // Still frame from the preview clip (Turtleburg's approved trailer, 0:15). Shown while the video
+      // loads, and instead of it for visitors who prefer reduced motion.
+      src: "assets/projects/turtleburg-preview-poster.webp",
+      width: 960,
+      height: 540,
+      alt: "Turtleburg gameplay: a player in a red shirt walks a dirt path past a cabin with a “Neighbor's Home” nameplate",
     },
-    stack: ["Godot", "GDScript", "Python", "Aseprite"],
-    viewLink: "",
+    // ~7s muted loop cut from the trailer (outdoor exploration + building nameplates). 960x540, no audio.
+    // The page picks the first format the browser can play. Plays only on screen, never for reduced motion.
+    video: {
+      sources: [
+        { src: "assets/projects/turtleburg-preview.webm", type: "video/webm" },
+        { src: "assets/projects/turtleburg-preview.mp4", type: "video/mp4" },
+      ],
+      width: 960,
+      height: 540,
+    },
+    stack: ["Godot", "GDScript", "2D Game Development"],
+    viewLink: "https://cruzcodes.itch.io/turtleburg",
+    viewLabel: "Play Game",
     githubLink: "https://github.com/samcruzcodes/Turtleburg",
+    githubLabel: "Source Code",
+    // Shown in a "Restoration story" disclosure under the description.
+    details: [
+      "Recovered my original childhood project and brought it back to life",
+      "Modernized the controls and interaction cues",
+      "Fixed movement and collision bugs",
+      "Improved the quest journal and map",
+      "Exported cross-platform releases for web, Windows, and macOS",
+    ],
   },
 ];
 
@@ -526,6 +554,7 @@ export const journey = [
       alt: "Turtleburg's pixel-art title screen with a Clean Plumbing van",
     },
     links: [
+      projectLink("Turtleburg", "live", "Play Turtleburg"),
       projectLink("Turtleburg", "github", "Turtleburg on GitHub"),
       projectLink("Cheezy Conundrum", "live", "Play Cheezy Conundrum"),
       projectLink("Sandcastle Tycoon", "live", "Play Sandcastle Tycoon"),

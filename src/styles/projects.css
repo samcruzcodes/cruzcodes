@@ -453,6 +453,161 @@
   }
 }
 
+/* ---------- Released game with a gameplay preview (Turtleburg) ---------- */
+
+/* The frame is always 16:9, whether it holds the still image or the playing clip, so loading the
+   video never moves anything. It's a bit bigger than a normal card's picture on wide screens. */
+
+.projectCard--showcase .projectMedia {
+  height: auto;
+  aspect-ratio: 16 / 9;
+  position: relative;
+}
+
+.projectVideo {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+}
+
+.projectVideo > .projectImg {
+  position: absolute;
+  inset: 0;
+}
+
+.projectVideoToggle {
+  position: absolute;
+  right: 0.5rem;
+  bottom: 0.5rem;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  color: var(--text);
+  background: rgba(var(--panel-rgb), 0.88);
+  border: 2px solid rgba(var(--accent-rgb), 0.55);
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.projectVideoToggle:hover {
+  background: rgba(var(--accent-rgb), 0.28);
+  border-color: var(--accent);
+}
+
+.projectVideoToggle .icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Small "Released" pill, like the date pill but in the accent color. */
+
+.projectBadge {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0.25rem 0.75rem;
+  color: var(--accent);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  line-height: 1.3;
+  background: rgba(var(--accent-rgb), 0.12);
+  border: 2px solid rgba(var(--accent-rgb), 0.55);
+  border-radius: 999px;
+}
+
+.projectBadge::before {
+  content: "";
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  background: var(--accent);
+}
+
+.projectPlatforms {
+  margin: 0;
+  font-size: 0.9375rem;
+  color: var(--text-muted);
+}
+
+.projectPlatformsLabel {
+  color: var(--text);
+  font-weight: 700;
+}
+
+/* "Restoration story": a native <details>, so keyboard and screen readers work without any script. */
+
+.projectDetails {
+  max-width: 70ch;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.projectDetails summary {
+  display: inline-block;
+  min-height: 1.5rem;
+  padding: 0.125rem 0;
+  color: var(--accent);
+  font-family: "VT323", "Space Mono", monospace;
+  font-size: 1.375rem;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+/* A + / − so it looks like something you can open (the browser's own triangle is off for inline-block). */
+
+.projectDetails summary::after {
+  content: "+";
+  margin-left: 0.5rem;
+}
+
+.projectDetails[open] summary::after {
+  content: "\2212";
+}
+
+.projectDetails ul {
+  margin: 0.375rem 0 0;
+  padding-left: 1.25rem;
+}
+
+.projectDetails li + li {
+  margin-top: 0.25rem;
+}
+
+/* "Play Game" is the main button: solid accent instead of the dark gradient. */
+
+.projectBtn--primary,
+.projectBtn--primary:hover,
+.projectBtn--primary:focus-visible {
+  color: var(--bg);
+  font-weight: 700;
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.projectBtn--primary:hover,
+.projectBtn--primary:focus-visible {
+  background: #8dffca;
+}
+
+@media (min-width: 981px) {
+  .projectCard--showcase {
+    grid-template-columns: 28rem minmax(0, 1fr);
+  }
+
+  .projectCard--showcase.projectCard--flipped {
+    grid-template-columns: minmax(0, 1fr) 28rem;
+  }
+
+  .projectCard--showcase .projectMedia {
+    height: auto;
+    align-self: start;
+  }
+}
+
 /* ---------- Motion (only when reduced motion is not requested) ---------- */
 @media (prefers-reduced-motion: no-preference) {
   .projectBtn,
