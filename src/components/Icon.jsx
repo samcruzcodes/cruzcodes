@@ -27,11 +27,7 @@ const ICONS = {
     fillRule: "evenodd",
     d: "M32 64h448v384H32zM80 112v288h352V112zM176 144a32 32 0 1 1 0 64 32 32 0 0 1 0-64zM96 384l96-112 64 64 80-112 80 160z",
   },
-  // Not from Font Awesome: simple hand-drawn pause and play shapes for the gameplay preview button.
-  pause: {
-    viewBox: "0 0 512 512",
-    d: "M96 64h112v384H96zM304 64h112v384H304z",
-  },
+  // Not from Font Awesome: a simple hand-drawn play triangle for the gameplay preview.
   play: {
     viewBox: "0 0 512 512",
     d: "M112 48l352 208-352 208z",

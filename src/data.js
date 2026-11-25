@@ -47,9 +47,10 @@ export const projectTags = ["Game", "Web", "Mobile", "AI"];
 // How the Projects page is ordered (on purpose: recruiter-focused, not by date):
 //   section: "selected" -> the main "Selected Projects" list, or "more" -> the "More Projects" list
 //   rank:    1, 2, 3... the order inside its section (filters keep this order)
-//   badge / platforms / viewLabel / githubLabel / details / video: optional extras (Turtleburg uses
-//     them): a small status pill, a "Platforms" line, custom button text (the viewLabel button is the
-//     main one), a "Restoration story" list, and a muted looping preview clip with the image as its poster.
+//   video: optional gameplay preview on the card, always a still `image` first. With `sources` it's a
+//     click-to-play clip (loads only when pressed, plays once, has controls); with `href` it's just a
+//     labelled link out (used when the footage can't be embedded). `viewLabel` / `githubLabel` rename
+//     the buttons (the viewLabel one is the main, accent-colored button).
 //   featured: 1, 2, 3 (optional) -> the three Featured tiles on Home, in that order
 // `date` and `ongoing` are no longer used for sorting; they're just notes about when I worked on it.
 // `dateLabel` is what shows on the card.
@@ -128,7 +129,7 @@ export const projects = [
   {
     title: "Budget.io Watchdog",
     section: "selected",
-    rank: 4,
+    rank: 3,
     featured: 3,
     tag: "Web",
     alsoTags: ["AI"],
@@ -196,7 +197,7 @@ export const projects = [
   {
     title: "H4I — PPAC Healthcare Platform",
     section: "selected",
-    rank: 5,
+    rank: 4,
     tag: "Web",
     alsoTags: ["AI"],
     date: "2026-05-01",
@@ -217,18 +218,24 @@ export const projects = [
   {
     title: "Duke vs. The Gang",
     section: "selected",
-    rank: 6,
+    rank: 5,
     tag: "Game",
     date: "2026-05-01",
     dateLabel: "Sep 2025 – May 2026",
     description:
       "A free-to-play Wild West bullet hell made with DGA Studios at Cornell, with eccentric bosses and drink-based combat. I built a cutscene system that adapts to player state, plus modular dialogue, combat, and state management.",
     image: {
-      // Source: key art by the DGA Studios Duke vs. The Gang team (credited in the README).
-      src: "assets/projects/duke-vs-the-gang.webp",
-      width: 605,
-      height: 480,
-      alt: "Duke vs. The Gang key art: the Wild West cast in a comic-style brawl",
+      // Gameplay frame (the first screenshot below, resized for this card). Steam has no official
+      // trailer embed and I haven't confirmed the team can reuse its trailer file, so the card
+      // links to Steam instead of playing it here.
+      src: "assets/projects/duke-thumb.webp",
+      width: 960,
+      height: 538,
+      alt: "Duke vs. The Gang boss fight against Julius, Manic Miner: a cowboy dodges red-circled dynamite on mine-cart tracks as an explosion goes off",
+    },
+    video: {
+      label: "Watch trailer on Steam",
+      href: "https://store.steampowered.com/app/4662580/Duke_vs_The_Gang/",
     },
     // In-game screenshots (originals are in design/source-images/). Same setup as Veil Sur's.
     gallery: [
@@ -460,46 +467,36 @@ export const projects = [
   {
     title: "Turtleburg",
     section: "selected",
-    rank: 3,
+    rank: 6,
     tag: "Game",
-    // First built Oct 2022 – Feb 2023 (age 14); restored and officially released on itch.io in 2026.
-    date: "2026-11-01",
-    dateLabel: "2022 – 2026",
-    badge: "Released · Playable",
-    platforms: ["Web", "Windows", "macOS"],
+    date: "2022-02-01",
+    dateLabel: "Feb 2022",
     description:
-      "An educational pixel-art RPG about water conservation, originally developed when I was 14 and recently restored, polished, and officially released. Explore a seaside community, meet its residents, and discover how small everyday actions can make a difference.",
+      "An educational pixel-art RPG about water conservation that I made at 14 and recently restored and published on itch.io. Explore a seaside community, meet its residents, and see how small everyday actions add up.",
     image: {
-      // Still frame from the preview clip (Turtleburg's approved trailer, 0:15). Shown while the video
-      // loads, and instead of it for visitors who prefer reduced motion.
+      // Still frame from the preview clip below (cut from Turtleburg's trailer, 0:15). Shows until a
+      // visitor presses Play.
       src: "assets/projects/turtleburg-preview-poster.webp",
       width: 960,
       height: 540,
       alt: "Turtleburg gameplay: a player in a red shirt walks a dirt path past a cabin with a “Neighbor's Home” nameplate",
     },
-    // ~7s muted loop cut from the trailer (outdoor exploration + building nameplates). 960x540, no audio.
-    // The page picks the first format the browser can play. Plays only on screen, never for reduced motion.
+    // Click-to-play: nothing from `sources` loads until the visitor presses Play. 7s, 960x540, no audio
+    // (so no captions needed), plays once. `description` is the text version for screen readers.
     video: {
+      label: "Play preview",
       sources: [
         { src: "assets/projects/turtleburg-preview.webm", type: "video/webm" },
         { src: "assets/projects/turtleburg-preview.mp4", type: "video/mp4" },
       ],
-      width: 960,
-      height: 540,
+      description:
+        "Silent 7-second gameplay clip: the player walks and jogs along dirt paths through the seaside town, passing cabins with name signs such as “Neighbor's Home”.",
     },
     stack: ["Godot", "GDScript", "2D Game Development"],
     viewLink: "https://cruzcodes.itch.io/turtleburg",
     viewLabel: "Play Game",
     githubLink: "https://github.com/samcruzcodes/Turtleburg",
     githubLabel: "Source Code",
-    // Shown in a "Restoration story" disclosure under the description.
-    details: [
-      "Recovered my original childhood project and brought it back to life",
-      "Modernized the controls and interaction cues",
-      "Fixed movement and collision bugs",
-      "Improved the quest journal and map",
-      "Exported cross-platform releases for web, Windows, and macOS",
-    ],
   },
 ];
 

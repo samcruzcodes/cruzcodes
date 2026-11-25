@@ -1,108 +1,101 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
+import ExternalLink from "./ExternalLink";
 import Icon from "./Icon";
 
-// A short, muted, looping gameplay clip for a project card (see `video` in data.js).
-//   - Nothing downloads until the card is near the screen, and it pauses when scrolled away.
-//   - If the visitor prefers reduced motion, it stays a still image until they press Play.
-//   - The Pause/Play button is always there (moving content that lasts over 5 seconds needs one, WCAG 2.2.2).
-//   - The still image (`image`) shows first, and again if the clip can't load. The frame keeps its
-//     16:9 shape the whole time, so the page doesn't jump.
-
-const REDUCED_MOTION = "(prefers-reduced-motion: reduce)";
+// The gameplay picture on a project card (see `video` in data.js). It's always a still image first.
+//   - `video.sources`: a "Play preview" button over the image. Nothing downloads until it's pressed;
+//     then the clip plays once (no loop) with the browser's own controls (pause, scrub, full screen),
+//     and a Close button puts the still image back. Escape closes it too.
+//   - `video.href`: for footage that can't be embedded. The same-looking overlay is a link out.
+// Nothing here plays on load, scroll, hover, or focus, so reduced-motion needs no special case.
+// The frame is 16:9 the whole time, so the page doesn't jump.
 
 export default function VideoPreview({ video, image, title, onImageError }) {
-  const frameRef = useRef(null);
+  const [playing, setPlaying] = useState(false);
   const videoRef = useRef(null);
-  const [wantsPlay, setWantsPlay] = useState(() => !window.matchMedia(REDUCED_MOTION).matches);
-  const [nearScreen, setNearScreen] = useState(false);
-  const [onScreen, setOnScreen] = useState(false);
-  // True once the clip has been shown, so a later Pause keeps it in place instead of swapping back.
-  const [started, setStarted] = useState(false);
-  const [failed, setFailed] = useState(false);
+  const playRef = useRef(null);
+  const wasPlaying = useRef(false);
+  const descId = useId();
 
-  // Follows the visitor turning reduced motion on while the page is open.
+  // Keyboard users land on the video (so Space pauses it), then back on Play when they close it.
   useEffect(() => {
-    const query = window.matchMedia(REDUCED_MOTION);
-    const onChange = (e) => e.matches && setWantsPlay(false);
-    query.addEventListener("change", onChange);
-    return () => query.removeEventListener("change", onChange);
-  }, []);
-
-  // `nearScreen` (a bit early) starts loading; `onScreen` decides when it plays.
-  useEffect(() => {
-    const frame = frameRef.current;
-    if (!frame || !("IntersectionObserver" in window)) return undefined;
-    const early = new IntersectionObserver(([entry]) => entry.isIntersecting && setNearScreen(true), {
-      rootMargin: "200px",
-    });
-    const visible = new IntersectionObserver(([entry]) => setOnScreen(entry.isIntersecting));
-    early.observe(frame);
-    visible.observe(frame);
-    return () => {
-      early.disconnect();
-      visible.disconnect();
-    };
-  }, []);
-
-  useEffect(() => {
-    if (wantsPlay && nearScreen) setStarted(true);
-  }, [wantsPlay, nearScreen]);
-
-  const showClip = started && !failed;
-  const playing = showClip && wantsPlay && onScreen;
-
-  useEffect(() => {
-    const el = videoRef.current;
-    if (!el) return;
-    if (playing) el.play().catch(() => {}); // a blocked autoplay just leaves the still image
-    else el.pause();
-  }, [playing, showClip]);
+    if (playing) {
+      wasPlaying.current = true;
+      videoRef.current?.focus();
+    } else if (wasPlaying.current) {
+      wasPlaying.current = false;
+      playRef.current?.focus();
+    }
+  }, [playing]);
 
   return (
-    <div className="projectVideo" ref={frameRef}>
-      {showClip ? (
-        <video
-          ref={videoRef}
-          className="projectImg"
-          width={video.width}
-          height={video.height}
-          poster={image.src}
-          aria-label={image.alt}
-          muted
-          loop
-          playsInline
-          preload="auto"
-          disablePictureInPicture
-        >
-          {/* A <video> doesn't report a failed <source>: the last one tells us nothing could play. */}
-          {video.sources.map((s, i) => (
-            <source
-              key={s.src}
-              src={s.src}
-              type={s.type}
-              onError={i === video.sources.length - 1 ? () => setFailed(true) : undefined}
-            />
-          ))}
-        </video>
+    <figure
+      className="projectVideo"
+      onKeyDown={(e) => {
+        if (playing && e.key === "Escape") setPlaying(false);
+      }}
+    >
+      {playing ? (
+        <>
+          <video
+            ref={videoRef}
+            className="projectImg"
+            width={image.width}
+            height={image.height}
+            poster={image.src}
+            aria-label={`${title} gameplay preview`}
+            aria-describedby={descId}
+            controls
+            autoPlay
+            playsInline
+            preload="auto"
+            disablePictureInPicture
+          >
+            {video.sources.map((s) => (
+              <source key={s.src} src={s.src} type={s.type} />
+            ))}
+          </video>
+          <button type="button" className="projectVideoClose" onClick={() => setPlaying(false)}>
+            <Icon name="xmark" />
+            <span className="visuallyHidden">Close {title} gameplay preview</span>
+          </button>
+        </>
       ) : (
-        <img
-          className="projectImg"
-          src={image.src}
-          width={image.width}
-          height={image.height}
-          alt={image.alt}
-          loading="lazy"
-          decoding="async"
-          onError={onImageError}
-        />
+        <>
+          <img
+            className="projectImg"
+            src={image.src}
+            width={image.width}
+            height={image.height}
+            alt={image.alt}
+            loading="lazy"
+            decoding="async"
+            onError={onImageError}
+          />
+          {video.sources ? (
+            <button
+              type="button"
+              ref={playRef}
+              className="projectVideoPlay"
+              onClick={() => setPlaying(true)}
+            >
+              <Icon name="play" />
+              {video.label}
+              <span className="visuallyHidden"> of {title} gameplay, 7 seconds, no sound</span>
+            </button>
+          ) : (
+            <ExternalLink className="projectVideoPlay" href={video.href}>
+              <Icon name="play" />
+              {video.label}
+            </ExternalLink>
+          )}
+        </>
       )}
-
-      <button type="button" className="projectVideoToggle" onClick={() => setWantsPlay((v) => !v)}>
-        <Icon name={wantsPlay ? "pause" : "play"} />
-        <span className="visuallyHidden">
-          {wantsPlay ? "Pause" : "Play"} {title} gameplay preview
-        </span>
-      </button>
-    </div>
+      {video.description && (
+        <figcaption id={descId} className="visuallyHidden">
+          {video.description}
+        </figcaption>
+      )}
+    </figure>
   );
 }

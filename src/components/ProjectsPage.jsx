@@ -51,9 +51,6 @@ function ProjectCard({ project, flipped, compact }) {
     imagePlaceholder,
     gallery,
     status,
-    badge,
-    platforms,
-    details,
     video,
     dateLabel,
     stack,
@@ -111,29 +108,9 @@ function ProjectCard({ project, flipped, compact }) {
           {dateLabel && <p className="projectDate">{dateLabel}</p>}
         </header>
 
-        {badge && <p className="projectBadge">{badge}</p>}
-
         {role && <p className="projectRole">{role}</p>}
 
         <p className="projectDesc">{description}</p>
-
-        {details?.length > 0 && (
-          // Built-in disclosure: keyboard and screen-reader friendly with no extra JavaScript.
-          <details className="projectDetails">
-            <summary>Restoration story</summary>
-            <ul>
-              {details.map((d) => (
-                <li key={d}>{d}</li>
-              ))}
-            </ul>
-          </details>
-        )}
-
-        {platforms?.length > 0 && (
-          <p className="projectPlatforms">
-            <span className="projectPlatformsLabel">Platforms:</span> {platforms.join(", ")}
-          </p>
-        )}
 
         <Stack items={stack} />
 
