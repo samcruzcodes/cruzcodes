@@ -385,6 +385,8 @@
 }
 
 .projectTab--active {
+  text-decoration: underline; /* so "selected" isn't shown by color alone */
+  text-underline-offset: 0.2em;
   color: var(--accent);
   border-color: rgba(var(--accent-rgb), 0.65);
   background: rgba(var(--accent-rgb), 0.10);
@@ -473,6 +475,37 @@
   border-radius: 0;
 }
 
+.mediaGallery {
+  display: grid;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+/* A small label so it's clear this is browsable, with an "n of N" counter on the right. */
+
+.mediaHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.mediaHeading {
+  margin: 0;
+  color: var(--accent);
+  font-family: "VT323", "Space Mono", monospace;
+  font-size: 1.25rem;
+  line-height: 1.1;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.mediaCount {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
 .mediaStage {
   position: relative;
   aspect-ratio: 16 / 9;
@@ -504,7 +537,7 @@
 
 .mediaThumbs {
   list-style: none;
-  margin: 0.375rem 0 0; /* clears the stage's drop shadow */
+  margin: 0;
   padding: 0;
   display: flex;
   gap: 0.375rem;
@@ -539,10 +572,20 @@
   border-color: rgba(var(--accent-rgb), 0.6);
 }
 
-/* The one being shown: thicker accent border (not just a color change). */
+/* The ones you're not on are a little dimmer; the one being shown is full strength with a thick accent
+   border and a glow (so it isn't just a color change). */
+
+.mediaThumb[aria-pressed="false"] {
+  opacity: 0.72;
+}
+
+.mediaThumb[aria-pressed="false"]:hover {
+  opacity: 1;
+}
 
 .mediaThumb[aria-pressed="true"] {
   border: 3px solid var(--accent);
+  box-shadow: 0 0 0 2px rgba(var(--accent-rgb), 0.35);
 }
 
 /* A little play triangle marks the items that are videos or a trailer link. */
@@ -560,6 +603,63 @@
   filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.9));
 }
 
+/* Previous / next arrows on the left and right of the picture. They hide while a video plays. */
+
+.mediaArrow {
+  position: absolute;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  margin-top: -1.375rem;
+  padding: 0;
+  color: var(--text);
+  background: rgba(var(--panel-rgb), 0.88);
+  border: 2px solid rgba(var(--accent-rgb), 0.55);
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.mediaArrow--prev {
+  left: 0.5rem;
+}
+
+.mediaArrow--next {
+  right: 0.5rem;
+}
+
+.mediaArrow:hover {
+  background: rgba(var(--accent-rgb), 0.28);
+  border-color: var(--accent);
+}
+
+.mediaArrow .icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.mediaStage:has(video) .mediaArrow {
+  display: none;
+}
+
+/* One line saying what the picture is: "Trailer · 0:42  The official trailer". */
+
+.mediaCaption {
+  margin: 0.5rem 0 0; /* clears the stage's drop shadow */
+  font-size: 0.9375rem;
+  line-height: 1.35;
+}
+
+.mediaKind {
+  margin-right: 0.5rem;
+  color: var(--accent);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.8125rem;
+  letter-spacing: 0.04em;
+}
+
 /* Centered on the picture so it's easy to spot. One look for both the Play button (Turtleburg) and
    the Steam link (Duke vs. The Gang). */
 
@@ -574,7 +674,7 @@
   gap: 0.5rem;
   min-height: 2.75rem;
   padding: 0.375rem 0.875rem;
-  max-width: calc(100% - 1.25rem);
+  max-width: calc(100% - 7rem); /* leaves room for the arrows on both sides */
   font-family: "VT323", "Space Mono", monospace;
   font-size: 1.375rem;
   line-height: 1.1;

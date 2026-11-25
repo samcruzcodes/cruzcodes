@@ -224,26 +224,37 @@ export const projects = [
     dateLabel: "Sep 2025 – May 2026",
     description:
       "A free-to-play Wild West bullet hell made with DGA Studios at Cornell, with eccentric bosses and drink-based combat. I built a cutscene system that adapts to player state, plus modular dialogue, combat, and state management.",
-    // Media gallery on the card (see Turtleburg's note). The screenshots are the ones on the game's Steam
-    // page (DGA Studios), saved here as WebP, not hotlinked. Steam has no embeddable trailer player (its
-    // trailer is only a streaming file on Steam's own servers), so the trailer slot links to the Steam page.
+    // Media gallery on the card (see Turtleburg's note). The trailer is a screen recording of the official
+    // trailer (no audio was captured), trimmed and cleaned up. The screenshots are the ones on the game's
+    // Steam page (DGA Studios), saved here as WebP, not hotlinked. The Steam page itself is the View button.
     media: [
       {
-        label: "Trailer on Steam",
+        kind: "Trailer",
+        time: "0:33",
+        label: "The official trailer",
         image: {
-          src: "assets/projects/duke-julius.webp",
+          src: "assets/projects/duke-trailer-poster.webp",
           width: 960,
-          height: 540,
-          alt: "Duke vs. The Gang boss fight against Julius, Manic Miner: a cowboy dodges red-circled dynamite on mine-cart tracks as an explosion goes off",
+          height: 542,
+          alt: "Duke vs. The Gang key art: a cowboy raises a golden beer mug beside the gang of outlaws under a sunset, above the game's hat-shaped logo",
         },
-        thumb: "assets/projects/duke-julius-thumb.webp",
-        link: {
-          label: "Watch trailer on Steam",
-          href: "https://store.steampowered.com/app/4662580/Duke_vs_The_Gang/",
+        thumb: "assets/projects/duke-trailer-poster-thumb.webp",
+        // A screen recording of the official trailer: player controls, loading black screens, long black gaps
+        // and the mouse pointer taken out; 1280x722 (the recording's shape), no audio. About 1.9 MB.
+        video: {
+          label: "Play trailer",
+          length: "33 seconds",
+          description:
+            "Silent 33-second trailer (the recording has no sound). It opens on the DGA Studios logo, then comic-style cutscene panels with a caption that begins “And all other relevant synonyms in my thesaurus…”. Gameplay follows: Duke the cowboy crosses a field of thorny bushes and talks with Ash, who says “Duke, right? I know I'm in no position to ask for anything, but please…”; the miner Julius says “You got more spirit than I gave you credit for, kid. Maybe it's time fo…”; Duke dodges red-circled dynamite, and fights the Dynamic Duo, Mirage and Ace, who say “Seems like you had a few tric…”. Some lines are cut off in the footage. It ends on the Duke vs. The Gang key art.",
+          sources: [
+            { src: "assets/projects/duke-trailer.webm", type: "video/webm" },
+            { src: "assets/projects/duke-trailer.mp4", type: "video/mp4" },
+          ],
         },
       },
       {
-        label: "Hero's Tavern",
+        kind: "Screenshot",
+        label: "Explore the Wild West town",
         image: {
           src: "assets/projects/duke-tavern.webp",
           width: 960,
@@ -253,7 +264,8 @@ export const projects = [
         thumb: "assets/projects/duke-tavern-thumb.webp",
       },
       {
-        label: "Ash boss fight",
+        kind: "Screenshot",
+        label: "Boss fight: Ash",
         image: {
           src: "assets/projects/duke-ash-field.webp",
           width: 960,
@@ -263,7 +275,19 @@ export const projects = [
         thumb: "assets/projects/duke-ash-field-thumb.webp",
       },
       {
-        label: "Mirage & Ace boss fight",
+        kind: "Screenshot",
+        label: "Boss fight: Julius",
+        image: {
+          src: "assets/projects/duke-julius.webp",
+          width: 960,
+          height: 540,
+          alt: "Duke vs. The Gang boss fight against Julius, Manic Miner: a cowboy dodges red-circled dynamite on mine-cart tracks as an explosion goes off",
+        },
+        thumb: "assets/projects/duke-julius-thumb.webp",
+      },
+      {
+        kind: "Screenshot",
+        label: "Boss fight: Mirage & Ace",
         image: {
           src: "assets/projects/duke-mirage-ace.webp",
           width: 960,
@@ -273,6 +297,7 @@ export const projects = [
         thumb: "assets/projects/duke-mirage-ace-thumb.webp",
       },
       {
+        kind: "Screenshot",
         label: "Dialogue with Ash",
         image: {
           src: "assets/projects/duke-ash-dialogue.webp",
@@ -492,16 +517,19 @@ export const projects = [
     dateLabel: "Feb 2022",
     description:
       "An educational pixel-art RPG about water conservation that I made at 14 and recently restored and published on itch.io. Explore a seaside community, meet its residents, and see how small everyday actions add up.",
-    // Media gallery on the card (MediaGallery.jsx): one item shows at a time, and the thumbnails switch
-    // between them. Every item is a still image first; a `video` only loads when Play is pressed.
+    // Media gallery on the card (MediaGallery.jsx): one item shows at a time; the arrows, the counter and the
+    // thumbnails switch between them. Every item is a still image first; a `video` only loads when Play is pressed.
+    //   kind:  "Preview" (short clip), "Trailer" (full video) or "Screenshot": shown in the caption so it's clear.
+    //   time:  length of a video as shown to everyone ("0:07"). label: the short caption / thumbnail name.
     //   image: the 960x540 still. thumb: its small 160x90 version for the thumbnail strip.
-    //   video: { label, length, description, sources } plays once with controls. No audio, so no captions;
-    //          `description` is the text version for screen readers.
-    // All stills and clips are real Turtleburg footage from the approved trailer, except the title screen,
-    // which is the screenshot on the itch.io page.
+    //   video: { label, length, description, sources } plays once with controls (`length` + `description` are
+    //          for screen readers; there's no audio, so no captions, and `description` also covers the on-screen text).
+    // Stills and clips are real Turtleburg footage from the approved trailer, with the trailer's own captions.
     media: [
       {
-        label: "Gameplay preview",
+        kind: "Preview",
+        time: "0:07",
+        label: "Meet the townspeople",
         image: {
           src: "assets/projects/turtleburg-preview-poster.webp",
           width: 960,
@@ -523,14 +551,16 @@ export const projects = [
         },
       },
       {
-        label: "Full trailer",
+        kind: "Trailer",
+        time: "0:42",
+        label: "The official trailer",
         image: {
-          src: "assets/projects/turtleburg-trailer-poster.webp",
+          src: "assets/projects/turtleburg-trailer-card.webp",
           width: 960,
           height: 540,
-          alt: "Turtleburg trailer still: the player walks a dirt path past a cabin with a “Neighbor's Home” nameplate",
+          alt: "Turtleburg trailer end card: a green Clean Plumbing van drives along a seaside road under the Turtleburg logo, with the caption “Small actions. A lasting impact.”",
         },
-        thumb: "assets/projects/turtleburg-trailer-poster-thumb.webp",
+        thumb: "assets/projects/turtleburg-trailer-card-thumb.webp",
         // The approved trailer, 1280x720, no audio (about 2.9 MB; only downloaded when Play is pressed).
         video: {
           label: "Play trailer",
@@ -544,45 +574,48 @@ export const projects = [
         },
       },
       {
-        label: "Quest journal",
+        kind: "Screenshot",
+        label: "Explore a seaside community",
         image: {
-          src: "assets/projects/turtleburg-journal.webp",
+          src: "assets/projects/turtleburg-explore.webp",
           width: 960,
           height: 540,
-          alt: "Turtleburg's quest journal open over the game world, listing tasks such as visiting Jayson's house and fixing a toilet and bathtub, with the caption “Check your goals”",
+          alt: "Turtleburg gameplay: the player walks a dirt path past a cabin with a “Neighbor's Home” nameplate, with the caption “Explore a seaside community”",
         },
-        thumb: "assets/projects/turtleburg-journal-thumb.webp",
+        thumb: "assets/projects/turtleburg-explore-thumb.webp",
       },
       {
-        label: "Town map",
+        kind: "Screenshot",
+        label: "Meet the residents",
         image: {
-          src: "assets/projects/turtleburg-map.webp",
+          src: "assets/projects/turtleburg-residents.webp",
           width: 960,
           height: 540,
-          alt: "Turtleburg's town map: an overhead view of the village's houses, paths, and shoreline with a green pin marking the next stop, captioned “Green pins mark your next stops”",
+          alt: "Turtleburg gameplay: two residents talk to the player in a village of log cabins; one says, “Dude if you dont mind drop by my place and help me out”",
         },
-        thumb: "assets/projects/turtleburg-map-thumb.webp",
+        thumb: "assets/projects/turtleburg-residents-thumb.webp",
       },
       {
-        label: "Fixing a leak",
+        kind: "Screenshot",
+        label: "Fix leaks, save water",
         image: {
-          src: "assets/projects/turtleburg-interior.webp",
+          src: "assets/projects/turtleburg-water.webp",
           width: 960,
           height: 540,
-          alt: "Turtleburg bathroom scene: the player and a resident look over a checkered-floor bathroom while a plumber explains that a new water-saving toilet makes a huge difference with every flush",
+          alt: "Turtleburg gameplay: the player explores a checkered-floor bathroom with a toilet, sink and tub, with the caption “Fix leaks. Save water.”",
         },
-        thumb: "assets/projects/turtleburg-interior-thumb.webp",
+        thumb: "assets/projects/turtleburg-water-thumb.webp",
       },
       {
-        label: "Title screen",
+        kind: "Screenshot",
+        label: "Clean up the beach",
         image: {
-          // Source: the screenshot on Turtleburg's itch.io page.
-          src: "assets/projects/turtleburg-title.webp",
+          src: "assets/projects/turtleburg-beach.webp",
           width: 960,
-          height: 560,
-          alt: "Turtleburg's title screen: a green Clean Plumbing van drives along a seaside road beneath the pixel-art game logo",
+          height: 540,
+          alt: "Turtleburg gameplay: the player stands on a sandy beach near a wooden gate, with a small blue item to pick up nearby and the caption “Clean up the beach.”",
         },
-        thumb: "assets/projects/turtleburg-title-thumb.webp",
+        thumb: "assets/projects/turtleburg-beach-thumb.webp",
       },
     ],
     stack: ["Godot", "GDScript", "2D Game Development"],
