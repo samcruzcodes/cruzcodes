@@ -49,7 +49,7 @@ export const projectTags = ["Game", "Web", "Mobile", "AI"];
 //   rank:    1, 2, 3... the order inside its section (filters keep this order)
 //   media: optional gallery on the card (Turtleburg and Duke vs. The Gang): a list of stills, click-to-play
 //     clips, and links, shown one at a time with a thumbnail strip. Details are in Turtleburg's entry.
-//   viewLabel / githubLabel: rename the buttons (the viewLabel one is the main, accent-colored button).
+//   viewLabel: renames the View button (it also becomes the main, accent-colored button).
 //   devlogLink: a small text link next to the buttons.
 //   featured: 1, 2, 3 (optional) -> the three Featured tiles on Home, in that order
 // `date` and `ongoing` are no longer used for sorting; they're just notes about when I worked on it.
@@ -94,7 +94,7 @@ export const projects = [
       height: 480,
       alt: "Veil Sur key art: a camera-headed character beside shadowy creatures, under the game's logo",
     },
-    stack: ["Unity", "C#", "GitHub", "Milanote"],
+    stack: ["Unity", "C#", "GitHub", "Milanote", "3D Game Development"],
     viewLink: "",
     githubLink: "https://github.com/cornelldga/Veil-Sur", // checked Nov 2026: public repo
     // Screenshots from the game (originals are in design/source-images/). thumb = gallery tile,
@@ -513,8 +513,8 @@ export const projects = [
     section: "selected",
     rank: 6,
     tag: "Game",
-    date: "2022-02-01",
-    dateLabel: "Feb 2022",
+    date: "2022-04-01",
+    dateLabel: "Oct 2021 – Apr 2022",
     description:
       "An educational pixel-art RPG about water conservation that I made at 14 and recently restored and published on itch.io. Explore a seaside community, meet its residents, and see how small everyday actions add up.",
     // Media gallery on the card (MediaGallery.jsx): one item shows at a time; the arrows, the counter and the
@@ -622,7 +622,6 @@ export const projects = [
     viewLink: "https://cruzcodes.itch.io/turtleburg",
     viewLabel: "Play Game",
     githubLink: "https://github.com/samcruzcodes/Turtleburg",
-    githubLabel: "Source Code",
     devlogLink:
       "https://cruzcodes.itch.io/turtleburg/devlog/1805117/almost-5-years-and-5-games-later-my-first-game-is-finally-out",
   },
@@ -680,7 +679,6 @@ export const journey = [
     },
     links: [
       projectLink("Turtleburg", "live", "Play Turtleburg"),
-      projectLink("Turtleburg", "github", "Turtleburg on GitHub"),
       projectLink("Cheezy Conundrum", "live", "Play Cheezy Conundrum"),
       projectLink("Sandcastle Tycoon", "live", "Play Sandcastle Tycoon"),
     ],

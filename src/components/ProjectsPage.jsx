@@ -58,7 +58,6 @@ function ProjectCard({ project, flipped, compact }) {
     viewLink,
     viewLabel,
     githubLink,
-    githubLabel,
   } = project;
   const hasLinks = Boolean(viewLink) || Boolean(githubLink);
   const [imageFailed, setImageFailed] = useState(false);
@@ -122,10 +121,7 @@ function ProjectCard({ project, flipped, compact }) {
           )}
           {githubLink && (
             <ExternalLink className="projectBtn" href={githubLink}>
-              {githubLabel || "GitHub"}
-              <span className="visuallyHidden">
-                {githubLabel ? ` for ${title} on GitHub` : ` repository for ${title}`}
-              </span>
+              GitHub<span className="visuallyHidden"> repository for {title}</span>
             </ExternalLink>
           )}
           {devlogLink && (
