@@ -453,23 +453,40 @@
   }
 }
 
-/* ---------- Gameplay preview (cards with a `video`: Turtleburg, Duke vs. The Gang) ---------- */
+/* ---------- Media gallery (cards with `media`: Turtleburg, Duke vs. The Gang) ---------- */
 
-/* The frame is always 16:9, whether it holds the still image, the playing clip, or the Steam link
-   picture, so pressing Play never moves anything. It stays inside the normal picture area. */
+/* The usual picture frame, but as a column: the 16:9 stage, then a row of small thumbnails under it.
+   The stage is always 16:9 (still image, playing clip, or link picture), so switching items or pressing
+   Play never moves anything, and it stays the same size as a normal card's picture. */
 
 .projectCard--showcase .projectMedia {
+  display: grid;
+  grid-template: none;
+  gap: 0.625rem;
   height: auto;
   width: 100%;
+  align-self: start; /* otherwise the card's row height would stretch it */
+  overflow: visible;
+  border: 0;
+  background: none;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+.mediaStage {
+  position: relative;
   aspect-ratio: 16 / 9;
-  align-self: start; /* otherwise the card's row height would stretch it, and aspect-ratio would widen it */
+  overflow: hidden;
+  border-radius: 14px;
+  border: 3px solid rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.14);
+  box-shadow: 0 10px 0 rgba(0, 0, 0, 0.2);
 }
 
 .projectVideo {
-  position: relative;
+  position: absolute;
+  inset: 0;
   margin: 0; /* <figure> has browser margins */
-  min-width: 0;
-  min-height: 0;
 }
 
 .projectVideo > .projectImg {
@@ -478,14 +495,80 @@
   object-fit: cover;
 }
 
+.projectVideo > .projectImg--video {
+  object-fit: contain; /* never crop the video's own controls */
+  background: #000;
+}
+
+/* Thumbnails: small, in one row that fills the width of the picture. */
+
+.mediaThumbs {
+  list-style: none;
+  margin: 0.375rem 0 0; /* clears the stage's drop shadow */
+  padding: 0;
+  display: flex;
+  gap: 0.375rem;
+}
+
+.mediaThumbs li {
+  flex: 1 1 0;
+  min-width: 1.75rem; /* shrinks on very narrow screens (320px) but stays over the 24px minimum target */
+}
+
+.mediaThumb {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 2.75rem;
+  padding: 0;
+  overflow: hidden;
+  cursor: pointer;
+  background: rgba(0, 0, 0, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+}
+
+.mediaThumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mediaThumb:hover {
+  border-color: rgba(var(--accent-rgb), 0.6);
+}
+
+/* The one being shown: thicker accent border (not just a color change). */
+
+.mediaThumb[aria-pressed="true"] {
+  border: 3px solid var(--accent);
+}
+
+/* A little play triangle marks the items that are videos or a trailer link. */
+
+.mediaThumb--video::after {
+  content: "";
+  position: absolute;
+  left: 0.3rem;
+  bottom: 0.3rem;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0.3rem 0 0.3rem 0.5rem;
+  border-color: transparent transparent transparent var(--accent);
+  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.9));
+}
+
 /* Centered on the picture so it's easy to spot. One look for both the Play button (Turtleburg) and
    the Steam link (Duke vs. The Gang). */
 
 .projectVideoPlay {
   position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+  inset: 0; /* with auto margins: centered, and as wide as its text (up to the picture) */
+  margin: auto;
+  width: max-content;
+  height: fit-content;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -534,6 +617,24 @@
 .projectVideoClose:hover {
   background: rgba(var(--accent-rgb), 0.28);
   border-color: var(--accent);
+}
+
+/* "Read Devlog": a plain text link beside the buttons, so it stays quieter than they are. */
+
+.projectTextLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0 0.25rem;
+  color: var(--text-muted);
+  font-size: 0.9375rem;
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
+.projectTextLink:hover,
+.projectTextLink:focus-visible {
+  color: var(--accent);
 }
 
 /* "Play Game" is the main button: solid accent instead of the dark gradient. */

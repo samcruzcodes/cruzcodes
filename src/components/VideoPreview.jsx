@@ -2,15 +2,17 @@ import { useEffect, useId, useRef, useState } from "react";
 import ExternalLink from "./ExternalLink";
 import Icon from "./Icon";
 
-// The gameplay picture on a project card (see `video` in data.js). It's always a still image first.
-//   - `video.sources`: a "Play preview" button over the image. Nothing downloads until it's pressed;
-//     then the clip plays once (no loop) with the browser's own controls (pause, scrub, full screen),
-//     and a Close button puts the still image back. Escape closes it too.
+// The big picture of one media item on a project card (MediaGallery.jsx picks which item). It's always
+// a still image first:
+//   - `video.sources`: a Play button over the image. Nothing downloads until it's pressed; then the clip
+//     plays once (no loop) with the browser's own controls (pause, scrub, full screen), and a Close button
+//     puts the still image back. Escape closes it too.
 //   - `video.href`: for footage that can't be embedded. The same-looking overlay is a link out.
+//   - no `video`: just the image.
 // Nothing here plays on load, scroll, hover, or focus, so reduced-motion needs no special case.
 // The frame is 16:9 the whole time, so the page doesn't jump.
 
-export default function VideoPreview({ video, image, title, onImageError }) {
+export default function VideoPreview({ video, image, title, itemLabel, onImageError }) {
   const [playing, setPlaying] = useState(false);
   const videoRef = useRef(null);
   const playRef = useRef(null);
@@ -39,11 +41,11 @@ export default function VideoPreview({ video, image, title, onImageError }) {
         <>
           <video
             ref={videoRef}
-            className="projectImg"
+            className="projectImg projectImg--video"
             width={image.width}
             height={image.height}
             poster={image.src}
-            aria-label={`${title} gameplay preview`}
+            aria-label={`${title} ${itemLabel}`}
             aria-describedby={descId}
             controls
             autoPlay
@@ -57,7 +59,7 @@ export default function VideoPreview({ video, image, title, onImageError }) {
           </video>
           <button type="button" className="projectVideoClose" onClick={() => setPlaying(false)}>
             <Icon name="xmark" />
-            <span className="visuallyHidden">Close {title} gameplay preview</span>
+            <span className="visuallyHidden">Close {itemLabel.toLowerCase()} of {title}</span>
           </button>
         </>
       ) : (
@@ -72,7 +74,7 @@ export default function VideoPreview({ video, image, title, onImageError }) {
             decoding="async"
             onError={onImageError}
           />
-          {video.sources ? (
+          {video?.sources && (
             <button
               type="button"
               ref={playRef}
@@ -81,9 +83,13 @@ export default function VideoPreview({ video, image, title, onImageError }) {
             >
               <Icon name="play" />
               {video.label}
-              <span className="visuallyHidden"> of {title} gameplay, 7 seconds, no sound</span>
+              <span className="visuallyHidden">
+                {" "}
+                of {title} ({video.length}, no sound)
+              </span>
             </button>
-          ) : (
+          )}
+          {video?.href && (
             <ExternalLink className="projectVideoPlay" href={video.href}>
               <Icon name="play" />
               {video.label}
@@ -91,7 +97,7 @@ export default function VideoPreview({ video, image, title, onImageError }) {
           )}
         </>
       )}
-      {video.description && (
+      {video?.description && (
         <figcaption id={descId} className="visuallyHidden">
           {video.description}
         </figcaption>

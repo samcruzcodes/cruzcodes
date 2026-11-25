@@ -4,7 +4,7 @@ import ExternalLink from "./ExternalLink";
 import Icon from "./Icon";
 import ImagePlaceholder from "./ImagePlaceholder";
 import Lightbox from "./Lightbox";
-import VideoPreview from "./VideoPreview";
+import MediaGallery from "./MediaGallery";
 import { findProjectById, projectId, projects, projectTags } from "../data";
 
 // The order is hand-picked in data.js (`section` + `rank`), not by date. Filters keep it.
@@ -51,7 +51,8 @@ function ProjectCard({ project, flipped, compact }) {
     imagePlaceholder,
     gallery,
     status,
-    video,
+    media,
+    devlogLink,
     dateLabel,
     stack,
     viewLink,
@@ -69,16 +70,11 @@ function ProjectCard({ project, flipped, compact }) {
       id={projectId(title)}
       className={`projectCard panel ${flipped ? "projectCard--flipped" : ""} ${
         compact ? "projectCard--compact" : ""
-      } ${video ? "projectCard--showcase" : ""}`}
+      } ${media ? "projectCard--showcase" : ""}`}
     >
       <div className="projectMedia">
-        {video && image && !imageFailed ? (
-          <VideoPreview
-            video={video}
-            image={image}
-            title={title}
-            onImageError={() => setImageFailed(true)}
-          />
+        {media ? (
+          <MediaGallery items={media} title={title} />
         ) : image && !imageFailed ? (
           <img
             className="projectImg"
@@ -130,6 +126,11 @@ function ProjectCard({ project, flipped, compact }) {
               <span className="visuallyHidden">
                 {githubLabel ? ` for ${title} on GitHub` : ` repository for ${title}`}
               </span>
+            </ExternalLink>
+          )}
+          {devlogLink && (
+            <ExternalLink className="projectTextLink" href={devlogLink}>
+              Read Devlog<span className="visuallyHidden"> for {title}</span>
             </ExternalLink>
           )}
           {!hasLinks && status && <span className="projectStatus">{status}</span>}
