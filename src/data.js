@@ -134,9 +134,9 @@ export const projects = [
     tag: "Web",
     alsoTags: ["AI"],
     role: "Solo Project",
-    ongoing: true,
-    date: "2026-10-01",
-    dateLabel: "Oct 2026 – Present",
+    // Finished: the repo's commits run Oct 28 - Nov 12, 2026 (32 in October, 4 in November).
+    date: "2026-11-01",
+    dateLabel: "Oct–Nov 2026",
     description:
       "Built a real-time fraud detection system with Java, Spring Boot, Kafka, and PostgreSQL, using six detection rules. Tested reliability through Kubernetes recovery, scaling, and rolling updates, with zero lost transactions across 1,503 events.",
     image: {
