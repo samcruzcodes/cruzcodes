@@ -23,7 +23,7 @@ export const about = {
     { text: "AI tools for researchers", href: "https://gpt-abstract-assistant.vercel.app/" },
     ", and I lead ",
     { text: "a 24-person game team at DGA Studios", href: "https://github.com/cornelldga/Veil-Sur" },
-    ". I've also taught game dev at Girls Who Code, TA'd Cornell's intro CS course, and taught English in Tokyo. I'm always up for collaborating at the intersection of EdTech, games, and product, so let's connect!",
+    ". I've also taught game dev at Girls Who Code, TA'd Cornell's intro computer science (CS) course, and taught English in Tokyo. I'm always up for collaborating at the intersection of EdTech, games, and product, so let's connect!",
   ],
   orgs: [
     { name: "Latinas Promoviendo Comunidad / Lambda Pi Chi Sorority, Inc.", href: "https://www.lambdapichi.org" },
@@ -203,7 +203,7 @@ export const projects = [
     date: "2026-05-01",
     dateLabel: "Jan–May 2026",
     description:
-      "Built a full-stack healthcare platform for the Pelvic Pain Association of Cornell, featuring provider search, resource discovery, and an AI chatbot with retrieval-augmented generation.",
+      "Built a full-stack healthcare platform with Hack4Impact (H4I) for the Pelvic Pain Association of Cornell, featuring provider search, resource discovery, and an AI chatbot with retrieval-augmented generation.",
     image: {
       // Source: screenshot of the PPAC site our Hack4Impact Cornell team built; photo © PPAC.
       src: "assets/projects/ppac.webp",

@@ -46,6 +46,14 @@
 
 /* Page links (real <a href>s) that look like the old nav buttons. */
 
+/* The labels are typed normally in Header.jsx; the capitals are just styling (so screen readers
+   read "Home", not "H-O-M-E"). */
+
+.navLink,
+.action_btn {
+  text-transform: uppercase;
+}
+
 .navLink {
   display: inline-block;
   background: transparent;

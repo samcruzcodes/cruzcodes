@@ -4,9 +4,9 @@ import { isPlainClick } from "./navigation";
 import { contact } from "../data";
 
 const menuItems = [
-  { name: "HOME", key: "home" },
-  { name: "ABOUT", key: "about" },
-  { name: "PROJECTS", key: "projects" },
+  { name: "Home", key: "home" },
+  { name: "About", key: "about" },
+  { name: "Projects", key: "projects" },
 ];
 
 export default function Header({ page, setPage }) {
@@ -66,7 +66,7 @@ export default function Header({ page, setPage }) {
         <ul className="links">{navButtons}</ul>
 
         <a className="action_btn retro-title" href={contact.mailto}>
-          CONTACT ME!
+          Contact Me!
         </a>
       </nav>
 
@@ -101,7 +101,7 @@ export default function Header({ page, setPage }) {
               href={contact.mailto}
               onClick={() => setIsOpen(false)} // closes menu on tap
             >
-              CONTACT ME!
+              Contact Me!
             </a>
           </li>
         </ul>

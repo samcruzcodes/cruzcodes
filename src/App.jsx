@@ -20,6 +20,10 @@ function navFromHash() {
   return { page: "home", target: null };
 }
 
+// Each page gets its own tab title (and screen readers announce it), since there's no real page load.
+const PAGE_TITLES = { home: "Home", about: "About", projects: "Projects" };
+const SITE_TITLE = "Samantha Cruz | Developer of Stuff";
+
 export default function App() {
   const [nav, setNav] = useState(navFromHash);
   const mainRef = useRef(null);
@@ -30,6 +34,10 @@ export default function App() {
     // Jumping to a project card scrolls itself; everything else starts at the top.
     if (!target) window.scrollTo({ top: 0 });
   };
+
+  useEffect(() => {
+    document.title = nav.page === "home" ? SITE_TITLE : `${PAGE_TITLES[nav.page]} | ${SITE_TITLE}`;
+  }, [nav.page]);
 
   // When you switch pages, jump focus to the new heading so keyboard and
   // screen-reader users land on the new content (but not on first load).
