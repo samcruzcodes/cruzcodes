@@ -3,7 +3,7 @@ import Icon from "./Icon";
 import VideoPreview from "./VideoPreview";
 
 // A card's media (see `media` in data.js): one big item at a time, with a heading, an "n of N" counter,
-// previous/next arrows on the picture, a short caption (what it is: Preview, Trailer or Screenshot), and a
+// previous/next arrows on the picture, a short caption (what it is: Trailer or Screenshot), and a
 // row of small thumbnail buttons. Nothing advances on its own. The thumbnails are tiny WebPs; the big
 // picture of the other items only loads when you pick them, and a video only loads when you press Play.
 // (The heading is a labelled group, not an <h4>: on phones the picture sits above the card's <h3>.)

@@ -519,37 +519,13 @@ export const projects = [
       "An educational pixel-art RPG about water conservation that I made at 14 and recently restored and published on itch.io. Explore a seaside community, meet its residents, and see how small everyday actions add up.",
     // Media gallery on the card (MediaGallery.jsx): one item shows at a time; the arrows, the counter and the
     // thumbnails switch between them. Every item is a still image first; a `video` only loads when Play is pressed.
-    //   kind:  "Preview" (short clip), "Trailer" (full video) or "Screenshot": shown in the caption so it's clear.
-    //   time:  length of a video as shown to everyone ("0:07"). label: the short caption / thumbnail name.
+    //   kind:  "Trailer" (the video) or "Screenshot": shown in the caption so it's clear.
+    //   time:  length of a video as shown to everyone ("0:42"). label: the short caption / thumbnail name.
     //   image: the 960x540 still. thumb: its small 160x90 version for the thumbnail strip.
     //   video: { label, length, description, sources } plays once with controls (`length` + `description` are
     //          for screen readers; there's no audio, so no captions, and `description` also covers the on-screen text).
     // Stills and clips are real Turtleburg footage from the approved trailer, with the trailer's own captions.
     media: [
-      {
-        kind: "Preview",
-        time: "0:07",
-        label: "Meet the townspeople",
-        image: {
-          src: "assets/projects/turtleburg-preview-poster.webp",
-          width: 960,
-          height: 540,
-          alt: "Turtleburg gameplay: the player stands at a wooden gate on a dirt path while two companions talk in a dialogue box about the beach town and its turtles",
-        },
-        thumb: "assets/projects/turtleburg-preview-poster-thumb.webp",
-        // The 7 seconds right after the trailer's opening van scene ends (the van is fully off-screen at 3.30s;
-        // the first gameplay frame is 3.367s): 3.367s to 10.297s of the trailer.
-        video: {
-          label: "Play preview",
-          length: "7 seconds",
-          description:
-            "Silent 7-second gameplay clip: dialogue boxes introduce the beach town of Turtleburg, then the player walks into a tavern where a resident explains that fewer turtles are visiting because of pollution and a lack of clean water.",
-          sources: [
-            { src: "assets/projects/turtleburg-preview.webm", type: "video/webm" },
-            { src: "assets/projects/turtleburg-preview.mp4", type: "video/mp4" },
-          ],
-        },
-      },
       {
         kind: "Trailer",
         time: "0:42",
