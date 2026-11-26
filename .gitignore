@@ -1,2 +1,44 @@
-node_modules
+# Dependencies and generated output
+node_modules/
 build/
+coverage/
+.cache/
+.eslintcache
+*.tsbuildinfo
+
+# Deploy cache (the gh-pages tool keeps a clone of the deploy branch here)
+.gh-pages-cache/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment files and secrets (keep a .env.example if you add one)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Editor and OS files
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Raw screen recordings and video masters. The web-ready WebM/MP4 files in public/ are kept.
+*.mov
+*.MOV
+Screen Recording*
+Screen Shot*
+Screenshot*
+
+# Scratch folders for temporary screenshots and work files
+/screenshots/
+/tmp/
+/.tmp/
+design/source-video/
