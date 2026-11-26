@@ -6,9 +6,6 @@ coverage/
 .eslintcache
 *.tsbuildinfo
 
-# Deploy cache (the gh-pages tool keeps a clone of the deploy branch here)
-.gh-pages-cache/
-
 # Logs
 *.log
 npm-debug.log*
